@@ -2,21 +2,21 @@ import { Schema, model } from "mongoose";
 
 interface IUser {
     id: number;
-    nome: string;
-    dataDeNascimento: Date;
+    name: string;
+    birthDate: Date;
     login: string;
-    senha: string;
+    password: string;
     email: string;
     cpf: string;
 }
 const UserSchema = new Schema<IUser>({
     id: { type: Number, required: true , unique: true},
-    nome: { type: String, required: true },
-    dataDeNascimento: { type: Date, required: true },
+    name: { type: String, required: true },
+    birthDate: { type: Date, required: true },
     login: { type: String, required: true , unique: true},
-    senha: { type: String, required: true },
+    password: { type: String, required: true },
     email: { type: String, required: true , unique: true},
     cpf: { type: String, required: true , unique: true},
 });
 
-export default model<IUser>("User", UserSchema);
+export const User = model<IUser>("User", UserSchema);

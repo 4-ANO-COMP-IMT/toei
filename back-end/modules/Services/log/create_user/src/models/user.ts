@@ -19,4 +19,4 @@ const UserSchema = new Schema<IUser>({
     cpf: { type: String, required: true , unique: true},
 });
 
-export default model<IUser>("User", UserSchema);
+export const User = model<IUser>("User", UserSchema);

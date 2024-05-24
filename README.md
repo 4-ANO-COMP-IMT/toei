@@ -10,8 +10,8 @@ Repositório para o projeto referente as matérias ECM516 e ECM252, sobre superv
 O projeto consiste em uma corretora de ações.
 
 ## Autores
-- [Ryuske Hideaki Sato](https://github.com/Dragonrhs)
-- [Gabriel Henrique Baca Rado](https://github.com/Gabriel-HBR)
 - [Erick Eiji Nagao](https://github.com/ErickNagao)
-- [Raphael Fernandes Raymundo](https://github.com/RaphaelRAY)
+- [Gabriel Henrique Baca Rado](https://github.com/Gabriel-HBR)
 - [Nicole Martins Fragnan](https://github.com/nicmf)
+- [Raphael Fernandes Raymundo](https://github.com/RaphaelRAY)
+- [Ryuske Hideaki Sato](https://github.com/Dragonrhs)

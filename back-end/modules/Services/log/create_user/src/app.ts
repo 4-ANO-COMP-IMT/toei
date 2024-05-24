@@ -6,6 +6,11 @@ import { config } from './config/config';
 
 const app = express();
 
+if (!config.mongoUri || !config.port) {
+  console.error('Required configuration is missing');
+  process.exit(1);
+}
+
 mongoose.connect(config.mongoUri)
   .then(() => console.log('Connected to MongoDB'))
   .catch((err) => console.error('Failed to connect to MongoDB', err));

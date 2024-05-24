@@ -4,8 +4,10 @@ Repositório para o projeto referente as matérias ECM516 e ECM252, sobre superv
 # Sumário
 
 - [Descrição](#Descrição)
-- [Autores](#Autores)
 - [Benefícios](#Benefícios)
+- [Funcionalidades](#Funcionalidades)
+- [Autores](#Autores)
+
 
 # Descrição 
 

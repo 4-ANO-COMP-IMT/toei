@@ -2,10 +2,10 @@
   "name": "create_user",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "app.ts",
   "scripts": {
     "build": "tsc",
-    "start": "nodemon app.js",
+    "start": "nodemon src/app.ts",
     "start:dev": "ts-node src/app.ts",
     "test": "vitest"
     

@@ -7,33 +7,33 @@ export const register = async (req: Request, res: Response) => {
     try {
         const { name, birthDate, login, password, email, cpf } = req.body;
         
-        if (!name === undefined) {
+        if (!name) {
             throw new MissingParameters('name');
             
         }
-        if (!birthDate === undefined) {
+        if (!birthDate) {
             throw new MissingParameters('birthDate');
             
         }
-        if (!login === undefined) {
+        if (!login) {
             throw new MissingParameters('login');
             
         }
-        if (!password === undefined) {
+        if (!password) {
             throw new MissingParameters('password');
             
         }
-        if (!email === undefined) {
+        if (!email) {
             throw new MissingParameters('email');
             
         }
-        if (!cpf === undefined) {
+        if (!cpf) {
             throw new MissingParameters('cpf');
             
         }
         const user = await userService.createUser(name, birthDate, login, password, email, cpf);
         
-        res.json({ user });
+        res.status(201).json({ user });
     } catch (error) {
         res.status(400).json({ message: (error as Error).message });
     }

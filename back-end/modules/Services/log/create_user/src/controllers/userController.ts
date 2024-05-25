@@ -5,7 +5,7 @@ import { MissingParameters, WrongTypeParameters } from './errorsController';
 export const register = async (req: Request, res: Response) => {
     
     try {
-        const { name, birthDate, login, password, email, cpf } = req.body;
+        const { name,password, birthDate, login, email, cpf } = req.body;
         
         if (!name) {
             throw new MissingParameters('name');
@@ -31,7 +31,7 @@ export const register = async (req: Request, res: Response) => {
             throw new MissingParameters('cpf');
             
         }
-        const user = await userService.createUser(name, birthDate, login, password, email, cpf);
+        const user = await userService.createUser(name, password, birthDate, login,  email, cpf);
         
         res.status(201).json({ user });
     } catch (error) {

@@ -1,7 +1,6 @@
 import { Schema, model } from "mongoose";
 
 interface IUser {
-    id: number;
     name: string;
     birthDate: Date;
     login: string;
@@ -10,7 +9,6 @@ interface IUser {
     cpf: string;
 }
 const UserSchema = new Schema<IUser>({
-    id: { type: Number, required: true , unique: true},
     name: { type: String, required: true },
     birthDate: { type: Date, required: true },
     login: { type: String, required: true , unique: true},

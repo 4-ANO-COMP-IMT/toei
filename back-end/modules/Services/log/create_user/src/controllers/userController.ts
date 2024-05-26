@@ -1,8 +1,9 @@
 import { Request, Response } from 'express';
 import * as userService from '../service/userService';
 import { MissingParameters, WrongTypeParameters } from './errorsController';
+import { User } from '../models/user';
 
-export const register =  (req: Request, res: Response) => {
+export const register = async (req: Request, res: Response) => {
     
     try {
         const { name,password, birthDate, login, email, cpf } = req.body;
@@ -31,6 +32,22 @@ export const register =  (req: Request, res: Response) => {
             throw new MissingParameters('cpf');
             
         }
+        const existingUser = await User.findOne({ login });
+        if (existingUser) {
+        throw new Error('User with this login already exists');
+        }
+
+        const existingEmail = await User.findOne({ email });
+        if (existingEmail) {
+        throw new Error('User with this email already exists');
+        }
+
+ 
+        const existingCpf = await User.findOne({ cpf });
+        if (existingCpf) {
+        throw new Error('User with this cpf already exists');
+        }
+
 
 //validaçao do formato da data    
         const dateParts = birthDate.split("/");

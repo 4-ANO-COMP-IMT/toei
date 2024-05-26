@@ -32,6 +32,8 @@ export const register = async (req: Request, res: Response) => {
             throw new MissingParameters('cpf');
             
         }
+
+        //validaçao dos parametros unicos
         const existingUser = await User.findOne({ login });
         if (existingUser) {
         throw new Error('User with this login already exists');
@@ -42,12 +44,10 @@ export const register = async (req: Request, res: Response) => {
         throw new Error('User with this email already exists');
         }
 
- 
         const existingCpf = await User.findOne({ cpf });
         if (existingCpf) {
         throw new Error('User with this cpf already exists');
         }
-
 
 //validaçao do formato da data    
         const dateParts = birthDate.split("/");

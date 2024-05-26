@@ -48,6 +48,4 @@ Ferramentas de busca avançada e filtros para facilitar a localização de obras
 
 - [Erick Eiji Nagao](https://github.com/ErickNagao)
 - [Gabriel Henrique Baca Rado](https://github.com/Gabriel-HBR)
-- [Nicole Martins Fragnan](https://github.com/nicmf)
-- [Raphael Fernandes Raymundo](https://github.com/RaphaelRAY)
 - [Ryuske Hideaki Sato](https://github.com/Dragonrhs)

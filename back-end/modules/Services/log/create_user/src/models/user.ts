@@ -6,7 +6,6 @@ interface IUser {
     login: string;
     password: string;
     email: string;
-    cpf: string;
 }
 const UserSchema = new Schema<IUser>({
     name: { type: String, required: true },
@@ -14,7 +13,6 @@ const UserSchema = new Schema<IUser>({
     login: { type: String, required: true , unique: true},
     password: { type: String, required: true },
     email: { type: String, required: true , unique: true},
-    cpf: { type: String, required: true , unique: true},
 });
 
 export const User = model<IUser>("User", UserSchema);

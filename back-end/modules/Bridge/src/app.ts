@@ -1,4 +1,3 @@
-import bodyParser from 'body-parser';
 import dotenv from 'dotenv'
 import express from 'express'
 import axios from 'axios'
@@ -14,28 +13,19 @@ app.use(express.json())
 
 app.post('/event', async (req, res)=>{
   const event = req.body
-  
-// try{
-//     axios.post('http://localhost:3000/eventos', event)
-//     .then(res => console.log(res.data)).catch(err => {
-//         console.log(err);
-//         err = err[3000] || []
-//         err.push({port: 3000, evento: event, erro: err})
-//         err[3000] = err
-//     });
-//     res.status(201).send({status: 'Event create user received'})
-// }catch(err){
-//     console.log('Failed to publich create user event',err)
-// }
-
-
- 
-  axios.post('http://localhost:3000/event', event)
-//   .catch((err) => {
-//     console.log('Failed to publich create user event',err)
-//   })
-//   res.status(201).send({status: 'Event create user received'})
-
+  console.log(event)
+try{
+    axios.post('http://localhost:3000/user/event', event)
+    .then(res => console.log(res.data)).catch(err => {
+        console.log(err);
+        err = err[3000] || []
+        err.push({port: 3000, event: event, err: err})
+        err[3000] = err
+    });
+    res.status(201).send({status: 'Event create user received'})
+}catch(err){
+    console.log('Failed to publich create user event',err)
+}
 
 // try{
 //     axios.post('http://localhost:4000/eventos', event)
@@ -54,7 +44,7 @@ app.post('/event', async (req, res)=>{
 // res.end()
 // })
   
-  axios.post('http://localhost:4000/event', event)
+  // axios.post('http://localhost:4000/event', event)
 //   .catch((err) => {
 //     console.log('Failed to publich login user event',err)
 //   })
@@ -62,5 +52,4 @@ app.post('/event', async (req, res)=>{
 
   res.end()
 })
-
 app.listen(PORT, () => console.log(`Event-Driven. Port: ${PORT}.`))

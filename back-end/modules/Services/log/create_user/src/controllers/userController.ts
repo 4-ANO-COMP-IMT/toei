@@ -64,3 +64,12 @@ export const register = async (req: Request, res: Response) => {
     }
 };
 
+export const read = async (req: Request, res: Response) => {
+    try {
+        const login = req.params.login;
+        const user = await userService.readUser(login as string);
+        res.status(200).json({ user });
+    } catch (error) {
+        res.status(400).json({ message: (error as Error).message });
+    }
+}

@@ -21,6 +21,25 @@ export const createUser =  (name: string, password: string, birthDate: Date, log
     }).catch((err) => {
         console.log('Failed to publich create user event',err)
     });
-  
+    
     return user;     
 };
+
+export const readUser = async (login:string) => {
+    const user = await User.findOne({login : login});
+
+    if(!user){
+        throw new Error('User not found');
+    }
+
+    axios.post('http://localhost:10000/event', {
+        type: 'UserSelected',
+        payload: {
+            user
+        }
+    }).catch((err) => {
+        console.log('Failed to publich read user event',err)
+    });
+
+    return user;
+}

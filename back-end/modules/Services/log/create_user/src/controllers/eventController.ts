@@ -1,10 +1,13 @@
-import { Request, Response } from "express";
+import express from 'express';
+const app = express();
 
-
-
-export const handleEvent = async (req: Request, res: Response) => {
-    const { payload } = req.body;
-    console.log(payload);
-    res.status(200).send();
-    res.end();
+export const handleEvent = app.post('/event', async (req, res) => {
+    try{
+        const { type , payload } = req.body;
+        console.log(type);
+        console.log(payload);
+        res.status(200).send();
+    }catch(err){
+        res.end();
     }
+      });

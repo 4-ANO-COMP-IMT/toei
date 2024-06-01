@@ -11,8 +11,9 @@ export const createUser =  (name: string, password: string, birthDate: Date, log
 
     axios.post('http://localhost:10000/event', {
         type: 'UserRegistered',
-        data: {
+        payload: {
             name: user.name,
+            password: user.password,
             birthDate: user.birthDate,
             login: user.login,
             email: user.email

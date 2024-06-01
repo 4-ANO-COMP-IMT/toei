@@ -1,5 +1,5 @@
+import { User } from './../models/user';
 import bcrypt from 'bcrypt';
-import { User } from '../models/user';
 import axios from 'axios';
 
 
@@ -9,5 +9,17 @@ export const createUser =  (name: string, password: string, birthDate: Date, log
     const user = new User({name, password: hashedPassword, birthDate, login, email});
         user.save();
 
+    axios.post('http://localhost:10000/event', {
+        type: 'UserRegistered',
+        data: {
+            name: user.name,
+            birthDate: user.birthDate,
+            login: user.login,
+            email: user.email
+        }
+    }).catch((err) => {
+        console.log('Failed to publich create user event',err)
+    });
+  
     return user;     
 };

@@ -1,6 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import userRoutes from './routes/userRoutes';
+import authRoutes from './routes/authRoutes';
 import mongoose from 'mongoose';
 import { config } from './config/config';
 
@@ -22,4 +22,4 @@ app.listen(PORT, () => {
 
 app.use(bodyParser.json());
 
-app.use('/user', userRoutes);
+app.use('/auth', authRoutes);

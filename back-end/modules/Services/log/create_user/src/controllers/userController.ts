@@ -6,7 +6,7 @@ import { User } from '../models/user';
 export const register = async (req: Request, res: Response) => {
     
     try {
-        const { name,password, birthDate, login, email, cpf } = req.body;
+        const { name,password, birthDate, login, email } = req.body;
         
         if (!name) {
             throw new MissingParameters('name');
@@ -28,10 +28,7 @@ export const register = async (req: Request, res: Response) => {
             throw new MissingParameters('email');
             
         }
-        if (!cpf) {
-            throw new MissingParameters('cpf');
-            
-        }
+        
 
         //validaçao dos parametros unicos
         const existingUser = await User.findOne({ login });
@@ -44,10 +41,6 @@ export const register = async (req: Request, res: Response) => {
         throw new Error('User with this email already exists');
         }
 
-        const existingCpf = await User.findOne({ cpf });
-        if (existingCpf) {
-        throw new Error('User with this cpf already exists');
-        }
 
 //validaçao do formato da data    
         const dateParts = birthDate.split("/");
@@ -61,7 +54,7 @@ export const register = async (req: Request, res: Response) => {
         throw new Error('Invalid birthDate. Could not parse into a valid date');
     }
 
-        const user =  userService.createUser(name, password, dateObject, login,  email, cpf);
+        const user =  userService.createUser(name, password, dateObject, login,  email);
         
         res.status(201).json({ user });
 
@@ -71,3 +64,12 @@ export const register = async (req: Request, res: Response) => {
     }
 };
 
+export const read = async (req: Request, res: Response) => {
+    try {
+        const login = req.params.login;
+        const user = await userService.readUser(login as string);
+        res.status(200).json({ user });
+    } catch (error) {
+        res.status(400).json({ message: (error as Error).message });
+    }
+}

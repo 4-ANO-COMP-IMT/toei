@@ -1,12 +1,15 @@
 import bcrypt from 'bcrypt';
-import { getEventBridgeData } from '../app';
+import { UserLogin } from '../models/userLogin';
 
 export const login = async (login: string, password: string) => {
-  const user = await getEventBridgeData(); // Await the promise to get the actual user object
-
-  const User = await user.findOne({ login });
-  if (!User || !(await bcrypt.compare(password, User.password))) {
-    throw new Error('Invalid login or password');
+  console.log('login', login);
+  console.log('password', password)
+  const userLogin = await UserLogin.findOne({login: login});
+  console.log('userLogin', userLogin)
+  if (!userLogin || !(await bcrypt.compare(password, userLogin?.password || ''))){
+    console.log("------------FALSE")
+    return false;
   }
-  return User.email;
+  console.log("------------TRUE")
+  return true;
 };

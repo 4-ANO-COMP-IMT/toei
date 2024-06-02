@@ -19,7 +19,7 @@ export const createUser =  (name: string, password: string, birthDate: Date, log
             email: user.email
         }
     }).catch((err) => {
-        console.log('Failed to publich create user event',err)
+        console.log('Failed to send UserRegistered event \n%s',err)
     });
     
     return user;     
@@ -38,7 +38,7 @@ export const readUser = async (login:string) => {
             user
         }
     }).catch((err) => {
-        console.log('Failed to publich read user event',err)
+        console.log('Failed to send UserSelected event',err)
     });
 
     return user;

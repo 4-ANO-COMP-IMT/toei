@@ -9,8 +9,6 @@ const app = express()
 
 app.use(express.json())
 
-
-
 app.post('/event', async (req, res)=>{
   const event = req.body
   console.log(event)

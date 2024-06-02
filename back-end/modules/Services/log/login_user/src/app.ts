@@ -1,8 +1,8 @@
 import express from 'express';
 import bodyParser from 'body-parser';
+import authRoutes from './routes/authRoutes';
 import mongoose from 'mongoose';
 import { config } from './config/config';
-import authRoutes from './routes/authRoutes';
 
 const app = express();
 
@@ -23,23 +23,3 @@ app.listen(PORT, () => {
 app.use(bodyParser.json());
 
 app.use('/auth', authRoutes);
-
-import axios from 'axios';
-
-export const getEventBridgeData = async () => {
-  try {
-    const user = await axios.get('http://localhost:4000/event');
-
-    const User = user.data;
-
-    return User;
-  } catch (error) {
-    console.error(`Erro ao obter dados do Event Bridge: ${error}`);
-  }
-};
-
-getEventBridgeData();
-
-app.get('/', (req, res) => {
-  res.send('Create Auth Microservice');
-});

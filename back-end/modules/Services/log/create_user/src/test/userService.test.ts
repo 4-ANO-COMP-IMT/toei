@@ -15,7 +15,6 @@ describe("[User Entity Tests]", () => {
          new Date("1990-01-01"),
          "john_doe",
          "joh@hotmail.com",	
-         "123.456.789-00"
         
       );
       expect(user).toBeInstanceOf(User);

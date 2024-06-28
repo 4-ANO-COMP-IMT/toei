@@ -4,7 +4,9 @@ import userRoutes from './routes/userRoutes';
 import mongoose from 'mongoose';
 import { config } from './config/config';
 
+const cors = require('cors');
 const app = express();
+app.use(cors())
 
 if (!config.mongoUri || !config.port) {
   console.error('Required configuration is missing');

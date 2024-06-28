@@ -1,11 +1,12 @@
 interface buttonFormProps {
-    text: string
+    text: string;
+    type: "submit" | "reset" | "button" | undefined;
 }
 
 function buttonForm(props: buttonFormProps) {
     return (
-      <button form="submit">{props.text}</button>
+      <button type={props.type}>{props.text}</button>
     )
-  }
-  
-  export default buttonForm
+}
+
+export default buttonForm

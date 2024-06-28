@@ -1,0 +1,27 @@
+html{
+    font: 1.2em 'Roboto', sans-serif;
+}
+.card{
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(237, 237, 237);
+    width: 300px;
+    border: 2px solid black;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.4);
+    
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0);
+
+}
+.form button{
+    font: 1em 'Roboto', sans-serif;
+}
+.form input{
+    font: 1em 'Roboto', sans-serif;
+}

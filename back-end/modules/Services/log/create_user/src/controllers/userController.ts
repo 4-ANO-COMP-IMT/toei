@@ -43,13 +43,13 @@ export const register = async (req: Request, res: Response) => {
 
 
 //validaçao do formato da data    
-        const dateParts = birthDate.split("/");
+        const dateParts = birthDate.split("-");
   
-    if (dateParts.length !== 3 || dateParts[0].length !== 2 || dateParts[1].length !== 2 || dateParts[2].length !== 4) {
-        throw new Error(`Invalid birthDate format. Expected format is dd/mm/yyyy.`);
+    if (dateParts.length !== 3 || dateParts[0].length !== 4 || dateParts[1].length !== 2 || dateParts[2].length !== 2) {
+        throw new Error(`Invalid birthDate format. Expected format is yyyy-mm-dd.`);
     }
 
-        const dateObject = new Date(Number(dateParts[2]), Number(dateParts[1]) - 1, Number(dateParts[0]));
+        const dateObject = new Date(Number(dateParts[0]), Number(dateParts[1]) - 1, Number(dateParts[2]));
     if (isNaN(dateObject.getTime())) {
         throw new Error('Invalid birthDate. Could not parse into a valid date');
     }

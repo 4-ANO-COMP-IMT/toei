@@ -22,7 +22,8 @@ Permite ao usuário manter um controle organizado de todas as obras que ele acom
 ## Personalização:
 
 A liberdade de adicionar informações detalhadas sobre cada obra permite que o usuário personalize suas listas de acordo com suas preferências e necessidades.
-Acessibilidade e Conveniência:
+
+## Acessibilidade e Conveniência:
 
 Com uma interface amigável, o usuário pode acessar suas listas de qualquer lugar, proporcionando conveniência e acessibilidade.
 

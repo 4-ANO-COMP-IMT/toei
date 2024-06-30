@@ -1,0 +1,29 @@
+html{
+    font: 1.2em 'Roboto', sans-serif;
+}
+.login>div{
+    text-align: center;
+}
+.login .card{
+    display: inline-block;
+    text-align:left;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(255, 247, 244);
+    border: 1px solid rgb(99, 99, 99);
+    border-radius: 10px;
+    padding: 30px 40px;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.4);
+}
+.login .form button{
+    font: 1em 'Roboto', sans-serif;
+}
+.login .form input{
+    font: 1em 'Roboto', sans-serif;
+}
+.login .form{
+    gap: 10px;
+    display: flex;
+    flex-direction: column;
+}

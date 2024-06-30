@@ -1,10 +1,13 @@
 import InputForm from '../components/inputForm'
 import ButtonForm from '../components/buttonForm'
 import './register.css'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import axios from 'axios'
 
 function Register() {
+  useEffect(() => {
+    document.title = 'Register';
+  }, []);
 
   interface FormInputs {
     name?: string;
@@ -29,12 +32,12 @@ function Register() {
   const submitHandler = (e:any) => {
     e.preventDefault()
     // console.log(formInputs)
-    signIn()
+    register()
   }
   
-  const signIn = async () => {
+  const register = async () => {
     try {
-      const res = await axios.post('http://localhost:3000/user/', formInputs)
+      const res = await axios.post('http://localhost:3000/user', formInputs)
       console.log(res)
       
       // setTimeout(() => {
@@ -46,25 +49,33 @@ function Register() {
     }
   }
   return (
-    <div>
-      <h1>Sign In</h1>
-      <div className='card'>
-      <form autoComplete='off' onSubmit={submitHandler} className='form'>
-      <InputForm id='name' label='Name' type='text' onChange={inputChangedHandler}/>
-      {/* <InputForm id='birthDate' label='BirthDate' type='date' onChange={inputChangedHandler}/> */}
-
+    <div className='register'>
       <div>
-          <label style={{display:"block"}}>BirthDate</label>
-        <input id='birthDate' placeholder="dd-mm-yyyy" type='date'  onChange={inputChangedHandler}/>
+        <h1>Register</h1>
       </div>
+      <div>
+        <div className='card'>
+        <form autoComplete='off' onSubmit={submitHandler} className='form'>
+        <InputForm id='name' label='Name' type='text' onChange={inputChangedHandler}/>
+        {/* <InputForm id='birthDate' label='BirthDate' type='date' onChange={inputChangedHandler}/> */}
 
-      <InputForm id='login' label='Login' type='text' onChange={inputChangedHandler}/>
-      <InputForm id='email' label='Email' type='email' onChange={inputChangedHandler}/>
-      <InputForm id='password'label='Password' type='password' onChange={inputChangedHandler}/>
-      {/* <InputForm id='passwordCheck'label='Confirm password ' type='password' /> */}
-      <a href='http://localhost:5173/login'>Login&#10;</a>
-      <ButtonForm type='submit' text='Register'/>
-      </form>
+        <div>
+            <label style={{display:"block"}}>BirthDate</label>
+          <input id='birthDate' placeholder="dd-mm-yyyy" type='date'  onChange={inputChangedHandler}/>
+        </div>
+
+        <InputForm id='login' label='Login' type='text' onChange={inputChangedHandler}/>
+        <InputForm id='email' label='Email' type='email' onChange={inputChangedHandler}/>
+        <InputForm id='password'label='Password' type='password' onChange={inputChangedHandler}/>
+        {/* <InputForm id='passwordCheck'label='Confirm password ' type='password' /> */}
+        <div>
+          <a href={'http://localhost:5173/login'}>Login</a><br />
+        </div>
+        <div>
+          <ButtonForm type='submit' text='Register'/>
+        </div>
+        </form>
+        </div>
       </div>
     </div>
   )

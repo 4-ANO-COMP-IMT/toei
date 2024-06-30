@@ -1,10 +1,13 @@
 import InputForm from '../components/inputForm'
 import ButtonForm from '../components/buttonForm'
 import './login.css'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import axios from 'axios'
 
 function Login() {
+  useEffect(() => {
+    document.title = 'Login';
+  }, []);
 
   interface FormInputs {
     login?: string;
@@ -25,12 +28,12 @@ function Login() {
   const submitHandler = (e:any) => {
     e.preventDefault()
     // console.log(formInputs)
-    logIn()
+    login()
   }
   
-  const logIn = async () => {
+  const login = async () => {
     try {
-      const res = await axios.post('http://localhost:4000/auth/', formInputs)
+      const res = await axios.post('http://localhost:4000/auth', formInputs)
       console.log(res.data)
       // Save JWT token
       // Redirect to another page
@@ -40,15 +43,24 @@ function Login() {
     }
   }
   return (
-    <div>
-      <h1>Log In</h1>
-      <div className='card'>
-      <form autoComplete='off' onSubmit={submitHandler} className='form'>
-      <InputForm id='login' label='Login' type='text' onChange={inputChangedHandler}/>
-      <InputForm id='password'label='Password' type='password' onChange={inputChangedHandler}/>
-      {/* <InputForm id='passwordCheck'label='Confirm password ' type='password' /> */}
-      <ButtonForm type='submit' text='Login'/>
-      </form>
+    <div className='login'>
+      <div>
+        <h1>Login</h1>
+      </div>
+      <div>
+        <div className='card'>
+        <form autoComplete='off' onSubmit={submitHandler} className='form'>
+        <InputForm id='login' label='Login' type='text' onChange={inputChangedHandler}/>
+        <InputForm id='password'label='Password' type='password' onChange={inputChangedHandler}/>
+        {/* <InputForm id='passwordCheck'label='Confirm password ' type='password' /> */}
+        <div>
+          <a href={'http://localhost:5173/register'}>Register</a><br />
+        </div>
+        <div>
+          <ButtonForm type='submit' text='Login'/>
+        </div>
+        </form>
+        </div>
       </div>
     </div>
   )

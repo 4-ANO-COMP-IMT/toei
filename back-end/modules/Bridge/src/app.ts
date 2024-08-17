@@ -24,6 +24,12 @@ app.post('/event', async (req, res)=>{
   }catch(err){
     console.log('Failed to send event to login',err)
   }
+  
+  try{
+    axios.post('http://localhost:5000/artwork/event', event)
+  }catch(err){
+    console.log('Failed to send event to artwork',err)
+  }
 
   res.status(201).send({status: `Event "${event.type}" received`})
 })

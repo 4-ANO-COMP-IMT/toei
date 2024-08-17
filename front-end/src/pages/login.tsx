@@ -3,8 +3,12 @@ import ButtonForm from '../components/buttonForm'
 import './login.css'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
+import { useNavigate } from "react-router-dom";
 
 function Login() {
+  const navigate = useNavigate();
+  axios.defaults.withCredentials = true;
+
   useEffect(() => {
     document.title = 'Login';
   }, []);
@@ -35,8 +39,8 @@ function Login() {
     try {
       const res = await axios.post('http://localhost:4000/auth', formInputs)
       console.log(res.data)
-      // Save JWT token
       // Redirect to another page
+      navigate('/home')
     }
     catch (err:any) {
       console.error(err.response.data)

@@ -8,4 +8,6 @@ router.post('/', authController.login);
 
 router.post('/event', eventController.handleEvent);
 
+router.get('/cookies',authController.cookies);
+
 export default router;

@@ -3,8 +3,11 @@ import ButtonForm from '../components/buttonForm'
 import './register.css'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
+import { useNavigate } from "react-router-dom";
 
 function Register() {
+  const navigate = useNavigate();
+
   useEffect(() => {
     document.title = 'Register';
   }, []);
@@ -41,7 +44,8 @@ function Register() {
       console.log(res)
       
       // setTimeout(() => {
-        window.location.replace('http://localhost:5173/login');
+        // window.location.replace('http://localhost:5173/login');
+        navigate('/login')
       // }, 2000);
     }
     catch (err:any) {

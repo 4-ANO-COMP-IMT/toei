@@ -38,7 +38,7 @@ app.use(session({
     httpOnly: true,
     sameSite: 'lax',
     secure: false,
-    maxAge: 1000 * 60 * 1
+    maxAge: config.sessionMaxAge
   }
 }))
 

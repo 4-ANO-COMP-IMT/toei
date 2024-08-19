@@ -8,5 +8,13 @@ export const config ={
   redisHost: process.env.REDIS_HOST,
   redisPort: process.env.REDIS_PORT,
   redisPassword: process.env.REDIS_PASSWORD,
-  sessionSecret: process.env.SESSION_SECRET
+  sessionSecret: process.env.SESSION_SECRET,
+    sessionMaxAge:(
+      (
+        (
+          Number(process.env.SESSION_MAX_AGE_D) * 24 +
+          Number(process.env.SESSION_MAX_AGE_H)
+        ) * 60
+      ) + Number(process.env.SESSION_MAX_AGE_M)
+    ) * 60 * 1000
 };

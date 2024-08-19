@@ -1,14 +1,25 @@
 import express from 'express';
-import bodyParser from 'body-parser';
 import authRoutes from './routes/authRoutes';
 import mongoose from 'mongoose';
 import { config } from './config/config';
-
+import { createClient } from 'redis';
+import RedisStore from 'connect-redis';
 import session from 'express-session';
 import cookieParser from 'cookie-parser';
 
 const cors = require('cors');
 const app = express();
+const RedisClient = createClient({
+  password: config.redisPassword,
+  socket: {
+      host: config.redisHost,
+      port: Number(config.redisPort)
+  }
+});
+
+RedisClient.connect().then(()=>{
+  console.log('Connected to Redis');
+}).catch(console.error);
 
 app.use(cors({
   origin: 'http://localhost:5173',
@@ -18,14 +29,14 @@ app.use(cors({
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(bodyParser.json());
-
 app.use(session({
-  secret: 'secret', // secret deve estar em um arquivo de .env
+  store: new RedisStore({ client: RedisClient }),
+  secret: config.sessionSecret as string ,
   resave: false,
   saveUninitialized: false,
   cookie: {
     httpOnly: true,
+    sameSite: 'lax',
     secure: false,
     maxAge: 1000 * 60 * 1 // 1 minute
   }

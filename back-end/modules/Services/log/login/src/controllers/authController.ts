@@ -3,7 +3,7 @@ import * as authService from '../service/authService';
 
 declare module 'express-session' {
   interface SessionData {
-    username: string;
+    login_cookie: string;
   }
 }
 
@@ -14,8 +14,8 @@ export const login = async (req: Request, res: Response) => {
     if (!auth) {
       return res.status(401).json({Login: false ,status: 'failed', message: 'Invalid login or password'});
     }
-    req.session.username = login
-    console.log('session set [login]: ',req.session.username)
+    req.session.login_cookie = login
+    console.log('session set [login]: ',req.session.login_cookie)
     res.status(200).json({Login: true, status: 'success', message: 'User logged in successfully'});
     
   } catch (error) {
@@ -26,9 +26,9 @@ export const login = async (req: Request, res: Response) => {
 
 export const cookies = async (req: Request, res: Response) => {
   try {
-    console.log('session set [cookies]: ',req.session.username)
-    if(req.session.username){
-      return res.status(200).json({valid: true, username: req.session.username})
+    console.log('session set [cookies]: ',req.session.login_cookie)
+    if(req.session.login_cookie){
+      return res.status(200).json({valid: true, username: req.session.login_cookie})
     }else{
       return res.status(401).json({valid: false})
     }

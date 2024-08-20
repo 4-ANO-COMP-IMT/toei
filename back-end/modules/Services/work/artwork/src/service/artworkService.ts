@@ -1,9 +1,7 @@
 import { ArtworksModel, Artwork, Artworks } from '../models/artworks';
 import axios from 'axios';
 
-//criar artwork a partir do modelo
 export const createArtwork =  (login:String, artwork:Artwork) => {
-    // adicionar a artwork no mongodb
     ArtworksModel.updateOne(
         {login}, 
         {
@@ -31,7 +29,10 @@ export const createArtwork =  (login:String, artwork:Artwork) => {
 export const readArtwork =  async (login:String, position:number) => {
     console.log("Login:",login);
     const artwork_found = await ArtworksModel.find(
-        {login},
+        {
+            login,
+            [`artworks.${position}`]: {$exists: true}
+        },
         { "artworks": { $slice: [ position, 1 ] } }
     ).catch((err) => {
         console.log('Failed to read artwork from database \n%s',err)
@@ -50,3 +51,31 @@ export const readArtwork =  async (login:String, position:number) => {
 
     return artwork_found;
 }
+
+export const updateArtwork =  async (login:String, position:number, artwork:Artwork) => {
+    const artwork_updated = await ArtworksModel.updateOne(
+        {
+            login,
+            [`artworks.${position}`]: {$exists: true}
+        },
+        {
+            $set: {[`artworks.${position}`]: artwork }
+        }
+    ).catch((err) => {
+        console.log('Failed to update artwork in database \n%s',err)
+    });
+
+    axios.post('http://localhost:10000/event', {
+        type: 'ArtworkUpdated',
+        payload: {
+            login,
+            position,
+            artwork
+        }
+    }).catch((err) => {
+        console.log('Failed to send ArtworkUpdated event \n%s',err)
+    });
+
+    return artwork_updated;
+}
+

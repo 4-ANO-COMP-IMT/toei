@@ -61,6 +61,33 @@ export const read_artwork = async (req: Request, res: Response) => {
 
 }
 
+
+export const update_artwork = async (req: Request, res: Response) => {
+    try{
+        if(req.session.login_cookie){
+            const login = req.session.login_cookie;
+            if (!login) {throw new MissingParameters('login');}
+            if (typeof login !== 'string') {throw new WrongTypeParameters('login');}
+
+            const artwork:Artwork = req.body.artwork;
+            isArtworkValid(artwork);
+
+            const position = Number(req.params.position);
+            if(!position){throw new MissingParameters('position');}
+            if (isNaN(position) || !Number.isInteger(position)) {throw new WrongTypeParameters('position');}
+            if (position < 0) {throw new Invalid('position');}
+
+            const artworkUpdated = await artworkService.updateArtwork(login, position, artwork);
+            res.status(200).json({ artworkUpdated });
+        }else{
+            res.status(401).json({ message: 'User not logged in' });
+        }
+    }
+    catch (error) {
+        res.status(400).json({ message: (error as Error).message });
+    }
+}
+
  const isArtworkValid = (artwork: Artwork) => {
     if (!artwork) {throw new MissingParameters('artwork');
     }else{

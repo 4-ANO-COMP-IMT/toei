@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import * as authService from '../service/authService';
+import { MissingParameters, WrongTypeParameters, Invalid } from './errorsController';
 
 declare module 'express-session' {
   interface SessionData {
@@ -10,7 +11,16 @@ declare module 'express-session' {
 export const login = async (req: Request, res: Response) => {
   try {
     const { login, password } = req.body;
-     const auth = await authService.login(login, password);
+
+    if (!login) {throw new MissingParameters('login');}
+    if (typeof login !== 'string') {throw new WrongTypeParameters('login');}
+    if (login.trim() === "") {throw new Invalid('login');}
+
+    if (!password) {throw new MissingParameters('password');}
+    if (typeof password !== 'string') {throw new WrongTypeParameters('password');}
+    if (password.trim() === "") {throw new Invalid('password');}
+
+    const auth = await authService.login(login, password);
     if (!auth) {
       return res.status(401).json({Login: false ,status: 'failed', message: 'Invalid login or password'});
     }

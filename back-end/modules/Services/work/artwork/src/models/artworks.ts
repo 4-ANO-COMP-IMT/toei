@@ -49,4 +49,4 @@ const ArtworksSchema = new Schema<Artworks>({
     artworks: { type: [ArtworkSchema], required: true, default: []}
 });
 
-export const ArtworksModel = model<Artworks>("User", ArtworksSchema);
+export const ArtworksModel = model<Artworks>('User', ArtworksSchema, 'artworks');

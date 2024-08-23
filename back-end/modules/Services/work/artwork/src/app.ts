@@ -2,24 +2,12 @@ import express from 'express';
 import artworkRoutes from './routes/artworkRoutes';
 import mongoose from 'mongoose';
 import { config } from './config/config';
-import { createClient } from 'redis';
-import RedisStore from 'connect-redis';
 import session from 'express-session';
 import cookieParser from 'cookie-parser';
+import MongoStore from 'connect-mongo';
 
 const cors = require('cors');
 const app = express();
-const RedisClient = createClient({
-  password: config.redisPassword,
-  socket: {
-      host: config.redisHost,
-      port: Number(config.redisPort)
-  }
-});
-
-RedisClient.connect().then(()=>{
-  console.log('Connected to Redis');
-}).catch(console.error);
 
 app.use(cors({
   origin: 'http://localhost:5173',
@@ -29,11 +17,24 @@ app.use(cors({
 
 app.use(express.json());
 app.use(cookieParser());
+
+if (!config.mongoUri || !config.port) {
+  console.error('Required configuration is missing');
+  process.exit(1);
+}
+mongoose.connect(config.mongoUri)
+  .then(() => console.log('Connected to MongoDB'))
+  .catch((err) => console.error('Failed to connect to MongoDB', err));
+
 app.use(session({
-  store: new RedisStore({ client: RedisClient }),
+  store: MongoStore.create({
+    mongoUrl: config.mongoUri,
+    collectionName: 'sessions'
+  }),
   secret: config.sessionSecret as string ,
   resave: false,
   saveUninitialized: false,
+  rolling: false,
   cookie: {
     httpOnly: true,
     sameSite: 'lax',
@@ -42,18 +43,13 @@ app.use(session({
   }
 }))
 
-if (!config.mongoUri || !config.port) {
-  console.error('Required configuration is missing');
-  process.exit(1);
-}
-
-mongoose.connect(config.mongoUri)
-  .then(() => console.log('Connected to MongoDB'))
-  .catch((err) => console.error('Failed to connect to MongoDB', err));
-
 const PORT = config.port;
 app.listen(PORT, () => {
-  console.log(`Create User Microservice is running on port ${PORT}`);
+  console.log(`Create Artwork Microservice is running on port ${PORT}`);
 });
 
 app.use('/artwork', artworkRoutes);
+// Middleware para logar a sessão para depuração
+app.use((req, res, next) => {
+  next();
+});

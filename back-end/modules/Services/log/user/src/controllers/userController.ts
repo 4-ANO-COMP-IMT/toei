@@ -41,8 +41,7 @@ export const register = async (req: Request, res: Response) => {
         throw new Error('User with this email already exists');
         }
 
-
-//validaçao do formato da data    
+//validaçao do formato da data
         const dateParts = birthDate.split("-");
   
     if (dateParts.length !== 3 || dateParts[0].length !== 4 || dateParts[1].length !== 2 || dateParts[2].length !== 2) {
@@ -55,11 +54,10 @@ export const register = async (req: Request, res: Response) => {
     }
 
         const user =  userService.createUser(name, password, dateObject, login,  email);
-        
+        userService.event('UserRegistered', user);
+        console.log("User created by: ",login);
         res.status(201).json({ user });
-
     } catch (error) {
-
         res.status(400).json({ message: (error as Error).message });
     }
 };
@@ -68,6 +66,8 @@ export const read = async (req: Request, res: Response) => {
     try {
         const login = req.params.login;
         const user = await userService.readUser(login as string);
+        userService.event('UserSelected', {user});
+        console.log("User read by: ",login);
         res.status(200).json({ user });
     } catch (error) {
         res.status(400).json({ message: (error as Error).message });

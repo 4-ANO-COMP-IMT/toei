@@ -12,18 +12,16 @@ declare module 'express-session' {
 export const create_artwork = async (req: Request, res: Response) => {
     try {
         if(req.session.login_cookie){
+
             const login = req.session.login_cookie;
-            if (!login) {throw new MissingParameters('login');}
-            if (typeof login !== 'string') {throw new WrongTypeParameters('login');}
+            checkStr(login, 'login');
 
             const artwork:Artwork = req.body.artwork;
-            isArtworkValid(artwork);
-            
-            console.log("Login:",login);
-            console.log("Artwork:",artwork);
+            checkArtwork(artwork);
 
-            const artworkCreated = artworkService.createArtwork(login, artwork);
-            
+            const artworkCreated = await artworkService.createArtwork(login, artwork);
+            artworkService.event('ArtworkCreated', {login, artwork});
+            console.log("Artwork created by: ",login);
             res.status(201).json({ artworkCreated });
         }else{
             res.status(401).json({ message: 'User not logged in' });
@@ -35,21 +33,19 @@ export const create_artwork = async (req: Request, res: Response) => {
     }
 }
 
-
 export const read_artwork = async (req: Request, res: Response) => {
     try{
         if(req.session.login_cookie){
 
             const login = req.session.login_cookie;
-            if (!login) {throw new MissingParameters('login');}
-            if (typeof login !== 'string') {throw new WrongTypeParameters('login');}
+            checkStr(login, 'login');
 
             const position = Number(req.params.position);
-            if(!position){throw new MissingParameters('position');}
-            if (isNaN(position) || !Number.isInteger(position)) {throw new WrongTypeParameters('position');}
-            if (position < 0) {throw new Invalid('position');}
+            checkPosition(position);
             
             const artworkRead = await artworkService.readArtwork(login, position);
+            artworkService.event('ArtworkRead', {login, position, artwork: artworkRead});
+            console.log("Artwork read by: ",login);
             res.status(200).json({ artworkRead });
         }else{
             res.status(401).json({ message: 'User not logged in' });
@@ -58,26 +54,24 @@ export const read_artwork = async (req: Request, res: Response) => {
     catch (error) {
         res.status(400).json({ message: (error as Error).message });
     }
-
 }
-
 
 export const update_artwork = async (req: Request, res: Response) => {
     try{
         if(req.session.login_cookie){
+
             const login = req.session.login_cookie;
-            if (!login) {throw new MissingParameters('login');}
-            if (typeof login !== 'string') {throw new WrongTypeParameters('login');}
+            checkStr(login, 'login');
 
             const artwork:Artwork = req.body.artwork;
-            isArtworkValid(artwork);
+            checkArtwork(artwork);
 
             const position = Number(req.params.position);
-            if(!position){throw new MissingParameters('position');}
-            if (isNaN(position) || !Number.isInteger(position)) {throw new WrongTypeParameters('position');}
-            if (position < 0) {throw new Invalid('position');}
+            checkPosition(position);
 
             const artworkUpdated = await artworkService.updateArtwork(login, position, artwork);
+            artworkService.event('ArtworkUpdated', {login, position, artwork: artworkUpdated});
+            console.log("Artwork updated by: ",login);
             res.status(200).json({ artworkUpdated });
         }else{
             res.status(401).json({ message: 'User not logged in' });
@@ -88,7 +82,15 @@ export const update_artwork = async (req: Request, res: Response) => {
     }
 }
 
- const isArtworkValid = (artwork: Artwork) => {
+// funções de validação
+
+const checkStr = (input: string, name: string) => {
+  if (!input) {throw new MissingParameters(name);}
+  if (typeof input !== 'string') {throw new WrongTypeParameters(name);}
+  if (input.trim() === "") {throw new Invalid(name);} 
+}
+
+ const checkArtwork = (artwork: Artwork) => {
     if (!artwork) {throw new MissingParameters('artwork');
     }else{
         if(!artwork.hasOwnProperty('title')){throw new MissingParameters('title');}
@@ -134,4 +136,10 @@ export const update_artwork = async (req: Request, res: Response) => {
         });
         if(!artwork.hasOwnProperty('img')){throw new MissingParameters('image');}
     }
+}
+
+const checkPosition = (position: number) => {
+    if(!position && position != 0){throw new MissingParameters('position');}
+    if (isNaN(position) || !Number.isInteger(position)) {throw new WrongTypeParameters('position');}
+    if (position < 0) {throw new Invalid('position');}
 }

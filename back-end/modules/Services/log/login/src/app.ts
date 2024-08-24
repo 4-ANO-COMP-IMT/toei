@@ -3,7 +3,6 @@ import authRoutes from './routes/authRoutes';
 import mongoose from 'mongoose';
 import { config } from './config/config';
 import session from 'express-session';
-import cookieParser from 'cookie-parser';
 import MongoStore from 'connect-mongo';
 
 const cors = require('cors');
@@ -16,7 +15,6 @@ app.use(cors({
 }))
 
 app.use(express.json());
-app.use(cookieParser());
 
 if (!config.mongoUri || !config.port) {
   console.error('Required configuration is missing');

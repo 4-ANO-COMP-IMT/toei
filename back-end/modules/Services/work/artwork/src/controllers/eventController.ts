@@ -1,8 +1,8 @@
 import express from 'express';
-import { ArtworksModel } from '../models/artworks';
-import { ISession, SessionModel } from '../models/sessions';
 import {Request, Response} from 'express';
+import * as artworkService from '../service/artworkService';
 const app = express();
+
 
 type FuncoesKeys = keyof typeof funcoes;
 
@@ -19,7 +19,7 @@ export const handleEvent = app.post('/event', async (req:Request, res:Response) 
         }
         res.status(200).send({message: 'Event received'});
     }catch(err){
-        res.end();
+        console.log((err as Error).message);
     }
 });
 
@@ -27,28 +27,17 @@ const funcoes = {
     UserRegistered:(req: Request, res:Response)=>{
         try{
             const {login} = req.body.payload;
-            const authArtworks = new ArtworksModel({login, artworks: []});
-            authArtworks.save();
-            console.log(authArtworks)
-            res.status(200);
+            artworkService.startArtworks(login);
         }catch(err){
-            console.error((err as any).message);
+            console.log((err as Error).message);
         }
     },
     UserLogged:(req: Request, res:Response)=>{
         try{
-            const {login, session, _expires} = req.body.payload;
-            const expires:Date = new Date(_expires);
-            const newSession : ISession ={
-                "_id": session,
-                "expires": expires,
-                "session":`{"cookie":{"originalMaxAge":300000,"expires":"${expires.toISOString()}","secure":false,"httpOnly":true,"path":"/","sameSite":"lax"},"login_cookie":"${login}"}`
-            };
-            SessionModel.findOneAndUpdate({ _id: session }, newSession, { upsert: true }).
-            catch(err => console.error(err.message));
-            res.status(200);
+            const {cookie_config} = req.body.payload;
+            artworkService.updateCookie(cookie_config);
         }catch(err){
-            console.error((err as any).message);
+            console.log((err as Error).message);
         }
     }
 }

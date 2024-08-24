@@ -30,14 +30,16 @@ app.use(session({
     collectionName: 'sessions'
   }),
   secret: config.sessionSecret as string ,
-  resave: false,
+  resave: true,
   saveUninitialized: false,
-  rolling: false,
+  rolling: true,
+  unset: 'destroy',
+  name: 'session',
   cookie: {
     httpOnly: true,
     sameSite: 'lax',
     secure: false,
-    maxAge: config.sessionMaxAge
+    // maxAge: config.sessionMaxAge
   }
 }))
 

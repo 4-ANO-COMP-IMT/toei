@@ -1,5 +1,5 @@
 import express from 'express';
-import { UserLogin } from '../models/userLogin';
+import * as authService from '../service/authService';
 import {Request, Response} from 'express';
 const app = express();
 
@@ -16,18 +16,31 @@ export const handleEvent = app.post('/event', async (req:Request, res:Response) 
         else{
             console.error(`Event received: ${type}, does not exist in funcoes.`);
         }
-        res.status(200).send({message: 'Event received'});
+        res.status(200).send({ message: 'Event received'});
     }catch(err){
-        res.end();
+        res.status(400).json({ message: (err as Error).message });
     }
 });
 
+const UpdateCookie = (req: Request, res: Response) => {
+    try {
+        const { cookie_config } = req.body.payload;
+        authService.updateCookie(cookie_config);
+        }catch(err){
+            console.log(err);
+        }
+};
+
 const funcoes = {
     UserRegistered:(req: Request, res:Response)=>{
-        const {login,password} = req.body.payload;
-        // e registra na tabela login{login,senha}
-        const authLogin = new UserLogin({login, password});
-        console.log(authLogin)
-        authLogin.save();
-    }
+        try{
+            const {login,password} = req.body.payload;
+            authService.startUser(login,password);
+        }catch(err){
+            console.log((err as Error).message);
+        }
+    },
+    ArtworkCreated: UpdateCookie,
+    ArtworkRead: UpdateCookie,
+    ArtworkUpdated: UpdateCookie
 }

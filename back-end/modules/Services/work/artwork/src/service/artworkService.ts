@@ -1,5 +1,11 @@
 import { IArtwork, ArtworksModel } from '../models/artworks';
+import { ISession, ICookieConfig, SessionModel } from '../models/sessions';
 import axios from 'axios';
+
+export const startArtworks = async (login:String) => {
+    const authArtworks = new ArtworksModel({login, artworks: []});
+    authArtworks.save().catch(err => console.error(err.message));
+}
 
 export const createArtwork =  (login:String, artwork:IArtwork) => {
     ArtworksModel.updateOne(
@@ -9,9 +15,7 @@ export const createArtwork =  (login:String, artwork:IArtwork) => {
                 artworks: [artwork]
             }
         }
-    ).catch((err) => {
-        console.log('Failed to add artwork to database \n%s',err)
-    });
+    ).catch(err => console.error(err.message));
     return artwork;
 }
 
@@ -24,9 +28,7 @@ export const readArtwork =  async (login:String, position:number) => {
             [`artworks.${position}`]: {$exists: true}
         },
         { "artworks": { $slice: [ position, 1 ] } }
-    ).catch((err) => {
-        console.log('Failed to read artwork from database \n%s',err)
-    });
+    ).catch(err => console.error(err.message));
     return artwork_found;
 }
 
@@ -52,4 +54,16 @@ export const event = async ( typeMessage: string, payloadMessage: any ) => {
     }).catch((err) => {
         console.log(`Failed to send ${typeMessage} event`,err)
     });
+}
+
+export const updateCookie = async (cookie_config: ICookieConfig) => {
+    const {login, session, _expires, maxAge} = cookie_config;
+    const expires:Date = new Date(_expires);
+    const newSession : ISession ={
+        "_id": session,
+        "expires": expires,
+        "session":`{"cookie":{"originalMaxAge":${maxAge},"expires":"${expires.toISOString()}","secure":false,"httpOnly":true,"path":"/","sameSite":"lax"},"login_cookie":"${login}"}`
+    };
+    SessionModel.findOneAndUpdate({ _id: session }, newSession, { upsert: true }).
+    catch(err => console.error(err.message));
 }

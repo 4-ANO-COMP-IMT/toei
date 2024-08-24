@@ -54,9 +54,10 @@ export const register = async (req: Request, res: Response) => {
     }
 
         const user =  userService.createUser(name, password, dateObject, login,  email);
+        res.status(201).json({ user, message: 'User created successfully' });
+        console.log("User created by:",login);
+        
         userService.event('UserRegistered', user);
-        console.log("User created by: ",login);
-        res.status(201).json({ user });
     } catch (error) {
         res.status(400).json({ message: (error as Error).message });
     }
@@ -64,11 +65,14 @@ export const register = async (req: Request, res: Response) => {
 
 export const read = async (req: Request, res: Response) => {
     try {
+        // dps implementar session e pegar o login com a session e tirar os parâmetros
         const login = req.params.login;
         const user = await userService.readUser(login as string);
+
+        res.status(200).json({ user , message: 'User read successfully' });
+        console.log("User read by:",login);
+
         userService.event('UserSelected', {user});
-        console.log("User read by: ",login);
-        res.status(200).json({ user });
     } catch (error) {
         res.status(400).json({ message: (error as Error).message });
     }

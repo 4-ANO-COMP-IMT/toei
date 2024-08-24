@@ -47,7 +47,3 @@ app.listen(PORT, () => {
 });
 
 app.use('/artwork', artworkRoutes);
-// Middleware para logar a sessão para depuração
-app.use((req, res, next) => {
-  next();
-});

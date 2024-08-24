@@ -15,6 +15,3 @@ router.put('/:position', artworkController.update_artwork);
 router.post('/event',eventController.handleEvent);
 
 export default router;
-
-/*
-*/

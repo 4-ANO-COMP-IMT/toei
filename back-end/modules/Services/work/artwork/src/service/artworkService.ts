@@ -1,4 +1,4 @@
-import { ArtworksModel, Artwork } from '../models/artworks';
+import { IArtwork, ArtworksModel } from '../models/artworks';
 import axios from 'axios';
 
 export const createArtwork =  (login:String, artwork:IArtwork) => {

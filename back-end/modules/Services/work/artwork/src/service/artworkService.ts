@@ -1,7 +1,7 @@
 import { ArtworksModel, Artwork } from '../models/artworks';
 import axios from 'axios';
 
-export const createArtwork =  (login:String, artwork:Artwork) => {
+export const createArtwork =  (login:String, artwork:IArtwork) => {
     ArtworksModel.updateOne(
         {login}, 
         {
@@ -30,7 +30,7 @@ export const readArtwork =  async (login:String, position:number) => {
     return artwork_found;
 }
 
-export const updateArtwork =  async (login:String, position:number, artwork:Artwork) => {
+export const updateArtwork =  async (login:String, position:number, artwork:IArtwork) => {
     const artwork_updated = await ArtworksModel.updateOne(
         {
             login,

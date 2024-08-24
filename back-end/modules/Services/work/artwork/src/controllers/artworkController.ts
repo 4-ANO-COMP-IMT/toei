@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import * as artworkService from '../service/artworkService';
 import { MissingParameters, WrongTypeParameters, Invalid } from './errorsController';
-import { Artwork } from '../models/artworks';
+import { IArtwork } from '../models/artworks';
 
 declare module 'express-session' {
     interface SessionData {
@@ -14,9 +14,7 @@ export const create_artwork = async (req: Request, res: Response) => {
         if(req.session.login_cookie){
 
             const login = req.session.login_cookie;
-            checkStr(login, 'login');
-
-            const artwork:Artwork = req.body.artwork;
+        const artwork:IArtwork = req.body.artwork;
             checkArtwork(artwork);
 
             const artworkCreated = await artworkService.createArtwork(login, artwork);
@@ -63,7 +61,7 @@ export const update_artwork = async (req: Request, res: Response) => {
             const login = req.session.login_cookie;
             checkStr(login, 'login');
 
-            const artwork:Artwork = req.body.artwork;
+        const artwork:IArtwork = req.body.artwork;
             checkArtwork(artwork);
 
             const position = Number(req.params.position);
@@ -90,7 +88,7 @@ const checkStr = (input: string, name: string) => {
   if (input.trim() === "") {throw new Invalid(name);} 
 }
 
- const checkArtwork = (artwork: Artwork) => {
+ const checkArtwork = (artwork:IArtwork) => {
     if (!artwork) {throw new MissingParameters('artwork');
     }else{
         if(!artwork.hasOwnProperty('title')){throw new MissingParameters('title');}

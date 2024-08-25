@@ -24,7 +24,7 @@ mongoose.connect(config.mongoUri)
 
 const PORT = config.port;
 app.listen(PORT, () => {
-  console.log(`Create User Microservice is running on port ${PORT}`);
+  console.log(`User Microservice is running on port ${PORT}`);
 });
 
 app.use('/user', userRoutes);

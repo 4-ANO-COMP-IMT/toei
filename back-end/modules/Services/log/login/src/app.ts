@@ -45,7 +45,7 @@ app.use(session({
 
 const PORT = config.port;
 app.listen(PORT, () => {
-  console.log(`Create Login Microservice is running on port ${PORT}`);
+  console.log(`Login Microservice is running on port ${PORT}`);
 });
 
 app.use('/auth', authRoutes);

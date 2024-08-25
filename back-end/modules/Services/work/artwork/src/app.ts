@@ -44,7 +44,7 @@ app.use(session({
 
 const PORT = config.port;
 app.listen(PORT, () => {
-  console.log(`Create Artwork Microservice is running on port ${PORT}`);
+  console.log(`Artwork Microservice is running on port ${PORT}`);
 });
 
 app.use('/artwork', artworkRoutes);

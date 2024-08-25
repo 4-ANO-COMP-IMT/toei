@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import * as artworkService from '../service/artworkService';
+import * as artworkService from '../services/artworkService';
 import { MissingParameters, WrongTypeParameters, Invalid } from './errorsController';
 import { IArtwork } from '../models/artworks';
 

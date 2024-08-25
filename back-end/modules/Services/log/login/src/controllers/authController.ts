@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import * as authService from '../service/authService';
+import * as authService from '../services/authService';
 import { MissingParameters, WrongTypeParameters, Invalid } from './errorsController';
 
 declare module 'express-session' {

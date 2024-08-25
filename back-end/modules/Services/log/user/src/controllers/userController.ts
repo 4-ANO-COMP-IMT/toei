@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import * as userService from '../service/userService';
+import * as userService from '../services/userService';
 import { MissingParameters, WrongTypeParameters } from './errorsController';
 import { User } from '../models/user';
 

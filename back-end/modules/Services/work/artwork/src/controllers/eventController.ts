@@ -1,6 +1,6 @@
 import express from 'express';
 import {Request, Response} from 'express';
-import * as artworkService from '../service/artworkService';
+import * as artworkService from '../services/artworkService';
 const app = express();
 
 

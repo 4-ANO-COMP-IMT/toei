@@ -48,14 +48,6 @@ export const cookies = async (req: Request, res: Response) => {
 	}
 };
 
-// Funções de validação
-
-const checkStrInput = (input: string, name: string) => {
-	if (!input) {throw new MissingParameters(name);}
-	if (typeof input !== 'string') {throw new WrongTypeParameters(name);}
-	if (input.trim() === "") {throw new Invalid(name);} 
-}
-
 const cookieConfig = (req:Request) => {
 	const login:string = req.session.login_cookie as string
 	const session:string = req.sessionID
@@ -64,4 +56,12 @@ const cookieConfig = (req:Request) => {
 	const maxAge:number = req.session.cookie.originalMaxAge as number
 	const cookieConfig = {login, session, _expires, maxAge}
 	return cookieConfig
+}
+
+// Funções de validação
+
+const checkStrInput = (input: string, name: string) => {
+	if (!input) {throw new MissingParameters(name);}
+	if (typeof input !== 'string') {throw new WrongTypeParameters(name);}
+	if (input.trim() === "") {throw new Invalid(name);} 
 }

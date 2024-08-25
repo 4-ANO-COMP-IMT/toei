@@ -12,7 +12,7 @@ declare module 'express-session' {
 export const create_artwork = async (req: Request, res: Response) => {
     try {
         if(!req.session.login_cookie){
-            return res.status(401).json({ message: 'User not logged in' });
+            return res.status(401).json({ created:false, message: 'User not logged in' });
         }
         const login = req.session.login_cookie;
         const artwork:IArtwork = req.body.artwork;
@@ -20,47 +20,46 @@ export const create_artwork = async (req: Request, res: Response) => {
 
         const artworkCreated = await artworkService.createArtwork(login, artwork);
 
-        res.status(201).json({ artworkCreated, message:'Artwork created successfully' });
+        res.status(201).json({ created:true, artworkCreated, message:'Artwork created successfully' });
         console.log("Artwork created by:",login);
 
 		const cookie_config = cookieConfig(req)
-        artworkService.event('ArtworkCreated', {login, artwork, cookie_config});
+        artworkService.event('ArtworkCreated', {artwork, cookie_config});
     } catch (err) {
-        res.status(400).json({ message: (err as Error).message });
+        res.status(400).json({ created:false, message: (err as Error).message });
     }
 }
 
 export const read_artwork = async (req: Request, res: Response) => {
     try{
         if(!req.session.login_cookie){
-            return res.status(401).json({ message: 'User not logged in' });
+            return res.status(401).json({ read:false, message: 'User not logged in' });
         }
         const login = req.session.login_cookie as string;
-        checkStr(login, 'login');
         const position = Number(req.params.position);
         checkPosition(position);
 
         const artworkRead = await artworkService.readArtwork(login, position);
-
-        res.status(200).json({ artworkRead, message:'Artwork read successfully' });
+        if(artworkRead === undefined || artworkRead.length == 0){
+            return res.status(404).json({ read:false, message: 'Artwork not found' });
+        }
+        res.status(200).json({ read:true, artworkRead, message:'Artwork read successfully' });
         console.log("Artwork read by:",login);
 
 		const cookie_config = cookieConfig(req)
-        artworkService.event('ArtworkRead', { login, position, artwork: artworkRead, cookie_config });
+        artworkService.event('ArtworkRead', { position, artwork: artworkRead, cookie_config});
     }
     catch (err) {
-        res.status(400).json({ message: (err as Error).message });
+        res.status(400).json({ read:false, message: (err as Error).message });
     }
 }
 
 export const update_artwork = async (req: Request, res: Response) => {
     try{
         if(!req.session.login_cookie){
-            return res.status(401).json({ message: 'User not logged in' });
+            return res.status(401).json({  updated:false, message: 'User not logged in' });
         }
         const login = req.session.login_cookie;
-        checkStr(login, 'login');
-
         const artwork:IArtwork = req.body.artwork;
         checkArtwork(artwork);
 
@@ -68,15 +67,18 @@ export const update_artwork = async (req: Request, res: Response) => {
         checkPosition(position);
 
         const artworkUpdated = await artworkService.updateArtwork(login, position, artwork);
+        if(artworkUpdated && artworkUpdated.matchedCount == 0 || !artworkUpdated){
+            return res.status(404).json({  updated:false, message: 'Artwork not found' });
+        }
 
-        res.status(200).json({ artworkUpdated, message:'Artwork updated successfully' });
+        res.status(200).json({ updated:true, message:'Artwork updated successfully' });
         console.log("Artwork updated by:",login)
 
 		const cookie_config = cookieConfig(req)
-        artworkService.event('ArtworkUpdated', {login, position, artwork: artworkUpdated, cookie_config});
+        artworkService.event('ArtworkUpdated', {position, artwork:artworkUpdated, cookie_config});
     }
     catch (err) {
-        res.status(400).json({ message: (err as Error).message });
+        res.status(400).json({ updated:false, message: (err as Error).message });
     }
 }
 

@@ -24,14 +24,6 @@ export const handleEvent = app.post('/event', async (req:Request, res:Response) 
 });
 
 const funcoes = {
-    UserRegistered:(req: Request, res:Response)=>{
-        try{
-            const {login} = req.body.payload;
-            artworkService.startArtworks(login);
-        }catch(err){
-            console.log((err as Error).message);
-        }
-    },
     UserLogged:(req: Request, res:Response)=>{
         try{
             const {cookie_config} = req.body.payload;

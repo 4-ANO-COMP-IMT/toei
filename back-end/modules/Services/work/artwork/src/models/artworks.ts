@@ -33,20 +33,20 @@ export interface IArtwork {
 const ArtworkSchema = new Schema<IArtwork>({
     title: { type: String, required: true },
     description: { type: String, required: true },
-    counters: { type: [CounterSchema], required: true, default: [] },
-    tags: { type: [String], required: true, default: [] },
-    informations: { type: [InformationSchema], required: true, default: [] },
-    img: { type: String, required: true, default: "" }
+    counters: { type: [CounterSchema], required: true},
+    tags: { type: [String], required: true},
+    informations: { type: [InformationSchema], required: true},
+    img: { type: String, required: true}
 });
 
 export interface IArtworks {
     login: string;
-    artworks: IArtwork[];
+    artwork: IArtwork;
 }
 
 const ArtworksSchema = new Schema<IArtworks>({
-    login: { type: String, required: true , unique: true},
-    artworks: { type: [ArtworkSchema], required: true, default: []}
+    login: { type: String, required: true },
+    artwork: { type: ArtworkSchema, required: true }
 });
 
-export const ArtworksModel = model<IArtworks>('User', ArtworksSchema, 'artworks');
+export const ArtworksModel = model<IArtworks>('Artworks', ArtworksSchema, 'artworks');

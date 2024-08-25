@@ -24,7 +24,7 @@ export const create_artwork = async (req: Request, res: Response) => {
         console.log("Artwork created by:",login);
 
 		const cookie_config = cookieConfig(req)
-        artworkService.event('ArtworkCreated', {artwork, cookie_config});
+        artworkService.event('ArtworkCreated', {artworkCreated, cookie_config});
     } catch (err) {
         res.status(400).json({ created:false, message: (err as Error).message });
     }
@@ -36,18 +36,18 @@ export const read_artwork = async (req: Request, res: Response) => {
             return res.status(401).json({ read:false, message: 'User not logged in' });
         }
         const login = req.session.login_cookie as string;
-        const position = Number(req.params.position);
-        checkPosition(position);
+        const id = req.params.id;
+        checkStr(id, 'id');
 
-        const artworkRead = await artworkService.readArtwork(login, position);
-        if(artworkRead === undefined || artworkRead.length == 0){
+        const artworkRead = await artworkService.readArtwork(login, id);
+        if(!artworkRead || artworkRead.length === 0){
             return res.status(404).json({ read:false, message: 'Artwork not found' });
         }
         res.status(200).json({ read:true, artworkRead, message:'Artwork read successfully' });
         console.log("Artwork read by:",login);
 
 		const cookie_config = cookieConfig(req)
-        artworkService.event('ArtworkRead', { position, artwork: artworkRead, cookie_config});
+        artworkService.event('ArtworkRead', {artworkRead, cookie_config});
     }
     catch (err) {
         res.status(400).json({ read:false, message: (err as Error).message });
@@ -60,22 +60,23 @@ export const update_artwork = async (req: Request, res: Response) => {
             return res.status(401).json({  updated:false, message: 'User not logged in' });
         }
         const login = req.session.login_cookie;
+
+        const id = req.params.id;
+        checkStr(id, 'id');
+
         const artwork:IArtwork = req.body.artwork;
         checkArtwork(artwork);
 
-        const position = Number(req.params.position);
-        checkPosition(position);
-
-        const artworkUpdated = await artworkService.updateArtwork(login, position, artwork);
-        if(artworkUpdated && artworkUpdated.matchedCount == 0 || !artworkUpdated){
+        const artworkUpdated = await artworkService.updateArtwork(login, id, artwork);
+        if(!artworkUpdated || artworkUpdated.modifiedCount === 0){
             return res.status(404).json({  updated:false, message: 'Artwork not found' });
         }
 
-        res.status(200).json({ updated:true, message:'Artwork updated successfully' });
+        res.status(200).json({ updated:true, artworkUpdated, message:'Artwork updated successfully' });
         console.log("Artwork updated by:",login)
 
 		const cookie_config = cookieConfig(req)
-        artworkService.event('ArtworkUpdated', {position, artwork:artworkUpdated, cookie_config});
+        artworkService.event('ArtworkUpdated', {artworkUpdated, cookie_config});
     }
     catch (err) {
         res.status(400).json({ updated:false, message: (err as Error).message });
@@ -88,24 +89,34 @@ export const delete_artwork = async (req: Request, res: Response) => {
             return res.status(401).json({ deleted:false, message: 'User not logged in' });
         }
         const login = req.session.login_cookie;
-        const position = Number(req.params.position);
-        checkPosition(position);
+        const id = req.params.id;
+        checkStr(id, 'id');
 
-        const artworkDeleted = await artworkService.deleteArtwork(login, position);
-        if(artworkDeleted && artworkDeleted.modifiedCount == 0 || !artworkDeleted){
+        const artworkDeleted = await artworkService.deleteArtwork(login, id);
+        if(!artworkDeleted || artworkDeleted.deletedCount === 0){
             return res.status(404).json({ deleted:false, message: 'Artwork not found' });
         }
 
-        res.status(200).json({ deleted:true, message:'Artwork deleted successfully' });
+        res.status(200).json({ deleted:true, artworkDeleted, message:'Artwork deleted successfully' });
         console.log("Artwork deleted by:",login);
 
         const cookie_config = cookieConfig(req)
-        artworkService.event('ArtworkDeleted', {position, cookie_config});
+        artworkService.event('ArtworkDeleted', {artworkDeleted, cookie_config});
     }
     catch (err) {
         res.status(400).json({ deleted:false, message: (err as Error).message });
     }
 }
+
+const cookieConfig = (req:Request) => {
+	const login:string = req.session.login_cookie as string
+	const session:string = req.sessionID
+	const _expires:Date=req.session.cookie.expires as Date
+	const maxAge:number = req.session.cookie.originalMaxAge as number
+	const cookieConfig = {login, session, _expires, maxAge}
+	return cookieConfig
+}
+
 
 // funções de validação
 
@@ -159,20 +170,4 @@ const checkStr = (input: string, name: string) => {
         });
         if(!artwork.hasOwnProperty('img')){throw new MissingParameters('image');}
     }
-}
-
-const checkPosition = (position: number) => {
-    if(!position && position != 0){throw new MissingParameters('position');}
-    if(isNaN(position) || !Number.isInteger(position)) {throw new WrongTypeParameters('position');}
-    if(position < 0) {throw new Invalid('position');}
-}
-
-const cookieConfig = (req:Request) => {
-	const login:string = req.session.login_cookie as string
-	const session:string = req.sessionID
-	const _expires:Date=req.session.cookie.expires as Date
-	// console.log("expires:",_expires)
-	const maxAge:number = req.session.cookie.originalMaxAge as number
-	const cookieConfig = {login, session, _expires, maxAge}
-	return cookieConfig
 }

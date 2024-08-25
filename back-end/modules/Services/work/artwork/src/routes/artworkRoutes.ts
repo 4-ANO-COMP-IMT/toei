@@ -6,11 +6,11 @@ const router = Router();
 
 router.post('/', artworkController.create_artwork);
 
-router.get('/:position', artworkController.read_artwork);
+router.get('/:id', artworkController.read_artwork);
 
-router.put('/:position', artworkController.update_artwork);
+router.put('/:id', artworkController.update_artwork);
 
-router.delete('/:position', artworkController.delete_artwork);
+router.delete('/:id', artworkController.delete_artwork);
 
 router.post('/event',eventController.handleEvent);
 

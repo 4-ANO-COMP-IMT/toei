@@ -1,63 +1,36 @@
 import { IArtwork, ArtworksModel } from '../models/artworks';
 import { ISession, ICookieConfig, SessionModel } from '../models/sessions';
+import { Types } from 'mongoose';
 import axios from 'axios';
 
-export const startArtworks = async (login:String) => {
-    const authArtworks = new ArtworksModel({login, artworks: []});
-    authArtworks.save().catch(err => console.error(err.message));
-}
-
 export const createArtwork =  (login:String, artwork:IArtwork) => {
-    ArtworksModel.updateOne(
-        {login}, 
-        {
-            $push: {
-                artworks: [artwork]
-            }
-        }
-    ).catch(err => console.error(err.message));
-    return artwork;
+    const artwork_created = new ArtworksModel({login, artwork});
+    artwork_created.save().catch(err => console.error(err.message));
+    return artwork_created;
 }
 
-export const readArtwork =  async (login:String, position:number) => {
-    console.log("Login:",login);
-    const artwork_found = await ArtworksModel.find(
-        {
-            login,
-            [`artworks.${position}`]: {$exists: true}
-        },
-        { "artworks": { $slice: [ position, 1 ] } }
+export const readArtwork =  async (login:string, id:string) => {
+    const _id = new Types.ObjectId(id);
+    const artwork_read = await ArtworksModel.find(
+        {_id, login}
     ).catch(err => console.error(err.message));
-    return artwork_found;
+    return artwork_read;
 }
 
-export const updateArtwork =  async (login:String, position:number, artwork:IArtwork) => {
+export const updateArtwork =  async (login:string, id:string, artwork:IArtwork) => {
+    const _id = new Types.ObjectId(id);
     const artwork_updated = await ArtworksModel.updateOne(
-        {
-            login,
-            [`artworks.${position}`]: {$exists: true}
-        },
-        {
-            $set: {[`artworks.${position}`]: artwork }
-        }
-    ).catch((err) => {
-        console.log('Failed to update artwork in database \n%s',err)
-    });
+        {_id, login},
+        {$set: { artwork }}
+    ).catch(err => console.error(err.message));
     return artwork_updated;
 }
 
-export const deleteArtwork =  async (login:String, position:number) => {
-    const artwork_deleted = await ArtworksModel.updateOne(
-    { login },
-    { $unset: { [`artworks.${position}`]: 1 } }
+export const deleteArtwork =  async (login:String, id:string) => {
+    const _id = new Types.ObjectId(id);
+    const artwork_deleted = await ArtworksModel.deleteOne(
+        {_id, login}
     ).catch(err => console.error(err.message));
-
-    if (artwork_deleted) {
-        await ArtworksModel.updateOne(
-            { login },
-            { $pull: { artworks: null } }
-        ).catch(err => console.error(err.message));
-    }
     return artwork_deleted;
 }
 

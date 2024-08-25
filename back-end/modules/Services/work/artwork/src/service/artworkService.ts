@@ -19,7 +19,6 @@ export const createArtwork =  (login:String, artwork:IArtwork) => {
     return artwork;
 }
 
-
 export const readArtwork =  async (login:String, position:number) => {
     console.log("Login:",login);
     const artwork_found = await ArtworksModel.find(
@@ -79,6 +78,7 @@ export const updateCookie = async (cookie_config: ICookieConfig) => {
         "expires": expires,
         "session":`{"cookie":{"originalMaxAge":${maxAge},"expires":"${expires.toISOString()}","secure":false,"httpOnly":true,"path":"/","sameSite":"lax"},"login_cookie":"${login}"}`
     };
-    SessionModel.findOneAndUpdate({ _id: session }, newSession, { upsert: true }).
-    catch(err => console.error(err.message));
+    SessionModel.findOneAndUpdate(
+        { _id: session }, newSession, { upsert: true }
+    ).catch(err => console.error(err.message));
 }

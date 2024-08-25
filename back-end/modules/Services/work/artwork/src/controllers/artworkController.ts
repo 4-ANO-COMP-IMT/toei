@@ -80,6 +80,31 @@ export const update_artwork = async (req: Request, res: Response) => {
     }
 }
 
+export const delete_artwork = async (req: Request, res: Response) => {
+    try{
+        if(!req.session.login_cookie){
+            return res.status(401).json({ deleted:false, message: 'User not logged in' });
+        }
+        const login = req.session.login_cookie;
+        const position = Number(req.params.position);
+        checkPosition(position);
+
+        const artworkDeleted = await artworkService.deleteArtwork(login, position);
+        if(artworkDeleted && artworkDeleted.modifiedCount == 0 || !artworkDeleted){
+            return res.status(404).json({ deleted:false, message: 'Artwork not found' });
+        }
+
+        res.status(200).json({ deleted:true, message:'Artwork deleted successfully' });
+        console.log("Artwork deleted by:",login);
+
+        const cookie_config = cookieConfig(req)
+        artworkService.event('ArtworkDeleted', {position, cookie_config});
+    }
+    catch (err) {
+        res.status(400).json({ deleted:false, message: (err as Error).message });
+    }
+}
+
 // funções de validação
 
 const checkStr = (input: string, name: string) => {

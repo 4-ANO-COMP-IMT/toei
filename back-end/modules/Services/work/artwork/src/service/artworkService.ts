@@ -47,6 +47,21 @@ export const updateArtwork =  async (login:String, position:number, artwork:IArt
     return artwork_updated;
 }
 
+export const deleteArtwork =  async (login:String, position:number) => {
+    const artwork_deleted = await ArtworksModel.updateOne(
+    { login },
+    { $unset: { [`artworks.${position}`]: 1 } }
+    ).catch(err => console.error(err.message));
+
+    if (artwork_deleted) {
+        await ArtworksModel.updateOne(
+            { login },
+            { $pull: { artworks: null } }
+        ).catch(err => console.error(err.message));
+    }
+    return artwork_deleted;
+}
+
 export const event = async ( typeMessage: string, payloadMessage: any ) => {
     axios.post('http://localhost:10000/event', {
         type: typeMessage,

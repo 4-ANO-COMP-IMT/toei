@@ -1,39 +1,87 @@
 import bcrypt from 'bcrypt';
 import { UserLogin } from '../models/userLogin';
 import axios from 'axios';
-import { ISession, ICookieConfig, SessionModel } from '../models/sessions';
+import { ISessions, ICookieConfig, SessionsModel } from '../models/sessions'
+import { IUserChanges } from '../models/events';
+import { ObjectId } from 'mongodb';
 
-export const startUser = async (login: string, password: string) => {
+export const createLogin = async (login: string, password: string) => {
 	const authLogin = new UserLogin({login, password});
-	console.log(authLogin)
-	authLogin.save().catch(err => console.error(err.message));
+	await authLogin.save();
 }
 
-export const login = async (login: string, password: string) => {
+export const updateLogin = async (userChanges:IUserChanges) => {
+    if (!userChanges){
+        return false;
+    }
+    const {oldLogin, newLogin, newPassword} = userChanges;
+    const userLogin = await UserLogin.findOne({login: oldLogin});
+    if (!userLogin){
+        return false;
+    }
+    userLogin.login = newLogin as string;
+    userLogin.password = newPassword as string;
+    await userLogin.save();
+    return true;
+}
+
+export const deleteLogin = async (login:string) => {
+    const userLogin = await UserLogin.deleteOne({login});
+    if (!userLogin){
+        return false;
+    }
+    return true;
+}
+
+export const checkLogin = async (login: string, password: string) => {
     const userLogin = await UserLogin.findOne({login: login});
     if (!userLogin || !(await bcrypt.compare(password, userLogin?.password || ''))){
         return false;
     }
-        return true;
+    return true;
 };
 
 export const event = async ( typeMessage: string, payloadMessage: any ) => {
   	axios.post('http://localhost:10000/event', {
 		type: typeMessage,
 		payload: payloadMessage
-	}).catch((err) => {
-		console.log(`Failed to send ${typeMessage} event:`,err.message)
 	});
 }
 
 export const updateCookie = async (cookie_config: ICookieConfig) => {
-    const {login, session, _expires, maxAge} = cookie_config;
+    const {login, session, _expires, maxAge, ip_cookie} = cookie_config;
     const expires:Date = new Date(_expires);
-    const newSession : ISession ={
-        "_id": session,
+    const newSession : ISessions ={
+        _id: session,
         "expires": expires,
-        "session":`{"cookie":{"originalMaxAge":${maxAge},"expires":"${expires.toISOString()}","secure":false,"httpOnly":true,"path":"/","sameSite":"lax"},"login_cookie":"${login}"}`
+        "session":{
+            "cookie":{
+                "originalMaxAge":maxAge,
+                "partitioned":false,
+                "priority":"medium",
+                "expires":expires.toISOString(),
+                "secure":false,
+                "httpOnly":true,
+                "domain":"localhost",
+                "path":"/",
+                "sameSite":"lax"
+            },
+            "login_cookie":login,
+            "ip_cookie":ip_cookie
+        }
     };
-    SessionModel.findOneAndUpdate({ _id: session }, newSession, { upsert: true }).
-    catch(err => console.error(err.message));
+    SessionsModel.findOneAndUpdate(
+        {_id: session}, newSession, {upsert: true}
+    ).catch((err) => {
+        console.log((err as Error).message);
+    });
+}
+
+export const deleteSessions = async (login:string) => {
+    const session_deleted = await SessionsModel.deleteMany(
+        {
+            'session.login_cookie': login
+        }
+    );
+    return session_deleted;
 }

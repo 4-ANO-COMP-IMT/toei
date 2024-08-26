@@ -1,29 +1,35 @@
 import { Request, Response } from 'express';
 import * as authService from '../services/authService';
 import { MissingParameters, WrongTypeParameters, Invalid } from './errorsController';
+import { ICookieConfig } from '../models/sessions';
 
 declare module 'express-session' {
 	interface SessionData {
 		login_cookie: string;
+		ip_cookie: string;
 	}
 }
 
 export const login = async (req: Request, res: Response) => {
   	try {
 		const { login, password } = req.body;
-		
 		checkStrInput(login, 'login');
 		checkStrInput(password, 'password');
 
-		const auth = await authService.login(login, password);
+		const auth = await authService.checkLogin(login, password);
 		if (!auth) {
 			return res.status(401).json({logged: false , message: 'Invalid login or password'});
 		}
+		// create new session and save cookie on browser, or rewrite if already exists
 		
+		// console.log('session: ',req.session)
 		req.session.login_cookie = login
+		req.session.ip_cookie = req.ip
+		req.session.save();
 
 		res.status(200).json({logged: true, message: 'User logged in successfully'});
-		
+		console.log('login by: ',login)
+
 		const cookie_config = cookieConfig(req)
 		await authService.event('UserLogged', {cookie_config});	
 	} catch (err) {
@@ -31,11 +37,12 @@ export const login = async (req: Request, res: Response) => {
 	}
 };
 
-export const cookies = async (req: Request, res: Response) => {
+export const check_session = async (req: Request, res: Response) => {
 	try{
-        if(!req.session.login_cookie){
+        if(!req.session.login_cookie || req.session.ip_cookie !== req.ip){
             return res.status(401).json({ valid: false, message: 'User not logged in' });
         }
+		
 		const login:string = req.session.login_cookie
 
 		res.status(200).json({valid: true, username: login, message: 'User logged in'});
@@ -48,13 +55,34 @@ export const cookies = async (req: Request, res: Response) => {
 	}
 };
 
+export const disconnect = async (req: Request, res: Response) => {
+	try {
+		if(!req.session.login_cookie || req.session.ip_cookie !== req.ip){
+			return res.status(401).json({message: 'User not logged in'});
+		}
+		
+		const cookie_config = cookieConfig(req)
+		authService.event('UserDisconnected', {cookie_config});
+
+		req.session.destroy((err) => {
+			if (err) {
+				return res.status(500).json({message: err});
+			}
+		})
+		res.status(200).json({message: 'User logged out'});
+	} catch (err) {
+		res.status(400).json({message: (err as Error).message });
+	}
+}
+
 const cookieConfig = (req:Request) => {
 	const login:string = req.session.login_cookie as string
 	const session:string = req.sessionID
 	const _expires:Date=req.session.cookie.expires as Date
-	// console.log("expires:",_expires)
 	const maxAge:number = req.session.cookie.originalMaxAge as number
-	const cookieConfig = {login, session, _expires, maxAge}
+    const ip_cookie:string = req.session.ip_cookie as string
+
+	const cookieConfig:ICookieConfig = {login, session, _expires, maxAge, ip_cookie}
 	return cookieConfig
 }
 

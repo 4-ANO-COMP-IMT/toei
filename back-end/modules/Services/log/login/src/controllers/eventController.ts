@@ -1,6 +1,8 @@
 import express from 'express';
 import * as authService from '../services/authService';
 import {Request, Response} from 'express';
+import { IUserChanges } from '../models/events';
+import { ICookieConfig } from '../models/sessions';
 const app = express();
 
 type FuncoesKeys = keyof typeof funcoes;
@@ -26,26 +28,37 @@ const UpdateCookie = (req: Request, res: Response) => {
     try {
         const { cookie_config } = req.body.payload;
         authService.updateCookie(cookie_config);
-        }catch(err){
-            console.log(err);
-        }
+    }catch(err){
+        console.log((err as Error).message);
+    }
 };
 
 const funcoes = {
     UserCreated:(req: Request, res:Response)=>{
         try{
             const {login,password} = req.body.payload;
-            authService.startUser(login,password);
+            authService.createLogin(login,password);
         }catch(err){
             console.log((err as Error).message);
         }
     },
     UserRead: UpdateCookie,
-    UserUpdated: UpdateCookie,
+    UserUpdated: (req: Request, res: Response) => {
+        try {
+            const userChanges:IUserChanges = req.body.payload.userChanges;
+            authService.updateLogin(userChanges);
+            
+            UpdateCookie(req,res);
+        }catch(err){
+            console.log((err as Error).message);
+        }
+    },
     UserDeleted: (req: Request, res: Response) => {
         try {
-            // apagar todas as sessions
-            // apagar os dados do user
+            const cookie_config:ICookieConfig = req.body.payload.cookie_config;
+            console.log(cookie_config)
+            authService.deleteLogin(cookie_config.login);
+            authService.deleteSessions(cookie_config.login);
         }catch(err){
             console.log((err as Error).message);
         }

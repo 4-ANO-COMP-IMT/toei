@@ -2,10 +2,13 @@ import { Request, Response } from 'express';
 import * as userService from '../services/userService';
 import { MissingParameters, WrongTypeParameters, Invalid } from './errorsController';
 import { IUser, UserModel, IUserInput } from '../models/user';
+import { ICookieConfig } from '../models/sessions';
+import bcrypt from 'bcrypt';
 
 declare module 'express-session' {
     interface SessionData {
-      login_cookie: string;
+        login_cookie: string;
+        ip_cookie: string;
     }
 }
 
@@ -13,11 +16,12 @@ export const create_user = async (req: Request, res: Response) => {
     try {
         const userInput:IUserInput = req.body;
         const user:IUser = await checkUser(userInput);
-        await userExists(user.login,user.email);
+        await createExists(user.login,user.email);
+        user.password = crypto(user.password);
         
         const userCreated:IUser = await userService.createUser(user);
         if(!userCreated){
-            return res.status(404).json({ created:false, message: 'User not found' });
+            return res.status(404).json({ created:false, message: 'User not created' });
         }
 
         res.status(201).json({ created:true, userCreated, message: 'User created successfully' });
@@ -31,7 +35,7 @@ export const create_user = async (req: Request, res: Response) => {
 
 export const read_user = async (req: Request, res: Response) => {
     try {
-        if(!req.session.login_cookie){
+        if(!req.session.login_cookie || req.session.ip_cookie !== req.ip){
             return res.status(401).json({ read:false, message: 'User not logged in' });
         }
         const login = req.session.login_cookie;
@@ -44,7 +48,7 @@ export const read_user = async (req: Request, res: Response) => {
         console.log("User read by:",login);
 
 		const cookie_config = cookieConfig(req)
-        userService.event('UserSelected', {userRead, cookie_config});
+        userService.event('UserRead', {userRead, cookie_config});
     } catch (error) {
         res.status(400).json({ read:false, message: (error as Error).message });
     }
@@ -52,24 +56,30 @@ export const read_user = async (req: Request, res: Response) => {
 
 export const update_user = async (req: Request, res: Response) => {
     try {
-        if(!req.session.login_cookie){
+        if(!req.session.login_cookie || req.session.ip_cookie !== req.ip){
             return res.status(401).json({ created:false, message: 'User not logged in' });
         }
-        const login = req.session.login_cookie;
         const userInput:IUserInput = req.body;
         const user:IUser = await checkUser(userInput);
-        await userExists(user.login,user.email);
+        user.password = crypto(user.password);
+
+        const login = req.session.login_cookie;
+        const { login:oldLogin, email:oldEmail,password:oldPassword} = await userService.readUser(login);
+        const userChanges = { oldLogin, oldEmail, oldPassword, newLogin:user.login, newEmail:user.email, newPassword:user.password};
+        await updateExists( userChanges );
         
         const userUpdated = await userService.updateUser(login, user);
         if(!userUpdated || userUpdated.modifiedCount === 0){
             return res.status(404).json({ updated:false, message: 'User not found' });
         }
+        req.session.login_cookie = user.login;
 
         res.status(200).json({ updated:true, userUpdated, message: 'User updated successfully' });
         console.log("User updated by:",login);
 
         const cookie_config = cookieConfig(req)
-        userService.event('UserUpdated', {userUpdated, cookie_config});
+        cookie_config.login = user.login
+        userService.event('UserUpdated', {userUpdated, userChanges, cookie_config});
     } catch (error) {
         res.status(400).json({ updated:false, message: (error as Error).message });
     }
@@ -77,7 +87,7 @@ export const update_user = async (req: Request, res: Response) => {
 
 export const delete_user = async (req: Request, res: Response) => {
     try {
-        if(!req.session.login_cookie){
+        if(!req.session.login_cookie || req.session.ip_cookie !== req.ip){
             return res.status(401).json({ deleted:false, message: 'User not logged in' });
         }
         const login = req.session.login_cookie;
@@ -91,13 +101,12 @@ export const delete_user = async (req: Request, res: Response) => {
         console.log("User deleted by:",login);
 
         const cookie_config = cookieConfig(req)
-        userService.event('UserDeleted', {userDeleted, cookie_config});
         req.session.destroy((err) => {
-            if (err) {
-                return console.log(err);
-            }
-            console.log("Session destroyed");
+            if (err) {return console.log(err);}
         });
+        userService.deleteSessions(cookie_config.login);
+        console.log("Session destroyed");
+        userService.event('UserDeleted', {userDeleted, cookie_config});
     } catch (error) {
         res.status(400).json({ deleted:false, message: (error as Error).message });
     }
@@ -108,8 +117,14 @@ const cookieConfig = (req:Request) => {
 	const session:string = req.sessionID
 	const _expires:Date=req.session.cookie.expires as Date
 	const maxAge:number = req.session.cookie.originalMaxAge as number
-	const cookieConfig = {login, session, _expires, maxAge}
+    const ip_cookie:string = req.session.ip_cookie as string
+
+	const cookieConfig:ICookieConfig = {login, session, _expires, maxAge, ip_cookie}
 	return cookieConfig
+}
+
+const crypto = (text:string) => {
+    return bcrypt.hashSync(text, 10);
 }
 
 // funções de validação
@@ -128,7 +143,6 @@ const checkUser = async(user:IUserInput) => {
     checkStr(login, 'login');
     checkStr(email, 'email');
 
-    //validaçao do formato da data
     const dateParts = birthDate.split("-");
 
     if (dateParts.length !== 3 || dateParts[0].length !== 4 || dateParts[1].length !== 2 || dateParts[2].length !== 2) {
@@ -142,9 +156,29 @@ const checkUser = async(user:IUserInput) => {
     return {name, password, birthDate:dateObject, login, email};
 }
 
-const userExists = async (login:string,email:string) => {
+const createExists = async (login:string,email:string) => {
     const existingUser = await UserModel.findOne({ login });
     if (existingUser) {throw new Error('User with this login already exists');}
     const existingEmail = await UserModel.findOne({ email });
+    if (existingEmail) {throw new Error('User with this email already exists');}
+}
+const updateExists = async ({oldLogin, oldEmail, newLogin, newEmail}: { oldLogin: string, oldEmail: string, newLogin: string, newEmail: string }) => {
+    const existingUser = await UserModel.findOne(
+        {
+            $and:[
+                { login:{$ne:oldLogin}, email:{$ne:oldEmail} },
+                { login:newLogin }
+            ]
+        }
+    );
+    if (existingUser) {throw new Error('User with this login already exists');}
+    const existingEmail = await UserModel.findOne(
+        {
+            $and:[
+                { login:{$ne:oldLogin}, email:{$ne:oldEmail} },
+                { email:newEmail }
+            ]
+        }
+    );
     if (existingEmail) {throw new Error('User with this email already exists');}
 }

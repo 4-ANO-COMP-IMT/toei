@@ -2,7 +2,8 @@ import express from 'express';
 import {Request, Response} from 'express';
 import * as artworkService from '../services/artworkService';
 const app = express();
-
+import { IUserChanges } from '../models/events';
+import { ICookieConfig } from '../models/sessions';
 
 type FuncoesKeys = keyof typeof funcoes;
 
@@ -28,21 +29,40 @@ const UpdateCookie = (req: Request, res: Response) => {
         const { cookie_config } = req.body.payload;
         artworkService.updateCookie(cookie_config);
     }catch(err){
-        console.log(err);
+        console.log((err as Error).message);
     }
 };
 
 const funcoes = {
     // UserCreated não afeta este mss
     UserRead: UpdateCookie,
-    UserUpdated: UpdateCookie,
+    UserUpdated: (req: Request, res: Response) => {
+        try {
+            const userChanges:IUserChanges = req.body.payload.userChanges;
+            artworkService.updateArtworks(userChanges);
+
+            UpdateCookie(req,res);
+        }catch(err){
+            console.log((err as Error).message);
+        }
+    },
     UserDeleted: (req: Request, res: Response) => {
         try {
-            // apagar todas as sessions
-            // apagar as artworks do user
+            const cookie_config:ICookieConfig = req.body.payload.cookie_config;
+            console.log(cookie_config)
+            artworkService.deleteArtworks(cookie_config.login);
+            artworkService.deleteSessions(cookie_config.login);
         }catch(err){
             console.log((err as Error).message);
         }
     },
     UserLogged:UpdateCookie,
+    UserDisconnected: (req: Request, res: Response) => {
+        try {
+            const cookie_config:ICookieConfig = req.body.payload.cookie_config;
+            artworkService.deleteSession(cookie_config.session);
+            }catch(err){
+                console.log((err as Error).message);
+            }
+    },
 }

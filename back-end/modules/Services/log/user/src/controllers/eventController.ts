@@ -1,6 +1,7 @@
 import express from 'express';
 import {Request, Response} from 'express';
 import * as userService from '../services/userService';
+import { ICookieConfig } from '../models/sessions';
 const app = express();
 
 type FuncoesKeys = keyof typeof funcoes;
@@ -22,20 +23,28 @@ export const handleEvent = app.post('/event', async (req:Request, res:Response) 
     }
 });
 
-const UpdateCookie = (req: Request, res: Response) => {
+const UpdateSession = (req: Request, res: Response) => {
     try {
         const { cookie_config } = req.body.payload;
-        userService.updateCookie(cookie_config);
-        }catch(err){
-            console.log(err);
-        }
+        userService.updateSession(cookie_config);
+    }catch(err){
+        console.log((err as Error).message);
+    }
 };
 
 const funcoes = {
-    UserLogged:UpdateCookie,
-    ArtworkCreated: UpdateCookie,
-    ArtworkRead: UpdateCookie,
-    ArtworkUpdated: UpdateCookie,
-    ArtworkDeleted: UpdateCookie,
+    UserLogged:UpdateSession,
+    UserDisconnected: (req: Request, res: Response) => {
+        try {
+            const cookie_config:ICookieConfig = req.body.payload.cookie_config;
+            userService.deleteSession(cookie_config.session);
+            }catch(err){
+                console.log((err as Error).message);
+            }
+    },
+    ArtworkCreated: UpdateSession,
+    ArtworkRead: UpdateSession,
+    ArtworkUpdated: UpdateSession,
+    ArtworkDeleted: UpdateSession,
 
 }

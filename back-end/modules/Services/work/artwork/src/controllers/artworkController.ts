@@ -2,16 +2,18 @@ import { Request, Response } from 'express';
 import * as artworkService from '../services/artworkService';
 import { MissingParameters, WrongTypeParameters, Invalid } from './errorsController';
 import { IArtwork } from '../models/artworks';
+import { ICookieConfig } from '../models/sessions';
 
 declare module 'express-session' {
     interface SessionData {
-      login_cookie: string;
+        login_cookie: string;
+        ip_cookie: string;
     }
 }
 
 export const create_artwork = async (req: Request, res: Response) => {
     try {
-        if(!req.session.login_cookie){
+        if(!req.session.login_cookie || req.session.ip_cookie !== req.ip){
             return res.status(401).json({ created:false, message: 'User not logged in' });
         }
         const login = req.session.login_cookie;
@@ -32,7 +34,7 @@ export const create_artwork = async (req: Request, res: Response) => {
 
 export const read_artwork = async (req: Request, res: Response) => {
     try{
-        if(!req.session.login_cookie){
+        if(!req.session.login_cookie || req.session.ip_cookie !== req.ip){
             return res.status(401).json({ read:false, message: 'User not logged in' });
         }
         const login = req.session.login_cookie as string;
@@ -56,7 +58,7 @@ export const read_artwork = async (req: Request, res: Response) => {
 
 export const update_artwork = async (req: Request, res: Response) => {
     try{
-        if(!req.session.login_cookie){
+        if(!req.session.login_cookie || req.session.ip_cookie !== req.ip){
             return res.status(401).json({  updated:false, message: 'User not logged in' });
         }
         const login = req.session.login_cookie;
@@ -85,7 +87,7 @@ export const update_artwork = async (req: Request, res: Response) => {
 
 export const delete_artwork = async (req: Request, res: Response) => {
     try{
-        if(!req.session.login_cookie){
+        if(!req.session.login_cookie || req.session.ip_cookie !== req.ip){
             return res.status(401).json({ deleted:false, message: 'User not logged in' });
         }
         const login = req.session.login_cookie;
@@ -113,7 +115,9 @@ const cookieConfig = (req:Request) => {
 	const session:string = req.sessionID
 	const _expires:Date=req.session.cookie.expires as Date
 	const maxAge:number = req.session.cookie.originalMaxAge as number
-	const cookieConfig = {login, session, _expires, maxAge}
+    const ip_cookie:string = req.session.ip_cookie as string
+
+	const cookieConfig:ICookieConfig = {login, session, _expires, maxAge, ip_cookie}
 	return cookieConfig
 }
 

@@ -6,8 +6,10 @@ const router = Router();
 
 router.post('/', authController.login);
 
-router.get('/cookies',authController.cookies);
+router.get('/cookies',authController.check_session);
 
 router.post('/event', eventController.handleEvent);
+
+router.get('/disconnect', authController.disconnect);
 
 export default router;

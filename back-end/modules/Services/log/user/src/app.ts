@@ -2,6 +2,8 @@ import express from 'express';
 import userRoutes from './routes/userRoutes';
 import mongoose from 'mongoose';
 import { config } from './config/config';
+import session from 'express-session';
+import MongoStore from 'connect-mongo';
 
 const cors = require('cors');
 const app = express();
@@ -21,6 +23,24 @@ if (!config.mongoUri || !config.port) {
 mongoose.connect(config.mongoUri)
   .then(() => console.log('Connected to MongoDB'))
   .catch((err) => console.error('Failed to connect to MongoDB', err));
+  
+app.use(session({
+  store: MongoStore.create({
+    mongoUrl: config.mongoUri,
+    collectionName: 'sessions'
+  }),
+  secret: config.sessionSecret as string ,
+  resave: true,
+  saveUninitialized: false,
+  rolling: true,
+  unset: 'destroy',
+  name: 'session',
+  cookie: {
+    httpOnly: true,
+    sameSite: 'lax',
+    secure: false
+  }
+}))
 
 const PORT = config.port;
 app.listen(PORT, () => {

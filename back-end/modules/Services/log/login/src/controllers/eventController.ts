@@ -32,7 +32,7 @@ const UpdateCookie = (req: Request, res: Response) => {
 };
 
 const funcoes = {
-    UserRegistered:(req: Request, res:Response)=>{
+    UserCreated:(req: Request, res:Response)=>{
         try{
             const {login,password} = req.body.payload;
             authService.startUser(login,password);
@@ -40,7 +40,18 @@ const funcoes = {
             console.log((err as Error).message);
         }
     },
+    UserRead: UpdateCookie,
+    UserUpdated: UpdateCookie,
+    UserDeleted: (req: Request, res: Response) => {
+        try {
+            // apagar todas as sessions
+            // apagar os dados do user
+        }catch(err){
+            console.log((err as Error).message);
+        }
+    },
     ArtworkCreated: UpdateCookie,
     ArtworkRead: UpdateCookie,
-    ArtworkUpdated: UpdateCookie
+    ArtworkUpdated: UpdateCookie,
+    ArtworkDeleted: UpdateCookie,
 }

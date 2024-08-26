@@ -23,13 +23,26 @@ export const handleEvent = app.post('/event', async (req:Request, res:Response) 
     }
 });
 
+const UpdateCookie = (req: Request, res: Response) => {
+    try {
+        const { cookie_config } = req.body.payload;
+        artworkService.updateCookie(cookie_config);
+    }catch(err){
+        console.log(err);
+    }
+};
+
 const funcoes = {
-    UserLogged:(req: Request, res:Response)=>{
-        try{
-            const {cookie_config} = req.body.payload;
-            artworkService.updateCookie(cookie_config);
+    // UserCreated não afeta este mss
+    UserRead: UpdateCookie,
+    UserUpdated: UpdateCookie,
+    UserDeleted: (req: Request, res: Response) => {
+        try {
+            // apagar todas as sessions
+            // apagar as artworks do user
         }catch(err){
             console.log((err as Error).message);
         }
-    }
+    },
+    UserLogged:UpdateCookie,
 }

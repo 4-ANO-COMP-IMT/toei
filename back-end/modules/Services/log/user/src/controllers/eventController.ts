@@ -1,5 +1,6 @@
 import express from 'express';
 import {Request, Response} from 'express';
+import * as userService from '../services/userService';
 const app = express();
 
 type FuncoesKeys = keyof typeof funcoes;
@@ -17,11 +18,24 @@ export const handleEvent = app.post('/event', async (req:Request, res:Response) 
         }
         res.status(200).send({message: 'Event received'});
     }catch(err){
-        res.end();
+        console.log((err as Error).message);
     }
 });
 
+const UpdateCookie = (req: Request, res: Response) => {
+    try {
+        const { cookie_config } = req.body.payload;
+        userService.updateCookie(cookie_config);
+        }catch(err){
+            console.log(err);
+        }
+};
+
 const funcoes = {
-    x:(req: Request, res:Response)=>{
-    }
+    UserLogged:UpdateCookie,
+    ArtworkCreated: UpdateCookie,
+    ArtworkRead: UpdateCookie,
+    ArtworkUpdated: UpdateCookie,
+    ArtworkDeleted: UpdateCookie,
+
 }

@@ -27,7 +27,8 @@ mongoose.connect(config.mongoUri)
 app.use(session({
   store: MongoStore.create({
     mongoUrl: config.mongoUri,
-    collectionName: 'sessions'
+    collectionName: 'sessions',
+    stringify: false
   }),
   secret: config.sessionSecret as string ,
   resave: true,
@@ -39,7 +40,10 @@ app.use(session({
     httpOnly: true,
     sameSite: 'lax',
     secure: false,
-    maxAge: config.sessionMaxAge
+    maxAge: config.sessionMaxAge,
+    partitioned: false,
+    priority: 'medium',
+    domain: 'localhost',
   }
 }))
 

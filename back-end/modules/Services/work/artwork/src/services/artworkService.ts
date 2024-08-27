@@ -1,9 +1,7 @@
 import { IArtwork, ArtworksModel } from '../models/artworks';
 import { ISessions, ICookieConfig, SessionsModel } from '../models/sessions';
 import { IUserChanges } from '../models/events';
-import { Types } from 'mongoose';
 import axios from 'axios';
-import { ObjectId } from 'mongodb';
 
 export const createArtwork =  (login:String, artwork:IArtwork) => {
     const artwork_created = new ArtworksModel({login, artwork});
@@ -12,20 +10,17 @@ export const createArtwork =  (login:String, artwork:IArtwork) => {
 }
 
 export const readArtwork =  async (login:string, id:string) => {
-    const _id = new Types.ObjectId(id);
-    const artwork_read = await ArtworksModel.find({_id, login});
+    const artwork_read = await ArtworksModel.find({_id:id, login});
     return artwork_read;
 }
 
 export const updateArtwork =  async (login:string, id:string, artwork:IArtwork) => {
-    const _id = new Types.ObjectId(id);
-    const artwork_updated = await ArtworksModel.updateOne({_id, login},{$set: { artwork }});
+    const artwork_updated = await ArtworksModel.updateOne({_id:id, login},{$set: { artwork }});
     return artwork_updated;
 }
 
 export const deleteArtwork =  async (login:String, id:string) => {
-    const _id = new Types.ObjectId(id);
-    const artwork_deleted = await ArtworksModel.deleteOne({_id, login});
+    const artwork_deleted = await ArtworksModel.deleteOne({_id:id, login});
     return artwork_deleted;
 }
 

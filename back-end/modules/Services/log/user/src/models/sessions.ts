@@ -1,5 +1,4 @@
 import { Schema, model } from "mongoose";
-import { ObjectId } from "mongodb";
 
 export interface ICookieConfig {
     login: string;
@@ -40,7 +39,7 @@ interface ISession {
 }
 
 const SessionSchema = new Schema<ISession>({
-    cookie: { type: CookieSchema, required: true },
+    cookie: { type: CookieSchema, required: true, _id: false },
     login_cookie: { type: String, required: true },
     ip_cookie: { type: String, required: true }
 });
@@ -54,7 +53,7 @@ export interface ISessions {
 const SessionsSchema = new Schema<ISessions>({
     _id: { type: String, required: true },
     expires: { type: Date, required: true },
-    session: { type: SessionSchema, required: true }
+    session: { type: SessionSchema, required: true, _id: false }
 });
 
 export const SessionsModel = model<ISessions>("Session", SessionsSchema, "sessions");

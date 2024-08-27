@@ -46,7 +46,7 @@ export interface IArtworks {
 
 const ArtworksSchema = new Schema<IArtworks>({
     login: { type: String, required: true },
-    artwork: { type: ArtworkSchema, required: true }
+    artwork: { type: ArtworkSchema, required: true, _id: false }
 });
 
 export const ArtworksModel = model<IArtworks>('Artworks', ArtworksSchema, 'artworks');

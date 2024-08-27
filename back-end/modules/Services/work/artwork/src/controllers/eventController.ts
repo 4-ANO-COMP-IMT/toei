@@ -40,7 +40,6 @@ const funcoes = {
         try {
             const userChanges:IUserChanges = req.body.payload.userChanges;
             artworkService.updateArtworks(userChanges);
-
             UpdateCookie(req,res);
         }catch(err){
             console.log((err as Error).message);
@@ -49,7 +48,6 @@ const funcoes = {
     UserDeleted: (req: Request, res: Response) => {
         try {
             const cookie_config:ICookieConfig = req.body.payload.cookie_config;
-            console.log(cookie_config)
             artworkService.deleteArtworks(cookie_config.login);
             artworkService.deleteSessions(cookie_config.login);
         }catch(err){
@@ -65,4 +63,6 @@ const funcoes = {
                 console.log((err as Error).message);
             }
     },
+    ArtworksRead: UpdateCookie,
+    TagsRead: UpdateCookie,
 }

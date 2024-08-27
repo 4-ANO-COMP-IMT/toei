@@ -47,7 +47,6 @@ const funcoes = {
         try {
             const userChanges:IUserChanges = req.body.payload.userChanges;
             authService.updateLogin(userChanges);
-            
             UpdateCookie(req,res);
         }catch(err){
             console.log((err as Error).message);
@@ -56,7 +55,6 @@ const funcoes = {
     UserDeleted: (req: Request, res: Response) => {
         try {
             const cookie_config:ICookieConfig = req.body.payload.cookie_config;
-            console.log(cookie_config)
             authService.deleteLogin(cookie_config.login);
             authService.deleteSessions(cookie_config.login);
         }catch(err){
@@ -67,4 +65,6 @@ const funcoes = {
     ArtworkRead: UpdateCookie,
     ArtworkUpdated: UpdateCookie,
     ArtworkDeleted: UpdateCookie,
+    ArtworksRead: UpdateCookie,
+    TagsRead: UpdateCookie
 }

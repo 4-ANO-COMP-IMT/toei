@@ -46,6 +46,6 @@ const funcoes = {
     ArtworkRead: UpdateSession,
     ArtworkUpdated: UpdateSession,
     ArtworkDeleted: UpdateSession,
-    ArtworksRead: UpdateSession,
+    QueryArtworks: UpdateSession,
     TagsRead: UpdateSession,
 }

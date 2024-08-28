@@ -48,7 +48,7 @@ export const event = async ( typeMessage: string, payloadMessage: any ) => {
 	});
 }
 
-export const updateCookie = async (cookie_config: ICookieConfig) => {
+export const updateSession = async (cookie_config: ICookieConfig) => {
     const {login, session, _expires, maxAge, ip_cookie} = cookie_config;
     const expires:Date = new Date(_expires);
     const newSession : ISessions ={

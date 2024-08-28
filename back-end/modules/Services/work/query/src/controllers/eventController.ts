@@ -24,10 +24,10 @@ export const handleEvent = app.post('/event', async (req:Request, res:Response) 
     }
 });
 
-const UpdateCookie = (req: Request, res: Response) => {
+const UpdateSession = (req: Request, res: Response) => {
     try {
         const { cookie_config } = req.body.payload;
-        queryService.updateCookie(cookie_config);
+        queryService.updateSession(cookie_config);
     }catch(err){
         console.log((err as Error).message);
     }
@@ -35,13 +35,13 @@ const UpdateCookie = (req: Request, res: Response) => {
 
 const funcoes = {
     // UserCreated não afeta este mss
-    UserRead: UpdateCookie,
+    UserRead: UpdateSession,
     UserUpdated: (req: Request, res: Response) => {
         try {
             const userChanges:IUserChanges = req.body.payload.userChanges;
             queryService.updateArtworks(userChanges);
 
-            UpdateCookie(req,res);
+            UpdateSession(req,res);
         }catch(err){
             console.log((err as Error).message);
         }
@@ -56,7 +56,7 @@ const funcoes = {
             console.log((err as Error).message);
         }
     },
-    UserLogged:UpdateCookie,
+    UserLogged:UpdateSession,
     UserDisconnected: (req: Request, res: Response) => {
         try {
             const cookie_config:ICookieConfig = req.body.payload.cookie_config;
@@ -75,11 +75,12 @@ const funcoes = {
             const login = artworkCreated.login;
             const id = artworkCreated['_id'];
             queryService.createArtwork(id, login, newArtwork);
-            UpdateCookie(req,res);
+            UpdateSession(req,res);
         }catch(err){
             console.log((err as Error).message);
         }
     },
+    ArtworkRead: UpdateSession,
     ArtworkUpdated: (req: Request, res: Response) => {
         try {
             const artworkUpdated = req.body.payload.artworkUpdated.artwork;
@@ -90,6 +91,7 @@ const funcoes = {
             const login = artworkUpdated.login;
             const id = artworkUpdated['_id'];
             queryService.updateArtwork(id, login, newArtwork);
+            UpdateSession(req,res);
         }catch(err){
             console.log((err as Error).message);
         }

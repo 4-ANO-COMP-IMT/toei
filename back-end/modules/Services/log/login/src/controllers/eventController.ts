@@ -24,10 +24,10 @@ export const handleEvent = app.post('/event', async (req:Request, res:Response) 
     }
 });
 
-const UpdateCookie = (req: Request, res: Response) => {
+const UpdateSession = (req: Request, res: Response) => {
     try {
         const { cookie_config } = req.body.payload;
-        authService.updateCookie(cookie_config);
+        authService.updateSession(cookie_config);
     }catch(err){
         console.log((err as Error).message);
     }
@@ -42,12 +42,12 @@ const funcoes = {
             console.log((err as Error).message);
         }
     },
-    UserRead: UpdateCookie,
+    UserRead: UpdateSession,
     UserUpdated: (req: Request, res: Response) => {
         try {
             const userChanges:IUserChanges = req.body.payload.userChanges;
             authService.updateLogin(userChanges);
-            UpdateCookie(req,res);
+            UpdateSession(req,res);
         }catch(err){
             console.log((err as Error).message);
         }
@@ -61,10 +61,10 @@ const funcoes = {
             console.log((err as Error).message);
         }
     },
-    ArtworkCreated: UpdateCookie,
-    ArtworkRead: UpdateCookie,
-    ArtworkUpdated: UpdateCookie,
-    ArtworkDeleted: UpdateCookie,
-    ArtworksRead: UpdateCookie,
-    TagsRead: UpdateCookie
+    ArtworkCreated: UpdateSession,
+    ArtworkRead: UpdateSession,
+    ArtworkUpdated: UpdateSession,
+    ArtworkDeleted: UpdateSession,
+    QueryArtworks: UpdateSession,
+    TagsRead: UpdateSession,
 }

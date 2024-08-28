@@ -24,10 +24,10 @@ export const handleEvent = app.post('/event', async (req:Request, res:Response) 
     }
 });
 
-const UpdateCookie = (req: Request, res: Response) => {
+const UpdateSession = (req: Request, res: Response) => {
     try {
         const { cookie_config } = req.body.payload;
-        artworkService.updateCookie(cookie_config);
+        artworkService.updateSession(cookie_config);
     }catch(err){
         console.log((err as Error).message);
     }
@@ -35,12 +35,12 @@ const UpdateCookie = (req: Request, res: Response) => {
 
 const funcoes = {
     // UserCreated não afeta este mss
-    UserRead: UpdateCookie,
+    UserRead: UpdateSession,
     UserUpdated: (req: Request, res: Response) => {
         try {
             const userChanges:IUserChanges = req.body.payload.userChanges;
             artworkService.updateArtworks(userChanges);
-            UpdateCookie(req,res);
+            UpdateSession(req,res);
         }catch(err){
             console.log((err as Error).message);
         }
@@ -54,7 +54,7 @@ const funcoes = {
             console.log((err as Error).message);
         }
     },
-    UserLogged:UpdateCookie,
+    UserLogged:UpdateSession,
     UserDisconnected: (req: Request, res: Response) => {
         try {
             const cookie_config:ICookieConfig = req.body.payload.cookie_config;
@@ -63,6 +63,6 @@ const funcoes = {
                 console.log((err as Error).message);
             }
     },
-    ArtworksRead: UpdateCookie,
-    TagsRead: UpdateCookie,
+    QueryArtworks: UpdateSession,
+    TagsRead: UpdateSession,
 }

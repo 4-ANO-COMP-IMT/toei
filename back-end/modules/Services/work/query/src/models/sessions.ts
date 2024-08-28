@@ -33,9 +33,9 @@ const CookieSchema = new Schema<ICookie>({
 });
 
 interface ISession {
-        cookie: ICookie;
-        login_cookie: string;
-        ip_cookie: string;
+    cookie: ICookie;
+    login_cookie: string;
+    ip_cookie: string;
 }
 
 const SessionSchema = new Schema<ISession>({

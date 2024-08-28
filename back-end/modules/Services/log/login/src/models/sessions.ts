@@ -1,5 +1,4 @@
 import { Schema, model } from "mongoose";
-import { ObjectId } from "mongodb";
 
 export interface ICookieConfig {
     login: string;

@@ -25,7 +25,7 @@ export const query_artworks = async (req: Request, res: Response) => {
         res.status(200).json({ read:true, artworks, message:'Artworks read successfully' });
         
 		const cookie_config = cookieConfig(req)
-        queryService.event('ArtworksRead', {cookie_config});
+        queryService.event('QueryArtworks', {cookie_config});
     } catch (error) {
         res.status(500).send(error);
     }

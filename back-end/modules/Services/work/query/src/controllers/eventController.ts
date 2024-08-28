@@ -105,4 +105,15 @@ const funcoes = {
             console.log((err as Error).message);
         }
     },
+    CounterUpdated: (req: Request, res: Response) => {
+        try {
+            const {login, id, position, value}= req.body.payload.counterUpdated;
+            if(position == 0){
+                queryService.updateCounter(login, id, value);
+            }
+            UpdateSession(req,res);
+            }catch(err){
+                console.log((err as Error).message);
+            }
+        },
 }

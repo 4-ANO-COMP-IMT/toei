@@ -90,3 +90,8 @@ export const deleteArtworks = async (login:String) => {
     const artwork_deleted = await ArtworksModel.deleteMany({login});
     return artwork_deleted;
 }
+
+export const updateCounter = async (login:string, id:string, position:number, value:number) => {
+    const artwork_updated = await ArtworksModel.updateOne({_id:id, login},{$set: { [`artwork.counters.${position}.value`]: value }});
+    return artwork_updated;
+}

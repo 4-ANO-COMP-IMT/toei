@@ -65,4 +65,13 @@ const funcoes = {
     },
     QueryArtworks: UpdateSession,
     TagsRead: UpdateSession,
+    CounterUpdated: (req: Request, res: Response) => {
+        try {
+            const {login, id, position, value}= req.body.payload.counterUpdated;
+            artworkService.updateCounter(login, id, position, value);
+            UpdateSession(req,res);
+            }catch(err){
+                console.log((err as Error).message);
+            }
+        },
 }

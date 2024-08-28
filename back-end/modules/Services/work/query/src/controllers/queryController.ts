@@ -52,9 +52,10 @@ const cookieConfig = (req:Request) => {
 	const login:string = req.session.login_cookie as string
 	const session:string = req.sessionID
 	const _expires:Date=req.session.cookie.expires as Date
-	// console.log("expires:",_expires)
 	const maxAge:number = req.session.cookie.originalMaxAge as number
-	const cookieConfig = {login, session, _expires, maxAge}
+    const ip_cookie:string = req.session.ip_cookie as string
+
+	const cookieConfig:ICookieConfig = {login, session, _expires, maxAge, ip_cookie}
 	return cookieConfig
 }
 

@@ -21,7 +21,7 @@ app.use(express.json());
 
 app.post('/event', async (req:Request, res:Response)=>{
   const event = req.body;
-  // console.log(event)
+  console.log(event.type, 'event received by',event.payload.cookie_config.login);
   
   for (let i = 0; i < allowedPorts.length; i++) {
     try {

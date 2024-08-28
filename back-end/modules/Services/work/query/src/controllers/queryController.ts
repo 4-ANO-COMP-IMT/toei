@@ -14,7 +14,7 @@ declare module 'express-session' {
 export const query_artworks = async (req: Request, res: Response) => {
     try {
         if(!req.session.login_cookie || req.session.ip_cookie !== req.ip){
-            return res.status(401).json({ created:false, message: 'User not logged in' });
+            return res.status(401).json({ query:false, message: 'User not logged in' });
         }
         const login = req.session.login_cookie;
 
@@ -22,19 +22,19 @@ export const query_artworks = async (req: Request, res: Response) => {
         checkFilters(title, tags, filters,sort,order);
 
         const artworks = await queryService.readArtworks(login,title,tags,filters,sort,order);
-        res.status(200).json({ read:true, artworks, message:'Artworks read successfully' });
+        res.status(200).json({ query:true, artworks, message:'Artworks read successfully' });
         
 		const cookie_config = cookieConfig(req)
         queryService.event('QueryArtworks', {cookie_config});
-    } catch (error) {
-        res.status(500).send(error);
+    } catch (err) {
+        res.status(400).json({ query:true, message: (err as Error).message });
     }
 }
 
 export const read_tags = async (req: Request, res: Response) => {
     try {
         if(!req.session.login_cookie || req.session.ip_cookie !== req.ip){
-            return res.status(401).json({ created:false, message: 'User not logged in' });
+            return res.status(401).json({ read:false, message: 'User not logged in' });
         }
         const login = req.session.login_cookie;
         const tags = await queryService.readTags(login);
@@ -43,8 +43,8 @@ export const read_tags = async (req: Request, res: Response) => {
         
 		const cookie_config = cookieConfig(req)
         queryService.event('TagsRead', {cookie_config});
-    } catch (error) {
-        res.status(500).send(error);
+    } catch (err) {
+        res.status(400).json({ read:false, message: (err as Error).message });
     }
 }
 

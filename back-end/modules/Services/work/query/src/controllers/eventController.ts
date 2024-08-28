@@ -100,6 +100,7 @@ const funcoes = {
         try {
             const {login,artwork} = req.body.payload;
             queryService.deleteArtwork(login, artwork._id);
+            UpdateSession(req,res);
         }catch(err){
             console.log((err as Error).message);
         }

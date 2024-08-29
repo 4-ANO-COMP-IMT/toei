@@ -58,7 +58,7 @@ export const check_session = async (req: Request, res: Response) => {
 export const disconnect = async (req: Request, res: Response) => {
 	try {
 		if(!req.session.login_cookie || req.session.ip_cookie !== req.ip){
-			return res.status(401).json({message: 'User not logged in'});
+			return res.status(401).json({disconnected:false, message: 'User not logged in'});
 		}
 		
 		const cookie_config = cookieConfig(req)
@@ -66,12 +66,12 @@ export const disconnect = async (req: Request, res: Response) => {
 
 		req.session.destroy((err) => {
 			if (err) {
-				return res.status(500).json({message: err});
+				return res.status(500).json({disconnected:false, message: err});
 			}
 		})
-		res.status(200).json({message: 'User logged out'});
+		res.status(200).json({disconnected:true, message: 'User logged out'});
 	} catch (err) {
-		res.status(400).json({message: (err as Error).message });
+		res.status(400).json({disconnected:false, message: (err as Error).message });
 	}
 }
 

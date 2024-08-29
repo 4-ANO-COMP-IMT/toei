@@ -14,6 +14,7 @@ declare module 'express-session' {
 
 export const create_user = async (req: Request, res: Response) => {
     try {
+        console.log(req);
         const userInput:IUserInput = req.body;
         const user:IUser = await checkUser(userInput);
         await createExists(user.login,user.email);
@@ -23,7 +24,13 @@ export const create_user = async (req: Request, res: Response) => {
         if(!userCreated){
             return res.status(404).json({ created:false, message: 'User not created' });
         }
-
+        if(req.session.login_cookie){
+            const cookie_config = cookieConfig(req)
+            await userService.event('UserDisconnected',{cookie_config});
+            await req.session.destroy((err) => {
+                if (err) {return res.status(500).json({message: err});}
+            })
+        }
         res.status(201).json({ created:true, userCreated, message: 'User created successfully' });
         console.log("User created by:",userCreated.login);
         

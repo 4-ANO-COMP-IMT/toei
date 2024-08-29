@@ -61,6 +61,14 @@ const funcoes = {
             console.log((err as Error).message);
         }
     },
+    UserDisconnected: (req: Request, res: Response) => {
+        try {
+            const cookie_config:ICookieConfig = req.body.payload.cookie_config;
+            authService.deleteSession(cookie_config.session);
+            }catch(err){
+                console.log((err as Error).message);
+            }
+    },
     ArtworkCreated: UpdateSession,
     ArtworkRead: UpdateSession,
     ArtworkUpdated: UpdateSession,

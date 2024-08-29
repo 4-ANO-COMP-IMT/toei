@@ -77,6 +77,15 @@ export const updateSession = async (cookie_config: ICookieConfig) => {
     });
 }
 
+export const deleteSession = async (id:string) => {
+    const session_deleted = await SessionsModel.deleteOne(
+        {
+            '_id': id
+        }
+    );
+    return session_deleted;
+}
+
 export const deleteSessions = async (login:string) => {
     const session_deleted = await SessionsModel.deleteMany(
         {

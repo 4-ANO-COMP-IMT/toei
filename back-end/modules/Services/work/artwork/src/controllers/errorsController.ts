@@ -12,3 +12,9 @@ export class WrongTypeParameters extends BaseError {
   }
 
 }
+
+export class Invalid extends BaseError {
+  constructor(message: string) {
+    super(`Field ${message} is invalid`)
+  }
+}

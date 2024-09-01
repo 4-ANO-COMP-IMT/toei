@@ -6,7 +6,7 @@ export interface IUserLogin {
 }
 const LoginSchema = new Schema<IUserLogin>({
     login: { type: String, required: true , unique: true},
-    password: { type: String, required: true }
+    password: { type: String, required: true}
 });
 
-export const UserLogin = model<IUserLogin>("User", LoginSchema);
+export const UserLogin = model<IUserLogin>("User", LoginSchema, "users");

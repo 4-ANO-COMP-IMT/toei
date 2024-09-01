@@ -1,50 +1,52 @@
 import { Schema, model } from "mongoose";
 
-interface Counter {
+export interface ICounter {
     name: string;
     value: number;      // default 0
-    maxvalue: number;   //de 0 até valor máximo, se = a 0, não tem limite
+    maxValue: number;   //de 0 até valor máximo, se = a 0, não tem limite
 }
 const CounterSchema = new Schema({
     name: { type: String, required: true },
-    value: { type: Number, required: false, default: 0 },
-    maxValue: { type: Number, required: false, default: 0 }
+    value: { type: Number, required: true, default: 0 },
+    maxValue: { type: Number, required: true, default: 0 }
   });
 
-interface Information {
+export interface IInformation {
     name: string;
     content: string;
 }
-
+// make sure name and content are required
 const InformationSchema = new Schema({
     name: { type: String, required: true },
-    content: { type: String, required: true }
+    content: { type: String, required: false , default: '' }
 });
 
-export interface Artwork {
+export interface IArtwork {
     title: string;
-    counters: Counter[];
+    description: string;
+    counters: ICounter[];
     tags: string[];
-    informations: Information[];
+    informations: IInformation[];
     img: string;
 }
 
-const ArtworkSchema = new Schema<Artwork>({
+const ArtworkSchema = new Schema<IArtwork>({
     title: { type: String, required: true },
-    counters: { type: [CounterSchema], required: false, default: [] },
-    tags: { type: [String], required: false, default: [] },
-    informations: { type: [InformationSchema], required: false, default: [] },
-    img: { type: String, required: false, default: "" }
+    description: { type: String, required: true },
+    counters: { type: [CounterSchema], required: true, _id: false },
+    tags: { type: [String], required: true},
+    informations: { type: [InformationSchema], required: true, _id: false },
+    img: { type: String, required: true}
 });
 
-export interface Artworks {
+export interface IArtworks {
     login: string;
-    artworks: Artwork[];
+    artwork: IArtwork;
 }
 
-const ArtworksSchema = new Schema<Artworks>({
-    login: { type: String, required: true , unique: true},
-    artworks: { type: [ArtworkSchema], required: false, default: [] }
+const ArtworksSchema = new Schema<IArtworks>({
+    login: { type: String, required: true },
+    artwork: { type: ArtworkSchema, required: true, _id: false }
 });
 
-export const ArtworksModel = model<Artworks>("User", ArtworksSchema);
+export const ArtworksModel = model<IArtworks>('Artworks', ArtworksSchema, 'artworks');

@@ -78,7 +78,7 @@ export const update_artwork = async (req: Request, res: Response) => {
         console.log("Artwork updated by:",login)
 
 		const cookie_config = cookieConfig(req)
-        artworkService.event('ArtworkUpdated', {artworkUpdated:artwork, cookie_config});
+        artworkService.event('ArtworkUpdated', {artworkUpdated:artwork, cookie_config, id});
     }
     catch (err) {
         res.status(400).json({ updated:false, message: (err as Error).message });

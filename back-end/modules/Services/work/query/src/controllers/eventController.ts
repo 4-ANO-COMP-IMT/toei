@@ -85,11 +85,11 @@ const funcoes = {
         try {
             const artworkUpdated = req.body.payload.artworkUpdated;
             const artwork = artworkUpdated;
-            if(artwork.counters===0) {artwork.counter = {};}
+            if(artwork.counters.length===0) {artwork.counter = {};}
             else{artwork.counter = artwork.counters[0];}
             const {counters:removeC,informations:removeI,...newArtwork} = artwork;
-            const login = artworkUpdated.login;
-            const id = artworkUpdated['_id'];
+            const login = req.body.payload.cookie_config.login;
+            const id = req.body.payload.id;
             queryService.updateArtwork(id, login, newArtwork);
             UpdateSession(req,res);
         }catch(err){

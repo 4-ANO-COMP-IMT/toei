@@ -4,14 +4,13 @@ import * as eventController from '../controllers/eventController';
 
 const router = Router();
 
-router.post('/', userController.register);
+router.post('/', userController.create_user);
 
-// mss para teste do front
-// router.put('/teste', (req, res)=>{
-//     res.json({"mensagem":req.body.mensagem});
-// });
+router.get('/', userController.read_user);
 
-router.get('/:login', userController.read);
+router.put('/', userController.update_user);
+
+router.delete('/', userController.delete_user);
 
 router.post('/event',eventController.handleEvent);
 

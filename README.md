@@ -47,6 +47,6 @@ Ferramentas de busca avançada e filtros para facilitar a localização de obras
 
 # Autores
 
-- [Erick Eiji Nagao](https://github.com/ErickNagao)
-- [Gabriel Henrique Baca Rado](https://github.com/Gabriel-HBR)
-- [Ryuske Hideaki Sato](https://github.com/Dragonrhs)
+- [Erick Eiji Nagao 21.00690-3](https://github.com/ErickNagao)
+- [Gabriel Henrique Baca Rado 21.01286-5](https://github.com/Gabriel-HBR)
+- [Ryuske Hideaki Sato 21.00745-4](https://github.com/Dragonrhs)

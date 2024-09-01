@@ -1,4 +1,4 @@
-import { createUser } from "../service/userService"; 
+import { createUser } from "../services/userService"; 
 import {expect,test,describe} from "vitest";
 import {User} from "../models/user";
 

@@ -18,7 +18,7 @@ export const query_artworks = async (req: Request, res: Response) => {
         }
         const login = req.session.login_cookie;
 
-        const {title, tags, filters,sort,order}:IFilters = req.body;
+        const {title, tags, filters,sort,order}:IFilters = req.body.formInputs;
         checkFilters(title, tags, filters,sort,order);
 
         const artworks = await queryService.readArtworks(login,title,tags,filters,sort,order);
@@ -40,7 +40,7 @@ export const read_tags = async (req: Request, res: Response) => {
         const tags = await queryService.readTags(login);
         
         res.status(200).json({ read:true, tags, message:'Tags read successfully' });
-        console.log("Tags read by:",login)
+        console.log("Tags read by:",login);
 
 		const cookie_config = cookieConfig(req)
         queryService.event('TagsRead', {cookie_config});

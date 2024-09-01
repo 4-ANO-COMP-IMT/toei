@@ -50,13 +50,19 @@ function Artwork() {
         await checkCookie();
         await checkArtwork();
     }
+    
+    const [login, setLogin] = useState<string>("");
 
     const checkCookie = async () => {
         try {
             const res = await axios.get('http://localhost:4000/auth/cookies', { withCredentials: true });
-            if (!res.data.valid) {
+            if (res.data.valid) {
+                setLogin(res.data.username)
+            }
+            else {
                 navigate('/login');
             }
+
         } catch (err: any) {
             console.log("No session cookie");
             navigate('/login');
@@ -98,7 +104,7 @@ function Artwork() {
 
     return (
         <>
-            <MenuBar index={1}/>
+            <MenuBar login={login} index={1}/>
             <Container style={{ height: "100vh", width: "100vw" }}>
                 <Container className='pt-4' style={{ maxWidth: "960px" }}>
                     <h1>{artwork.title}</h1>

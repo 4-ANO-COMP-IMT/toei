@@ -13,10 +13,14 @@ function CreateOrEditArtwork() {
     const navigate = useNavigate();
     axios.defaults.withCredentials = true;
 
+    const [login, setLogin] = useState<string>("");
+
     const checkCookie = async () => {
         try {
             const res = await axios.get('http://localhost:4000/auth/cookies', { withCredentials: true });
-            if (!res.data.valid) {
+            if (res.data.valid) {
+                setLogin(res.data.username);
+            }else{
                 navigate('/login');
             }
         } catch (err: any) {
@@ -211,7 +215,7 @@ function CreateOrEditArtwork() {
 
     return (
         <>
-            <MenuBar index={2} />
+            <MenuBar login={login} index={2} />
             <Container style={{ height: "100vh", width: "100vw" }}>
                 <Container className='pt-4' style={{ maxWidth: "960px" }}>
                     <Card className='p-4'>

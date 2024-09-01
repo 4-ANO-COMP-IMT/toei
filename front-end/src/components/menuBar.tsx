@@ -6,11 +6,11 @@ import './menuBar.css'; // Import the custom CSS file
 
 interface menuBarProps {
     index: number;
-    id?: string;
     title?: string;
+    login: string;
 }
 
-function menuBar({ index, title }: menuBarProps) {
+function menuBar({login, index, title }: menuBarProps) {
   const navigate = useNavigate();
   const { artworkId } = useParams<{ artworkId: string }>();
   axios.defaults.withCredentials = true;
@@ -78,7 +78,7 @@ function menuBar({ index, title }: menuBarProps) {
             ))}
             <Dropdown className="d-inline-block ms-2">
               <Dropdown.Toggle variant="secondary" id="dropdown-basic">
-                teste1
+                {login}
               </Dropdown.Toggle>
               <Dropdown.Menu className="dropdown-menu-end">
                 <Dropdown.Item onClick={() => { navigate("/profile") }}>Profile</Dropdown.Item>

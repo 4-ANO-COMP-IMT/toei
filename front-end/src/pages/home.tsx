@@ -68,7 +68,7 @@ function Home() {
         try {
             const res = await axios.get('http://localhost:4000/auth/cookies', { withCredentials: true });
             if (res.data.valid) {
-                setName(res.data.login);
+                setName(res.data.username);
             } else {
                 navigate('/login');
             }
@@ -185,7 +185,7 @@ function Home() {
 
     return (
         <>
-            <MenuBar index={0}/>
+            <MenuBar login={name} index={0}/>
             <Container style={{ height: "100vh", width: "100vw" }}>
                 <Container className='pt-4' style={{ maxWidth: "960px" }}>
                     <Card className='p-4 mb-4' id="search">

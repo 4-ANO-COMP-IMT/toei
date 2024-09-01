@@ -23,7 +23,13 @@ export const readArtworks = async (login:String,title:String,tags:String[],filte
 
 export const readTags = async (login:String) => {
     const tags = await ArtworksModel.aggregate([
-        {"$unwind": "$artwork.tags"},
+        {"$unwind": "$artwork.tags",
+        },
+        {
+            $match: {
+                login: login
+            }
+        },
         {
             $group: {
                 _id: null,

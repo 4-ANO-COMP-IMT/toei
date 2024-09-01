@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
-import { Container, Card, Form, Button, Row, Col, Stack, Badge, ButtonGroup, DropdownButton, ToggleButton } from "react-bootstrap";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowRight, faFilter } from "@fortawesome/free-solid-svg-icons";
-// import css
+import { Container, Card, Form, Button, Row, Col, Stack, ButtonGroup, DropdownButton, ToggleButton } from "react-bootstrap";
 import './home.css';
+import GenTags from '../components/genTags';
+import MenuBar from '../components/menuBar';
 
 function Home() {
     const navigate = useNavigate();
@@ -186,8 +185,9 @@ function Home() {
 
     return (
         <>
+            <MenuBar index={0}/>
             <Container style={{ height: "100vh", width: "100vw" }}>
-                <Container className='pt-4' style={{ maxWidth: "60rem" }}>
+                <Container className='pt-4' style={{ maxWidth: "960px" }}>
                     <Card className='p-4 mb-4' id="search">
                         <Form onSubmit={handleSubmit}>
                             <Form.Label className='h2 mb-4 fw-semibold'>Artworks</Form.Label>
@@ -207,7 +207,7 @@ function Home() {
                                                 value={"tag" + index + buttonsTag[index]?.toString()}
                                                 id={"toggle-check" + index}
                                                 type="checkbox"
-                                                variant="outline-primary"
+                                                variant="outline-success"
                                                 checked={buttonsTag[index]}
                                                 onChange={() => {
                                                     updateTag(index);
@@ -229,7 +229,7 @@ function Home() {
                                                 value={"filter" + index + buttonsFilter[index]?.toString()}
                                                 id={"toggle-check2" + index}
                                                 type="checkbox"
-                                                variant="outline-primary"
+                                                variant="outline-danger"
                                                 checked={buttonsFilter[index]}
                                                 onChange={() => {
                                                     updateFilter(index);
@@ -257,30 +257,24 @@ function Home() {
                                                 </b>
                                             </Card.Title>
                                         </a>
-                                        <Card.Text id="description" className="mt-3 mb-3" style={{ height: "4rem", overflow: "scroll" }}>{e.artwork.description}
+                                        <Card.Text id="description" className="mt-3 mb-3 card-description" style={{ height: "3em", lineHeight: "1.5em", overflow: "hidden"}}>{e.artwork.description}
                                         </Card.Text>
-                                        <Row className="justify-content-md-center">
-                                            <Col xs className="position-relative">
-                                                <div className="position-absolute top-50 start-50 translate-middle">
-                                                    <Card.Text>{e.artwork.counter.name}:</Card.Text>
-                                                </div>
-                                            </Col>
-                                            <Col xs="auto">
-                                                <ButtonGroup aria-label="Basic example">
-                                                    <Button variant="outline-secondary" style={{ width: "3rem" }} onClick={() => { updateCounter(e._id, index, e.artwork.counter.value + 1) }}>+</Button>
-                                                    <Button variant="outline-secondary" disabled>{String(e.artwork.counter.value)}/{String(e.artwork.counter.maxValue)}</Button>
-                                                    <Button variant="outline-secondary" style={{ width: "3rem" }} onClick={() => { updateCounter(e._id, index, e.artwork.counter.value - 1) }}>-</Button>
-                                                </ButtonGroup>
-                                            </Col>
-                                        </Row>
+                                            <Row className="justify-content-md-center">
+                                                <Col xs className="position-relative">
+                                                    <div className="position-absolute top-50 start-50 translate-middle">
+                                                        <Card.Text>{e.artwork.counter.name}:</Card.Text>
+                                                    </div>
+                                                </Col>
+                                                <Col xs="auto">
+                                                    <ButtonGroup aria-label="Basic example">
+                                                        <Button variant="outline-secondary" style={{ width: "3rem" }} onClick={() => { updateCounter(e._id, index, e.artwork.counter.value + 1) }}>+</Button>
+                                                        <Button variant="outline-secondary" disabled>{String(e.artwork.counter.value)}/{String(e.artwork.counter.maxValue)}</Button>
+                                                        <Button variant="outline-secondary" style={{ width: "3rem" }} onClick={() => { updateCounter(e._id, index, e.artwork.counter.value - 1) }}>-</Button>
+                                                    </ButtonGroup>
+                                                </Col>
+                                            </Row>
                                         <hr />
-                                        <h5>
-                                            <Stack direction="horizontal" gap={2} style={{ height: "3rem", overflow: "scroll" }}>
-                                                {e.artwork.tags.map((tag: String, tagIndex) => {
-                                                    return (<Badge key={`${e._id}-${tagIndex}`} bg="primary">{tag}</Badge>)
-                                                })}
-                                            </Stack>
-                                        </h5>
+                                        <GenTags tags={e.artwork.tags} id={e._id} className="home-tags"/> 
                                     </Card>
                                 </Col>
                             );

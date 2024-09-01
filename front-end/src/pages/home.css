@@ -30,3 +30,19 @@
     text-decoration-color: white;
     transition: 0.2s;
 }
+.card-description{
+    text-overflow: ellipsis;
+    display: -webkit-box;
+   -webkit-line-clamp: 2; /* number of lines to show */
+    line-clamp: 2; 
+   -webkit-box-orient: vertical;
+}
+.home-tags{
+    height: 3rem;
+    overflow:scroll;
+}
+
+.master{
+    width: 100%;
+    height: 100%;
+}

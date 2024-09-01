@@ -81,8 +81,8 @@ const funcoes = {
     ArtworkRead: UpdateSession,
     ArtworkUpdated: (req: Request, res: Response) => {
         try {
-            const artworkUpdated = req.body.payload.artworkCreated;
-            const artwork = artworkUpdated.artwork;
+            const artworkUpdated = req.body.payload.artworkUpdated;
+            const artwork = artworkUpdated;
             const {counters,...removeArtwork} = artwork;
             const login = artworkUpdated.login;
             const id = artworkUpdated['_id'];
@@ -94,8 +94,8 @@ const funcoes = {
     },
     ArtworkDeleted: (req: Request, res: Response) => {
         try {
-            const {login,artwork} = req.body.payload;
-            queryService.deleteArtwork(login, artwork._id);
+            const {login,id} = req.body.payload;
+            queryService.deleteArtwork(login, id);
             UpdateSession(req,res);
         }catch(err){
             console.log((err as Error).message);

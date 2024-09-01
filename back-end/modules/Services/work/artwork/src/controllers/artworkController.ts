@@ -78,7 +78,7 @@ export const update_artwork = async (req: Request, res: Response) => {
         console.log("Artwork updated by:",login)
 
 		const cookie_config = cookieConfig(req)
-        artworkService.event('ArtworkUpdated', {artworkUpdated, cookie_config});
+        artworkService.event('ArtworkUpdated', {artworkUpdated:artwork, cookie_config});
     }
     catch (err) {
         res.status(400).json({ updated:false, message: (err as Error).message });
@@ -103,7 +103,7 @@ export const delete_artwork = async (req: Request, res: Response) => {
         console.log("Artwork deleted by:",login);
 
         const cookie_config = cookieConfig(req)
-        artworkService.event('ArtworkDeleted', {artworkDeleted, cookie_config});
+        artworkService.event('ArtworkDeleted', {login, id, cookie_config});
     }
     catch (err) {
         res.status(400).json({ deleted:false, message: (err as Error).message });
@@ -137,10 +137,12 @@ const checkStr = (input: string, name: string) => {
         checkStr(artwork.title, 'title');
 
         if(!artwork.hasOwnProperty('description')){throw new MissingParameters('description');}
-        if(typeof artwork.description !== 'string'){throw new WrongTypeParameters('description');}
+        checkStr(artwork.description, 'description');
 
         if(!artwork.hasOwnProperty('counters')){throw new MissingParameters('counters');}
-        if(typeof  artwork.counters !== 'object'){throw new WrongTypeParameters('counters');}
+        if(!Array.isArray(artwork.counters)){throw new WrongTypeParameters('counters');}
+        if(artwork.counters.length === 0){throw new MissingParameters('counters');}
+        if(typeof artwork.counters !== 'object'){throw new WrongTypeParameters('counters');}
         else{
             artwork.counters.forEach(counter => {
                 if(!counter.hasOwnProperty('name')){throw new MissingParameters('counter_name');}
@@ -158,6 +160,8 @@ const checkStr = (input: string, name: string) => {
 
         if(!artwork.hasOwnProperty('tags')){throw new MissingParameters('tags');}
         if(typeof artwork.tags !== 'object'){throw new WrongTypeParameters('tags');}
+        if(!Array.isArray(artwork.tags)){throw new WrongTypeParameters('tags');}
+        if(artwork.tags.length === 0){throw new MissingParameters('tags');}
         artwork.tags.forEach(tag => {
             if(typeof tag !== 'string'){throw new WrongTypeParameters('tag');}
             if(tag.trim() === "" || tag.length > 20){throw new Invalid('tag');}
@@ -165,13 +169,15 @@ const checkStr = (input: string, name: string) => {
 
         if(!artwork.hasOwnProperty('informations')){throw new MissingParameters('informations');}
         if(typeof artwork.informations !== 'object'){throw new WrongTypeParameters('informations');}
+        if(!Array.isArray(artwork.informations)){throw new WrongTypeParameters('informations');}
+        if(artwork.informations.length === 0){throw new MissingParameters('informations');}
         artwork.informations.forEach(info => {
             if(!info.hasOwnProperty('name')){throw new MissingParameters('info_name');}
             checkStr(info.name, 'info_name');
-
             if(!info.hasOwnProperty('content')){throw new MissingParameters('info_content');}
-            checkStr(info.content, 'info_content');
+            if (typeof info.content !== 'string') {throw new WrongTypeParameters('info_content');}
         });
         if(!artwork.hasOwnProperty('img')){throw new MissingParameters('image');}
+        checkStr(artwork.img, 'image');
     }
 }

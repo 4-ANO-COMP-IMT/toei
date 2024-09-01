@@ -83,8 +83,8 @@ const funcoes = {
     ArtworkRead: UpdateSession,
     ArtworkUpdated: (req: Request, res: Response) => {
         try {
-            const artworkUpdated = req.body.payload.artworkUpdated.artwork;
-            const artwork = artworkUpdated.artwork;
+            const artworkUpdated = req.body.payload.artworkUpdated;
+            const artwork = artworkUpdated;
             if(artwork.counters===0) {artwork.counter = {};}
             else{artwork.counter = artwork.counters[0];}
             const {counters:removeC,informations:removeI,...newArtwork} = artwork;
@@ -98,8 +98,8 @@ const funcoes = {
     },
     ArtworkDeleted: (req: Request, res: Response) => {
         try {
-            const {login,artwork} = req.body.payload;
-            queryService.deleteArtwork(login, artwork._id);
+            const {login,id} = req.body.payload;
+            queryService.deleteArtwork(login, id);
             UpdateSession(req,res);
         }catch(err){
             console.log((err as Error).message);

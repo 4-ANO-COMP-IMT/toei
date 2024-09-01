@@ -18,7 +18,7 @@ export interface IInformation {
 // make sure name and content are required
 const InformationSchema = new Schema({
     name: { type: String, required: true },
-    content: { type: String, required: true }
+    content: { type: String, required: false , default: '' }
 });
 
 export interface IArtwork {

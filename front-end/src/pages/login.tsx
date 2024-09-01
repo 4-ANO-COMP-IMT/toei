@@ -68,20 +68,20 @@ function Login() {
       setShow(true);
       setTimeout(() => {
         navigate('/home')
-      }, 3000);
+      }, 1200);
     }
     catch (err:any) {
       setULR({message:err.response.data.message, logged:err.response.data.logged})
       setShow(true);
       setTimeout(() => {
         setShow(false);
-      }, 1500);
+      }, 600);
     }
   }
 
   return (
       <Container className='pt-4' style={{maxWidth: "40rem"}}>
-        <AlertMessage show={show} variant={ULR.logged?'success':'danger'} title={ULR.logged?"User created":"Error"} message={ULR.message}/>
+        <AlertMessage show={show} variant={ULR.logged?'success':'danger'} title={ULR.logged?"Success":"Error"} message={ULR.message}/>
         <Card className='p-4'>
           <Form noValidate onSubmit={handleSubmit}>
             <Form.Label className='h2 mb-4 fw-semibold'>Log in</Form.Label>

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { useNavigate } from "react-router-dom";
-import { Container, Card, Form, FloatingLabel,Row, Col, Button } from 'react-bootstrap'; 
+import { Container, Card, Form, FloatingLabel,Row, Col, Button } from 'react-bootstrap';
 import AlertMessage from '../components/alertMessage';
 
 function Register() {
@@ -12,18 +12,30 @@ function Register() {
     document.title = 'Register';
   }, []);
 
+  interface Counter {
+    name: string,
+    value: number,
+    maxValue: number
+}
+
+interface Information {
+    name: string;
+    content: string;
+}
+
   interface FormInputs {
-    name?: string;
-    birthDate?: string;
-    login?: string;
-    email?: string;
-    password?: string;
+    title: string;
+    description: string;
+    image: string;
+    informations: Information[];
+    tags: string[];
+    counters: Counter[];
   }
   interface UserCreatedResponse {
     message: string;
     created: boolean;
   }
-  
+
   const [formInputs, setFormInputs] = useState<FormInputs>()
   const [validated, setValidated] = useState(false);
   const [show, setShow] = useState(false);
@@ -36,10 +48,10 @@ function Register() {
     const updatedInputs = {
       ...formInputs,
       [e.target.id]: e.target.value
-    }
+    } as FormInputs;
     setFormInputs(updatedInputs)
   }
-  
+
   const handleSubmit = (event:any) => {
     event.preventDefault();
     const form = event.currentTarget;
@@ -51,7 +63,7 @@ function Register() {
     }
     setValidated(true);
   };
-  
+
   const register = async () => {
     try {
       const res = await axios.post('http://localhost:3000/user', formInputs)
@@ -59,21 +71,21 @@ function Register() {
       setShow(true);
       setTimeout(() => {
         navigate('/login')
-      }, 1500);
+      }, 600);
     }
     catch (err:any) {
       setUCR({message:err.response.data.message, created:err.response.data.created})
       setShow(true);
       setTimeout(() => {
         setShow(false);
-      }, 2000);
+      }, 1200);
     }
   }
 
   return (
     <>
       <Container className='pt-4' style={{maxWidth: "40rem"}}>
-        
+
         <AlertMessage show={show} variant={UCR.created ? 'success' : 'danger'} title={UCR.created ? 'Success' : 'Error'} message={UCR.message}/>
         <Card className='p-4'>
           <Form noValidate validated={validated} onSubmit={handleSubmit}>

@@ -7,14 +7,14 @@ interface genTagsProps {
 }
 
 
-function genTags({tags,id,className}:genTagsProps) {
+function tags({tags,id,className}:genTagsProps) {
   return(
     <>
     <h5>
     <Stack direction="horizontal" gap={2} className={className}>
         {tags.map((tag: String, tagIndex:number) => 
             <Badge
-            className="ml-1 mb-1" 
+            className="p-2" 
             key={`${id}.1.${tagIndex}`}
             bg="primary">
             {tag}
@@ -26,4 +26,4 @@ function genTags({tags,id,className}:genTagsProps) {
   );
 }
 
-export default genTags;
+export default tags;

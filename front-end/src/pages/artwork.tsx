@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Container, Table, Row, Col, Stack, ButtonGroup, Button } from 'react-bootstrap';
 import './artwork.css';
-import GenTags from '../components/genTags';
+import Tags from '../components/tags';
 import MenuBar from '../components/menuBar';
 
 function Artwork() {
@@ -114,7 +114,7 @@ function Artwork() {
                             <Row className="mb-3">
                                 <Col md="auto">
                                     <div className='artwork-tags'>
-                                        <GenTags tags={artwork.tags} id={artworkId as string} className="artwork-tags" />
+                                        <Tags tags={artwork.tags} id={artworkId as string} className="artwork-tags" />
                                     </div>
                                 </Col>
                             </Row>

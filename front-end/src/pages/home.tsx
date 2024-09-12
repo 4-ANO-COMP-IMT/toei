@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import { Container, Card, Form, Button, Row, Col, Stack, ButtonGroup, DropdownButton, ToggleButton } from "react-bootstrap";
 import './home.css';
-import GenTags from '../components/genTags';
+import Tags from '../components/tags';
 import MenuBar from '../components/menuBar';
 
 function Home() {
@@ -274,7 +274,7 @@ function Home() {
                                                 </Col>
                                             </Row>
                                         <hr />
-                                        <GenTags tags={e.artwork.tags} id={e._id} className="home-tags"/> 
+                                        <Tags tags={e.artwork.tags} id={e._id} className="home-tags pb-2"/> 
                                     </Card>
                                 </Col>
                             );

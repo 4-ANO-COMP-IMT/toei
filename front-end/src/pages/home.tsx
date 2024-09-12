@@ -186,19 +186,23 @@ function Home() {
     return (
         <>
             <MenuBar login={name} index={0}/>
-            <Container style={{ height: "100vh", width: "100vw" }}>
-                <Container className='pt-4' style={{ maxWidth: "960px" }}>
+                <Container className='p-2 pt-4' style={{ maxWidth: "960px" }}>
+
                     <Card className='p-4 mb-4' id="search">
                         <Form onSubmit={handleSubmit}>
-                            <Form.Label className='h2 mb-4 fw-semibold'>Artworks</Form.Label>
-                            <Form.Group controlId='title' className='mb-3'>
-                                {/* fazer navbar e colocar no lugar do botão */}
-                                <Form.Control type='string' placeholder='Title' onChange={inputChangedHandler} />
-                            </Form.Group>
+                            <Form.Label className='h2 mb-4 fw-semibold'>Search</Form.Label>
 
-                            <Stack direction="horizontal" gap={3}>
-                                <DropdownButton id="dropdown-basic-button" title="Tags" style={{ display: "inline" }}>
-                                    <Container style={{ "width": "20rem" }}>
+                            <div  className="mb-2 d-flex">
+                                <Form.Control id="title" type="string" placeholder="Title" className="me-2" onChange={inputChangedHandler} />
+                                <Button onClick={(event) => { handleSubmit(event) }} className="p-2 ms-auto">Search</Button>
+                            </div>
+
+                            <Stack direction="horizontal" gap={2}>
+                                <DropdownButton
+                                id="dropdown-basic-button"
+                                title="Tags"
+                                style={{ display: "inline" }}>
+                                    <Container style={{ "width": "25rem" }}>
                                     <Button className="m-1" variant="warning" onClick={() => { resetTags() }}>Reset</Button>
                                         {tags.map((tag, index) => (
                                             <ToggleButton
@@ -219,8 +223,11 @@ function Home() {
                                     </Container>
                                 </DropdownButton>
 
-                                <DropdownButton id="dropdown-basic-button2" title="Filters" style={{ display: "inline" }}>
-                                    <Container style={{ "width": "20rem" }}>
+                                <DropdownButton 
+                                id="dropdown-basic-button2"
+                                title="Filters"
+                                style={{ display: "inline" }}>
+                                    <Container style={{ "width": "25rem" }}>
                                     <Button className="m-1" variant="warning" onClick={() => { resetFilters() }}>Reset</Button>
                                         {tags.map((tag, index) => (
                                             <ToggleButton
@@ -240,10 +247,10 @@ function Home() {
                                         ))}
                                     </Container>
                                 </DropdownButton>
-                                <Button onClick={(event) => { handleSubmit(event) }} className="p-2 ms-auto">Search</Button>
                             </Stack>
                         </Form>
                     </Card>
+
                     <Row className="g-4 mb-4">
                         {artworks.map((e: Artwork, index) => {
                             return (
@@ -280,7 +287,6 @@ function Home() {
                             );
                         })}
                     </Row>
-                </Container>
             </Container>
         </>
     )

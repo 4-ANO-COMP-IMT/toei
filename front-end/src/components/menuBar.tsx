@@ -63,7 +63,7 @@ function menuBar({login, index, title }: menuBarProps) {
         bg="dark"
         variant="dark"
       >
-        <Container className='pe-4 ps-4 pt-2 pb-2' style={{ maxWidth: "960px" }}>
+        <Container className='p-2' style={{ maxWidth: "960px" }}>
           <Navbar.Brand href="/home">Toei</Navbar.Brand>
           <span>
             {buttons[index].map((button) => (

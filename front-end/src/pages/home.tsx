@@ -81,7 +81,7 @@ function Home() {
     const checkArtworks = async () => {
         try {
             const res = await axios.post('http://localhost:8000/query/', { formInputs });
-            if (res.data.artworks && res.data.artworks.length > 0) {
+            if (res.data.artworks) {
                 setArtworks(res.data.artworks);
             }
         } catch (err) {

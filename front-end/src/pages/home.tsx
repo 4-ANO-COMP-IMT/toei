@@ -94,9 +94,11 @@ function Home() {
             const res = await axios.get('http://localhost:8000/query/tags', { withCredentials: true });
             if (res.data.tags) {
                 if (res.data.tags[0].tags.length > 0) {
-                    setTags(res.data.tags[0].tags);
-                    setButtonsTag(new Array(res.data.tags[0].tags.length).fill(false));
-                    setButtonsFilter(new Array(res.data.tags[0].tags.length).fill(false));
+                    let aux:string[] = res.data.tags[0].tags;
+                    aux.sort((a, b) => a.localeCompare(b));
+                    setTags(aux);
+                    setButtonsTag(new Array(aux.length).fill(false));
+                    setButtonsFilter(new Array(aux.length).fill(false));
                 }
             } else {
                 setTags([]);

@@ -107,8 +107,8 @@ function Home() {
     }
 
     const updateCounter = async (id: string, index: number, value: number) => {
-        console.log("Updating counter");
-        console.log(id, index, value);
+        // console.log("Updating counter");
+        // console.log(id, index, value);
         if (value < 0 || value > artworks[index].artwork.counter.maxValue) {
             value = 0;
             return;
@@ -130,27 +130,27 @@ function Home() {
             ...formInputs,
             [e.target.id]: e.target.value
         }
-        console.log(e.target.id, e.target.value);
+        // console.log(e.target.id, e.target.value);
         setFormInputs(updatedInputs);
     }
 
     const handleSubmit = (event: any) => {
         event.preventDefault();
         try {
-            console.log(formInputs);
+            // console.log(formInputs);
             checkArtworks();
         } catch (err: any) {
             console.log("Error");
         }
     };
 
-    useEffect(() => {
-        console.log("ARTWORKS UPDATED:", artworks);
-    }, [artworks]); // Apenas para monitorar mudanças em artworks
+    // useEffect(() => {
+    //     console.log("ARTWORKS UPDATED:", artworks);
+    // }, [artworks]); // Apenas para monitorar mudanças em artworks
 
-    useEffect(() => {
-        console.log("TAGS UPDATED:", tags);
-    }, [tags]); // Apenas para monitorar mudanças em tags
+    // useEffect(() => {
+    //     console.log("TAGS UPDATED:", tags);
+    // }, [tags]); // Apenas para monitorar mudanças em tags
 
     useEffect(() => {
         const selectedTags = tags.filter((_, index) => buttonsTag[index]);

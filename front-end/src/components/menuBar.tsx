@@ -15,9 +15,9 @@ function menuBar({login, index, title }: menuBarProps) {
   const { artworkId } = useParams<{ artworkId: string }>();
   axios.defaults.withCredentials = true;
   
-  useEffect(() => {
-    console.log(artworkId);
-  }, [artworkId]);
+  // useEffect(() => {
+  //   console.log(artworkId);
+  // }, [artworkId]);
   
   const buttons = [
     [
@@ -33,7 +33,7 @@ function menuBar({login, index, title }: menuBarProps) {
   const disconnect = async () => {
     try {
       const res = await axios.get('http://localhost:4000/auth/disconnect', { withCredentials: true });
-      console.log(res.data);
+      // console.log(res.data);
       if (res.data.disconnected) {
         navigate('/login');
       }

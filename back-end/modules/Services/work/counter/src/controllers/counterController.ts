@@ -29,9 +29,6 @@ export const counter_update = async (req: Request, res: Response) => {
         if(!artworkSelected){
             return res.status(400).json({updated:false, message: 'Counter not found'});
         }
-
-        const artworkSelected:IArtworks = art;
-
         if (!artworkSelected.artwork.counters[position]){
             return res.status(400).json({updated:false, message: 'Counter not found'});
         }

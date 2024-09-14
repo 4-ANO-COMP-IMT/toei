@@ -81,12 +81,11 @@ const funcoes = {
     ArtworkRead: UpdateSession,
     ArtworkUpdated: (req: Request, res: Response) => {
         try {
-            const artworkUpdated = req.body.payload.artworkUpdated;
-            const artwork = artworkUpdated;
+            const artwork = req.body.payload.artworkUpdated;
             const {counters,...removeArtwork} = artwork;
-            const login = artworkUpdated.login;
-            const id = artworkUpdated['_id'];
-            counterService.updateArtwork(id, login,{counters});
+            const login = req.body.payload.cookie_config.login;
+            const id = req.body.payload.id;
+            counterService.updateArtwork(id, login,counters);
             UpdateSession(req,res);
         }catch(err){
             console.log((err as Error).message);

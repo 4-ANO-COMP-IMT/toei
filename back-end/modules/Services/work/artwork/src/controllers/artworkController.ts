@@ -70,7 +70,7 @@ export const update_artwork = async (req: Request, res: Response) => {
         checkArtwork(artwork);
 
         const artworkUpdated = await artworkService.updateArtwork(login, id, artwork);
-        if(!artworkUpdated || artworkUpdated.modifiedCount === 0){
+        if(!artworkUpdated || artworkUpdated.matchedCount === 0){
             return res.status(404).json({  updated:false, message: 'Artwork not found' });
         }
 

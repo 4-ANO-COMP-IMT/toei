@@ -24,8 +24,9 @@ export const counter_update = async (req: Request, res: Response) => {
         checkNum(position, 'position');
         checkNum(value, 'value');
         
-        const art = await counterService.getMaxValue(id, position);
-        if(!art){
+        const artworkSelected = await counterService.readArtwork(id, login, position) as IArtworks | null;
+
+        if(!artworkSelected){
             return res.status(400).json({updated:false, message: 'Counter not found'});
         }
 

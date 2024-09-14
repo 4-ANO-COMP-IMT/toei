@@ -8,6 +8,8 @@ import MenuBar from '../components/menuBar';
 function UpdateUser() {
   const navigate = useNavigate();
   axios.defaults.withCredentials = true;
+  
+  const [login, setLogin] = useState<string>('');
 
   useEffect(() => {
     document.title = 'Register';

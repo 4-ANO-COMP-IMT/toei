@@ -73,7 +73,6 @@ function create() {
     }
   
     const [validated, setValidated] = useState(false);        // check if form is valid
-    const [show, setShow] = useState(false);                  // show alert
     const [ACR, setACR] = useState<ArtworkCreatedResponse>({  // alert message
         message: '',
         created: false
@@ -106,10 +105,6 @@ function create() {
             }
         } catch (err: any) {
             setACR({message:err.response.data.message, created:err.response.data.created})
-            setShow(true);
-            setTimeout(() => {
-                setShow(false);
-            }, 1200);
         }
     }
     

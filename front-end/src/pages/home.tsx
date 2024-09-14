@@ -10,7 +10,7 @@ function Home() {
     const navigate = useNavigate();
     axios.defaults.withCredentials = true;
 
-    const [name, setName] = useState<string>('');
+    const [login, setLogin] = useState<string>('');
     const [tags, setTags] = useState<string[]>([]);
     
     interface Counter {
@@ -68,7 +68,7 @@ function Home() {
         try {
             const res = await axios.get('http://localhost:4000/auth/cookies', { withCredentials: true });
             if (res.data.valid) {
-                setName(res.data.username);
+                setLogin(res.data.username);
             } else {
                 navigate('/login');
             }
@@ -116,10 +116,10 @@ function Home() {
             return;
         }
         try {
-            const res = await axios.put('http://localhost:7000/counter/' + id, { position: 0, value: value });
+            const res = await axios.put('http://localhost:7000/counter/' + id, { position: 0, value: newValue });
             if (res.data.updated) {
                 let aux = artworks;
-                aux[index].artwork.counter.value = value;
+                aux[index].artwork.counter.value = newValue;
                 setArtworks([...aux]);
             }
         } catch (err) {
@@ -187,7 +187,7 @@ function Home() {
 
     return (
         <>
-            <MenuBar login={name} index={0}/>
+            <MenuBar login={login} index={0}/>
                 <Container className='p-2 pt-4' style={{ maxWidth: "960px" }}>
 
                     <Card className='p-4 mb-4' id="search">

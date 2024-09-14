@@ -91,8 +91,9 @@ function CreateOrEditArtwork() {
             } else {
                 if (artworkId) {
                     updateArtwork();
-                } else {
-                    createArtwork();
+                }
+                else {
+                    console.log("Artowork not found");
                 }
             }
             setValidated(true);
@@ -102,22 +103,6 @@ function CreateOrEditArtwork() {
         }
     };
 
-    const createArtwork = async () => {
-        try {
-            const res = await axios.post('http://localhost:5000/artwork/', { artwork: artworkInputs });
-            setACR({ message: res.data.message, created: res.data.created });
-            if (res.data.created) {
-                navigate('/home');
-            }
-        } catch (err: any) {
-            setACR({ message: err.response.data.message, created: err.response.data.created });
-            setShow(true);
-            setTimeout(() => {
-                setShow(false);
-            }, 1200);
-        }
-    }
-    
     const updateArtwork = async () => {
         try {
             const res = await axios.put('http://localhost:5000/artwork/' + artworkId, { artwork: artworkInputs });
@@ -158,9 +143,6 @@ function CreateOrEditArtwork() {
         }
     }, [artworkId]);
 
-    useEffect(() => {
-        console.log("ARTWORK INPUTS:", artworkInputs);
-    }, [artworkInputs]);
 
     const inputChangedHandler = (e: any) => {
         const { id, value } = e.target;

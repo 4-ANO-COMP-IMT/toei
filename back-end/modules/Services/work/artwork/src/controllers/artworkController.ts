@@ -139,44 +139,51 @@ const checkStr = (input: string, name: string) => {
         if(!artwork.hasOwnProperty('description')){throw new MissingParameters('description');}
         checkStr(artwork.description, 'description');
 
-        if(!artwork.hasOwnProperty('counters')){throw new MissingParameters('counters');}
-        if(!Array.isArray(artwork.counters)){throw new WrongTypeParameters('counters');}
-        if(artwork.counters.length === 0){throw new MissingParameters('counters');}
-        if(typeof artwork.counters !== 'object'){throw new WrongTypeParameters('counters');}
-        else{
-            artwork.counters.forEach(counter => {
-                if(!counter.hasOwnProperty('name')){throw new MissingParameters('counter_name');}
-                checkStr(counter.name, 'counter_name');
+        // if(!artwork.hasOwnProperty('counters')){throw new MissingParameters('counters');}
+        if(artwork.hasOwnProperty('counters')){
+            if(!Array.isArray(artwork.counters)){throw new WrongTypeParameters('counters');}
+            // if(artwork.counters.length === 0){throw new MissingParameters('counters');}
+            if(typeof artwork.counters !== 'object'){throw new WrongTypeParameters('counters');}
+            else{
+                artwork.counters.forEach(counter => {
+                    if(!counter.hasOwnProperty('name')){throw new MissingParameters('counter_name');}
+                    checkStr(counter.name, 'counter_name');
 
-                if(!counter.hasOwnProperty('value')){throw new MissingParameters('counter_value');}
-                if(isNaN(counter.value) || !Number.isInteger(counter.value)){throw new WrongTypeParameters('counter_value');}
-                if(counter.value < 0 || counter.value > counter.maxValue){throw new Invalid('counter_value');}
+                    if(!counter.hasOwnProperty('value')){throw new MissingParameters('counter_value');}
+                    if(isNaN(counter.value) || !Number.isInteger(counter.value)){throw new WrongTypeParameters('counter_value');}
+                    if(counter.value < 0 || counter.value > counter.maxValue){throw new Invalid('counter_value');}
 
-                if(!counter.hasOwnProperty('maxValue')){throw new MissingParameters('counter_maxvalue');}
-                if(isNaN(counter.maxValue) || !Number.isInteger(counter.maxValue)){throw new WrongTypeParameters('counter_maxvalue');}
-                if(counter.maxValue < 0){throw new Invalid('counter_maxvalue');}
+                    if(!counter.hasOwnProperty('maxValue')){throw new MissingParameters('counter_maxvalue');}
+                    if(isNaN(counter.maxValue) || !Number.isInteger(counter.maxValue)){throw new WrongTypeParameters('counter_maxvalue');}
+                    if(counter.maxValue < 0){throw new Invalid('counter_maxvalue');}
+                });
+            }
+        }
+
+        // if(!artwork.hasOwnProperty('tags')){throw new MissingParameters('tags');}
+        if(artwork.hasOwnProperty('tags')){
+            if(typeof artwork.tags !== 'object'){throw new WrongTypeParameters('tags');}
+            if(!Array.isArray(artwork.tags)){throw new WrongTypeParameters('tags');}
+            // if(artwork.tags.length === 0){throw new MissingParameters('tags');}
+            artwork.tags.forEach(tag => {
+                if(typeof tag !== 'string'){throw new WrongTypeParameters('tag');}
+                if(tag.trim() === "" || tag.length > 20){throw new Invalid('tag');}
             });
         }
 
-        if(!artwork.hasOwnProperty('tags')){throw new MissingParameters('tags');}
-        if(typeof artwork.tags !== 'object'){throw new WrongTypeParameters('tags');}
-        if(!Array.isArray(artwork.tags)){throw new WrongTypeParameters('tags');}
-        if(artwork.tags.length === 0){throw new MissingParameters('tags');}
-        artwork.tags.forEach(tag => {
-            if(typeof tag !== 'string'){throw new WrongTypeParameters('tag');}
-            if(tag.trim() === "" || tag.length > 20){throw new Invalid('tag');}
-        });
+        // if(!artwork.hasOwnProperty('informations')){throw new MissingParameters('informations');}
+        if(artwork.hasOwnProperty('informations')){
+            if(typeof artwork.informations !== 'object'){throw new WrongTypeParameters('informations');}
+            if(!Array.isArray(artwork.informations)){throw new WrongTypeParameters('informations');}
+            // if(artwork.informations.length === 0){throw new MissingParameters('informations');}
+            artwork.informations.forEach(info => {
+                if(!info.hasOwnProperty('name')){throw new MissingParameters('info_name');}
+                checkStr(info.name, 'info_name');
+                if(!info.hasOwnProperty('content')){throw new MissingParameters('info_content');}
+                if (typeof info.content !== 'string') {throw new WrongTypeParameters('info_content');}
+            });
+        }
 
-        if(!artwork.hasOwnProperty('informations')){throw new MissingParameters('informations');}
-        if(typeof artwork.informations !== 'object'){throw new WrongTypeParameters('informations');}
-        if(!Array.isArray(artwork.informations)){throw new WrongTypeParameters('informations');}
-        if(artwork.informations.length === 0){throw new MissingParameters('informations');}
-        artwork.informations.forEach(info => {
-            if(!info.hasOwnProperty('name')){throw new MissingParameters('info_name');}
-            checkStr(info.name, 'info_name');
-            if(!info.hasOwnProperty('content')){throw new MissingParameters('info_content');}
-            if (typeof info.content !== 'string') {throw new WrongTypeParameters('info_content');}
-        });
         if(!artwork.hasOwnProperty('img')){throw new MissingParameters('image');}
         checkStr(artwork.img, 'image');
     }

@@ -144,8 +144,8 @@ function create() {
         console.log(id, value);
     }
 
-    const [counterQuantity, setCounterQuantity] = useState<number>(1);
-    const [infoQuantity, setInfoQuantity] = useState<number>(1);
+    const [counterQuantity, setCounterQuantity] = useState<number>(0);
+    const [infoQuantity, setInfoQuantity] = useState<number>(0);
 
     useEffect(() => {
         setArtworkInputs(prevInputs => ({
@@ -191,11 +191,11 @@ function create() {
                     </Row>
                   ))}
                   <Button style={{width:"6rem"}} variant='outline-success' onClick={() => setCounterQuantity(counterQuantity + 1)}>Add</Button>
-                  <Button style={{width:"6rem"}} variant='outline-danger' className='ms-4' onClick={() => setCounterQuantity(counterQuantity>1?counterQuantity - 1:counterQuantity)}>Remove</Button>
+                  <Button style={{width:"6rem"}} variant='outline-danger' className='ms-4' onClick={() => setCounterQuantity(counterQuantity>0?counterQuantity - 1:counterQuantity)}>Remove</Button>
                   <hr/>
                   <h4>Tags</h4>
                   <FloatingLabel controlId='tags' label="Tags (example: tag1;tag2;tag3)" className='mb-3'>
-                    <Form.Control disabled={ACR.created} required type='string' placeholder="Tags" onChange={inputChangedHandler}/>
+                    <Form.Control disabled={ACR.created} type='string' placeholder="Tags" onChange={inputChangedHandler}/>
                   </FloatingLabel>
                   <hr/>
                   <h4>Informations</h4>
@@ -214,7 +214,7 @@ function create() {
                     </Row>
                   ))}
                   <Button style={{width:"6rem"}} variant='outline-success' onClick={() => setInfoQuantity(infoQuantity + 1)}>Add</Button>
-                  <Button style={{width:"6rem"}} variant='outline-danger' className='ms-4' onClick={() => setInfoQuantity(infoQuantity>1?infoQuantity - 1:infoQuantity)}>Remove</Button>
+                  <Button style={{width:"6rem"}} variant='outline-danger' className='ms-4' onClick={() => setInfoQuantity(infoQuantity>0?infoQuantity - 1:infoQuantity)}>Remove</Button>
                   <hr/>
                   <Button disabled={ACR.created} variant='primary' type='submit'>Create Artwork</Button>
                 </Form>

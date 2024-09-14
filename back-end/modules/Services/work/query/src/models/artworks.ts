@@ -30,8 +30,8 @@ export interface IArtwork {
 const ArtworkSchema = new Schema<IArtwork>({
     title: { type: String, required: true },
     description: { type: String, required: true },
-    counter: { type: CounterSchema, required: true, default:{}, _id: false },
-    tags: { type: [String], required: true},
+    counter: { type: CounterSchema, required: false, default:{}, _id: false },
+    tags: { type: [String], required: false, default: [] },
     img: { type: String, required: true}
 });
 

@@ -112,6 +112,7 @@ function UpdateUser() {
         user.birthDate = user.birthDate.split('T')[0]; // Format birthDate to YYYY-MM-DD
         setUserId(user._id);
         setFormInputs(user);
+        setLogin(user.login);
       }
     } catch (err: any) {
       setUCR({ message: err.response.data.message, created: err.response.data.read });
@@ -124,7 +125,7 @@ function UpdateUser() {
 
   return (
     <> 
-      <MenuBar index={2} />
+      <MenuBar index={2} login={login}/>
       <Container className='pt-4' style={{ maxWidth: "40rem" }}>
         <AlertMessage show={show} variant={UCR.created ? 'success' : 'danger'} title={UCR.created ? 'Success' : 'Error'} message={UCR.message} />
         <Card className='p-4'>

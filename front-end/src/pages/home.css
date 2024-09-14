@@ -39,7 +39,7 @@
 }
 .home-tags{
     height: 3rem;
-    overflow:scroll;
+    overflow:auto;
 }
 
 .master{

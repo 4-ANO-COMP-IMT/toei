@@ -83,6 +83,7 @@ function Home() {
             const res = await axios.post('http://localhost:8000/query/', { formInputs });
             if (res.data.artworks) {
                 setArtworks(res.data.artworks);
+                console.log(artworks);
             }
         } catch (err) {
             console.log((err as Error).message);
@@ -108,11 +109,10 @@ function Home() {
         }
     }
 
-    const updateCounter = async (id: string, index: number, value: number) => {
+    const updateCounter = async (id: string, index: number, newValue: number) => {
         // console.log("Updating counter");
-        // console.log(id, index, value);
-        if (value < 0 || value > artworks[index].artwork.counter.maxValue) {
-            value = 0;
+        if (newValue < 0 || newValue > artworks[index].artwork.counter.maxValue) {
+            newValue = 0;
             return;
         }
         try {
@@ -268,22 +268,30 @@ function Home() {
                                         </a>
                                         <Card.Text id="description" className="mt-3 mb-3 card-description" style={{ height: "3em", lineHeight: "1.5em", overflow: "hidden"}}>{e.artwork.description}
                                         </Card.Text>
-                                            <Row className="justify-content-md-center">
-                                                <Col xs className="position-relative">
-                                                    <div className="position-absolute top-50 start-50 translate-middle">
-                                                        <Card.Text>{e.artwork.counter.name}:</Card.Text>
-                                                    </div>
-                                                </Col>
-                                                <Col xs="auto">
-                                                    <ButtonGroup aria-label="Basic example">
-                                                        <Button variant="outline-secondary" style={{ width: "3rem" }} onClick={() => { updateCounter(e._id, index, e.artwork.counter.value + 1) }}>+</Button>
-                                                        <Button variant="outline-secondary" disabled>{String(e.artwork.counter.value)}/{String(e.artwork.counter.maxValue)}</Button>
-                                                        <Button variant="outline-secondary" style={{ width: "3rem" }} onClick={() => { updateCounter(e._id, index, e.artwork.counter.value - 1) }}>-</Button>
-                                                    </ButtonGroup>
-                                                </Col>
-                                            </Row>
+                                            {e.artwork.counter?
+                                                <Row className="justify-content-md-center">
+                                                    <Col xs className="position-relative">
+                                                        <div className="position-absolute top-50 start-50 translate-middle">
+                                                            <Card.Text>{e.artwork.counter.name}</Card.Text>
+                                                        </div>
+                                                    </Col>
+                                                    <Col xs="auto">
+                                                        <ButtonGroup aria-label="Basic example">
+                                                            <Button variant="outline-secondary" style={{ width: "3rem" }} onClick={() => { updateCounter(e._id, index, e.artwork.counter.value - 1) }}>-</Button>
+                                                            <Button variant="outline-secondary" disabled>{String(e.artwork.counter.value)}/{String(e.artwork.counter.maxValue)}</Button>
+                                                            <Button variant="outline-secondary" style={{ width: "3rem" }} onClick={() => { updateCounter(e._id, index, e.artwork.counter.value + 1) }}>+</Button>
+                                                        </ButtonGroup>
+                                                    </Col>
+                                                </Row>
+                                                :<></>
+                                            }
+                                        {e.artwork.tags.length>0?
+                                        <>
                                         <hr />
                                         <Tags tags={e.artwork.tags} id={e._id} className="home-tags pb-2"/> 
+                                        </>
+                                        :<></>
+                                        }
                                     </Card>
                                 </Col>
                             );

@@ -28,7 +28,7 @@ function CreateOrEditArtwork() {
             navigate('/login');
         }
     };
-    
+
     useEffect(() => {
         checkCookie();
     }, []);
@@ -65,21 +65,22 @@ function CreateOrEditArtwork() {
     };
 
     const [artworkInputs, setArtworkInputs] = useState<Artwork>(emptyArtwork);
+    const [tagsInput, setTagsInput] = useState<string>("");
     
     // map artwork to form
-    
+
     interface ArtworkCreatedResponse {
         message: string;
         created: boolean;
     }
-  
+
     const [validated, setValidated] = useState(false);        // check if form is valid
     const [show, setShow] = useState(false);                  // show alert
     const [ACR, setACR] = useState<ArtworkCreatedResponse>({  // alert message
         message: '',
         created: false
     })
-  
+
     const handleSubmit = (event: any) => {
         try {
             event.preventDefault();
@@ -127,6 +128,8 @@ function CreateOrEditArtwork() {
             if (res.data.read) {
                 const aux = res.data.artworkRead[0].artwork;
                 setArtworkInputs(aux);
+
+                setTagsInput(aux.tags.join("; "));
             }
         } catch (err: any) {
             setACR({ message: err.response.data.message, created: err.response.data.created });
@@ -165,8 +168,10 @@ function CreateOrEditArtwork() {
             };
         } else if (field === 'tags') {
             updatedInputs.tags = Array.from(new Set(value.split(';')
-                .map((tag: string) => tag.trim())
-                .filter((tag: string | any[]) => tag.length > 0)));
+                .map((tag: string) => tag.trim().toUpperCase())
+                .filter((tag: string | any[]) => tag.length > 0)
+            ));
+            setTagsInput(value);
         } else {
             updatedInputs[field as keyof Artwork] = value;
         }
@@ -234,7 +239,7 @@ function CreateOrEditArtwork() {
                             <hr />
                             <h4>Tags</h4>
                             <FloatingLabel controlId='tags' label="Tags (example: tag1;tag2;tag3)" className='mb-3'>
-                                <Form.Control disabled={ACR.created} required type='string' placeholder="Tags" value={artworkInputs.tags.join('; ')} onChange={inputChangedHandler} />
+                                <Form.Control disabled={ACR.created} type='string' placeholder="Tags" value={tagsInput} onChange={inputChangedHandler} />
                             </FloatingLabel>
                             <hr />
                             <h4>Informations</h4>

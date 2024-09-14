@@ -105,8 +105,7 @@ function Artwork() {
     return (
         <>
             <MenuBar login={login} index={1}/>
-            <Container style={{ height: "100vh", width: "100vw" }}>
-                <Container className='pt-4' style={{ maxWidth: "960px" }}>
+                <Container className='p-2' style={{ maxWidth: "960px" }}>
                     <h1>{artwork.title}</h1>
                     
                     {artwork.tags.length != 0 ? (
@@ -122,9 +121,9 @@ function Artwork() {
                     ) : null}
                     <hr />
                     {artwork.counters.length != 0 ? (
-                        <Row className="justify-content-md-center mb-4">
-                            <Col md="auto">
-                                <div className='artwork-counters'>
+                        <Row className="justify-content-sm-center mb-4">
+                            <Col sm="auto">
+                                <div className='artwork-sm-counters'>
                                     <h5>
                                         <Stack direction="horizontal" gap={2} className="artwork-counters">
                                             {artwork.counters.map((counter: Counter, counterIndex: number) =>
@@ -134,9 +133,9 @@ function Artwork() {
                                                     </div><br/>
                                                     <div className='d-inline-block'>
                                                         <ButtonGroup aria-label="Basic example">
-                                                            <Button variant="outline-secondary" style={{ width: "3rem" }} onClick={() => { updateCounter(counterIndex, counter.value + 1) }}>+</Button>
-                                                            <Button variant="outline-secondary" disabled>{String(counter.value)}/{String(counter.maxValue)}</Button>
                                                             <Button variant="outline-secondary" style={{ width: "3rem" }} onClick={() => { updateCounter(counterIndex, counter.value - 1) }}>-</Button>
+                                                            <Button variant="outline-secondary" disabled>{String(counter.value)}/{String(counter.maxValue)}</Button>
+                                                            <Button variant="outline-secondary" style={{ width: "3rem" }} onClick={() => { updateCounter(counterIndex, counter.value + 1) }}>+</Button>
                                                         </ButtonGroup>
                                                     </div>
                                                 </div>
@@ -170,9 +169,12 @@ function Artwork() {
                             })}
                         </tbody>
                     </Table>
-                    <p>{artwork.description}</p>
+                    {artwork.description.split('</br>').map((line, index) => {
+                        return (
+                            <p key={index}>{line}</p>
+                        );
+                    })}
                 </Container>
-            </Container>
         </>
     );
 }

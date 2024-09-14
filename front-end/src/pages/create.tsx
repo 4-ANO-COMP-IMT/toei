@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Form, Card, FloatingLabel, Button, Row, Col } from 'react-bootstrap';
 
-function create() {
+function createArtwork() {
 
     // check if user is logged in
 
@@ -129,7 +129,7 @@ function create() {
             };
         } else if (field === 'tags') {
             updatedInputs.tags = Array.from(new Set(value.split(';')
-                .map((tag: string) => tag.trim())
+                .map((tag: string) => tag.trim().toUpperCase())
                 .filter((tag: string | any[]) => tag.length > 0)));
         } else {
             updatedInputs[field as keyof Artwork] = value;
@@ -220,4 +220,4 @@ function create() {
         </>
     )
 }
-export default create
+export default createArtwork

@@ -104,7 +104,7 @@ function readArtwork() {
 
     return (
         <>
-            <MenuBar login={login} index={1}/>
+            <MenuBar login={login} type={2} message={artwork.title}/>
                 <Container className='p-2' style={{ maxWidth: "960px" }}>
                     <h1>{artwork.title}</h1>
                     

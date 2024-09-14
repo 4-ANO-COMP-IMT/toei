@@ -202,7 +202,7 @@ function updateArtwork() {
 
     return (
         <>
-            <MenuBar login={login} index={2} />
+            <MenuBar login={login} type={3} message={artworkInputs.title} />
             <Container style={{ height: "100vh", width: "100vw" }}>
                 <Container className='pt-4' style={{ maxWidth: "960px" }}>
                     <Card className='p-4'>

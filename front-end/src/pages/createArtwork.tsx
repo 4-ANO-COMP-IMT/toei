@@ -152,7 +152,7 @@ function createArtwork() {
 
     return(
         <>
-        <MenuBar login={login} index={2}/>
+        <MenuBar login={login} type={0}/>
         <Container style={{ height: "100vh", width: "100vw" }}>
             <Container className='pt-4' style={{ maxWidth: "960px" }}>
 

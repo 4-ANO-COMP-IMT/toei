@@ -125,7 +125,7 @@ function updateUser() {
 
   return (
     <> 
-      <MenuBar index={2} login={login}/>
+      <MenuBar type={4} login={login} message="your account"/>
       <Container className='pt-4' style={{ maxWidth: "40rem" }}>
         <AlertMessage show={show} variant={UCR.created ? 'success' : 'danger'} title={UCR.created ? 'Success' : 'Error'} message={UCR.message} />
         <Card className='p-4'>

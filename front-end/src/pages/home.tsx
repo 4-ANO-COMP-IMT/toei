@@ -187,7 +187,7 @@ function Home() {
 
     return (
         <>
-            <MenuBar login={login} index={0}/>
+            <MenuBar login={login} type={1}/>
                 <Container className='p-2 pt-4' style={{ maxWidth: "960px" }}>
 
                     <Card className='p-4 mb-4' id="search">

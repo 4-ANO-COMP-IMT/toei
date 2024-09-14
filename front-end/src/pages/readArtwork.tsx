@@ -2,11 +2,11 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Container, Table, Row, Col, Stack, ButtonGroup, Button } from 'react-bootstrap';
-import './artwork.css';
+import './readArtwork.css';
 import Tags from '../components/tags';
 import MenuBar from '../components/menuBar';
 
-function Artwork() {
+function readArtwork() {
     const { artworkId } = useParams<{ artworkId: string }>();
     const navigate = useNavigate();
     axios.defaults.withCredentials = true;
@@ -179,4 +179,4 @@ function Artwork() {
     );
 }
 
-export default Artwork;
+export default readArtwork;

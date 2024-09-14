@@ -5,7 +5,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Form, Card, FloatingLabel, Button, Row, Col } from 'react-bootstrap';
 
-function CreateOrEditArtwork() {
+function updateArtwork() {
     const { artworkId } = useParams<{ artworkId: string }>();
 
     // check if user is logged in
@@ -269,4 +269,4 @@ function CreateOrEditArtwork() {
     )
 }
 
-export default CreateOrEditArtwork;
+export default updateArtwork;

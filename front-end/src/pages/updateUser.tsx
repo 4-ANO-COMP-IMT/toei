@@ -5,7 +5,7 @@ import { Container, Card, Form, FloatingLabel, Row, Col, Button } from 'react-bo
 import AlertMessage from '../components/alertMessage';
 import MenuBar from '../components/menuBar';
 
-function UpdateUser() {
+function updateUser() {
   const navigate = useNavigate();
   axios.defaults.withCredentials = true;
   
@@ -164,4 +164,4 @@ function UpdateUser() {
   );
 }
 
-export default UpdateUser;
+export default updateUser;

@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Container, Card, Form, FloatingLabel,Row, Col, Button } from 'react-bootstrap';
 import AlertMessage from '../components/alertMessage';
 
-function Register() {
+function registerUser() {
   const navigate = useNavigate();
   axios.defaults.withCredentials = true;
 
@@ -124,4 +124,4 @@ interface Information {
   )
 }
 
-export default Register
+export default registerUser;

@@ -10,7 +10,6 @@ table {
     display: flex;
     flex-wrap: wrap;
     margin-top: 10px;
-    max-width: 576px;
 }
 .artwork-tags span, .artwork-counters span{
     display: block;

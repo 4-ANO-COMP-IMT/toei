@@ -1,6 +1,6 @@
 import express from 'express';
 import {Request, Response} from 'express';
-import * as queryService from '../services/counterService';
+import * as counterService from '../services/counterService';
 const app = express();
 import { ICookieConfig } from '../models/sessions';
 import { IUserChanges } from '../models/events';
@@ -27,7 +27,7 @@ export const handleEvent = app.post('/event', async (req:Request, res:Response) 
 const UpdateSession = (req: Request, res: Response) => {
     try {
         const { cookie_config } = req.body.payload;
-        queryService.updateCookie(cookie_config);
+        counterService.updateCookie(cookie_config);
     }catch(err){
         console.log((err as Error).message);
     }
@@ -39,7 +39,7 @@ const funcoes = {
     UserUpdated: (req: Request, res: Response) => {
         try {
             const userChanges:IUserChanges = req.body.payload.userChanges;
-            queryService.updateArtworks(userChanges);
+            counterService.updateArtworks(userChanges);
 
             UpdateSession(req,res);
         }catch(err){
@@ -50,8 +50,8 @@ const funcoes = {
         try {
             const cookie_config:ICookieConfig = req.body.payload.cookie_config;
             console.log(cookie_config)
-            queryService.deleteArtworks(cookie_config.login);
-            queryService.deleteSessions(cookie_config.login);
+            counterService.deleteArtworks(cookie_config.login);
+            counterService.deleteSessions(cookie_config.login);
         }catch(err){
             console.log((err as Error).message);
         }
@@ -60,7 +60,7 @@ const funcoes = {
     UserDisconnected: (req: Request, res: Response) => {
         try {
             const cookie_config:ICookieConfig = req.body.payload.cookie_config;
-            queryService.deleteSession(cookie_config.session);
+            counterService.deleteSession(cookie_config.session);
             }catch(err){
                 console.log((err as Error).message);
             }
@@ -72,7 +72,7 @@ const funcoes = {
             const {counters,...removeArtwork} = artwork;
             const login = artworkCreated.login;
             const id = artworkCreated['_id'];
-            queryService.createArtwork(id, login, {counters});
+            counterService.createArtwork(id, login, {counters});
             UpdateSession(req,res);
         }catch(err){
             console.log((err as Error).message);
@@ -81,12 +81,11 @@ const funcoes = {
     ArtworkRead: UpdateSession,
     ArtworkUpdated: (req: Request, res: Response) => {
         try {
-            const artworkUpdated = req.body.payload.artworkUpdated;
-            const artwork = artworkUpdated;
+            const artwork = req.body.payload.artworkUpdated;
             const {counters,...removeArtwork} = artwork;
-            const login = artworkUpdated.login;
-            const id = artworkUpdated['_id'];
-            queryService.updateArtwork(id, login,{counters});
+            const login = req.body.payload.cookie_config.login;
+            const id = req.body.payload.id;
+            counterService.updateArtwork(id, login,counters);
             UpdateSession(req,res);
         }catch(err){
             console.log((err as Error).message);
@@ -95,7 +94,7 @@ const funcoes = {
     ArtworkDeleted: (req: Request, res: Response) => {
         try {
             const {login,id} = req.body.payload;
-            queryService.deleteArtwork(login, id);
+            counterService.deleteArtwork(login, id);
             UpdateSession(req,res);
         }catch(err){
             console.log((err as Error).message);

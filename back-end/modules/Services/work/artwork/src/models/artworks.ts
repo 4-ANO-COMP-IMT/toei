@@ -33,9 +33,9 @@ export interface IArtwork {
 const ArtworkSchema = new Schema<IArtwork>({
     title: { type: String, required: true },
     description: { type: String, required: true },
-    counters: { type: [CounterSchema], required: true, _id: false },
-    tags: { type: [String], required: true},
-    informations: { type: [InformationSchema], required: true, _id: false },
+    counters: { type: [CounterSchema], required: false, _id: false , default: []},
+    tags: { type: [String], required: false, default: [] },
+    informations: { type: [InformationSchema], required: false, _id: false, default: [] },
     img: { type: String, required: true}
 });
 

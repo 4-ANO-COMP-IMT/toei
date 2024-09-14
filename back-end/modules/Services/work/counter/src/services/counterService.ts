@@ -1,10 +1,10 @@
-import { IArtwork, ArtworksModel } from '../models/counter';
+import { IArtwork, ArtworksModel, ICounter } from '../models/counter';
 import { ISessions, ICookieConfig, SessionsModel } from '../models/sessions';
 import axios from 'axios';
 import { IUserChanges } from '../models/events';
 
-export const getMaxValue = async (id: string, position: number) => {
-    const counter = await ArtworksModel.findOne({_id: id},{'artwork.counters':{$slice: [position,1]}});
+export const readArtwork = async (id: string, login :string, position: number) => {
+    const counter = await ArtworksModel.findOne({_id: id, login},{'artwork.counters':{$slice: [position,1]}});
     return counter;
 }
 
@@ -94,8 +94,7 @@ export const createArtwork = async (id:String, login:String, artwork:IArtwork) =
     return artwork_created;
 }
 
-export const updateArtwork =  async (id:String, login:string, artwork:IArtwork) => {
-    const {counters}=artwork;
+export const updateArtwork =  async (id:String, login:string, counters:ICounter[]) => {
     const artwork_updated = await ArtworksModel.updateOne({_id:id, login},{$set: { artwork: {counters} }});
     return artwork_updated;
 }

@@ -2,11 +2,11 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Container, Table, Row, Col, Stack, ButtonGroup, Button } from 'react-bootstrap';
-import './artwork.css';
-import GenTags from '../components/genTags';
+import './readArtwork.css';
+import Tags from '../components/tags';
 import MenuBar from '../components/menuBar';
 
-function Artwork() {
+function readArtwork() {
     const { artworkId } = useParams<{ artworkId: string }>();
     const navigate = useNavigate();
     axios.defaults.withCredentials = true;
@@ -104,9 +104,8 @@ function Artwork() {
 
     return (
         <>
-            <MenuBar login={login} index={1}/>
-            <Container style={{ height: "100vh", width: "100vw" }}>
-                <Container className='pt-4' style={{ maxWidth: "960px" }}>
+            <MenuBar login={login} type={2} message={artwork.title}/>
+                <Container className='p-2' style={{ maxWidth: "960px" }}>
                     <h1>{artwork.title}</h1>
                     
                     {artwork.tags.length != 0 ? (
@@ -114,7 +113,7 @@ function Artwork() {
                             <Row className="mb-3">
                                 <Col md="auto">
                                     <div className='artwork-tags'>
-                                        <GenTags tags={artwork.tags} id={artworkId as string} className="artwork-tags" />
+                                        <Tags tags={artwork.tags} id={artworkId as string} className="artwork-tags" />
                                     </div>
                                 </Col>
                             </Row>
@@ -122,9 +121,9 @@ function Artwork() {
                     ) : null}
                     <hr />
                     {artwork.counters.length != 0 ? (
-                        <Row className="justify-content-md-center mb-4">
-                            <Col md="auto">
-                                <div className='artwork-counters'>
+                        <Row className="justify-content-sm-center mb-4">
+                            <Col sm="auto">
+                                <div className='artwork-sm-counters'>
                                     <h5>
                                         <Stack direction="horizontal" gap={2} className="artwork-counters">
                                             {artwork.counters.map((counter: Counter, counterIndex: number) =>
@@ -134,9 +133,9 @@ function Artwork() {
                                                     </div><br/>
                                                     <div className='d-inline-block'>
                                                         <ButtonGroup aria-label="Basic example">
-                                                            <Button variant="outline-secondary" style={{ width: "3rem" }} onClick={() => { updateCounter(counterIndex, counter.value + 1) }}>+</Button>
-                                                            <Button variant="outline-secondary" disabled>{String(counter.value)}/{String(counter.maxValue)}</Button>
                                                             <Button variant="outline-secondary" style={{ width: "3rem" }} onClick={() => { updateCounter(counterIndex, counter.value - 1) }}>-</Button>
+                                                            <Button variant="outline-secondary" disabled>{String(counter.value)}/{String(counter.maxValue)}</Button>
+                                                            <Button variant="outline-secondary" style={{ width: "3rem" }} onClick={() => { updateCounter(counterIndex, counter.value + 1) }}>+</Button>
                                                         </ButtonGroup>
                                                     </div>
                                                 </div>
@@ -170,11 +169,14 @@ function Artwork() {
                             })}
                         </tbody>
                     </Table>
-                    <p>{artwork.description}</p>
+                    {artwork.description.split('</br>').map((line, index) => {
+                        return (
+                            <p key={index}>{line}</p>
+                        );
+                    })}
                 </Container>
-            </Container>
         </>
     );
 }
 
-export default Artwork;
+export default readArtwork;

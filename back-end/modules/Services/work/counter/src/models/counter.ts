@@ -16,7 +16,7 @@ export interface IArtwork {
 }
 
 const ArtworkSchema = new Schema<IArtwork>({
-    counters: { type: [CounterSchema], required: true, _id: false },
+    counters: { type: [CounterSchema], required: false, _id: false, default: [] },
 });
 
 export interface IArtworks {

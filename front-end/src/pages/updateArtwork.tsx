@@ -5,7 +5,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Form, Card, FloatingLabel, Button, Row, Col } from 'react-bootstrap';
 
-function CreateOrEditArtwork() {
+function updateArtwork() {
     const { artworkId } = useParams<{ artworkId: string }>();
 
     // check if user is logged in
@@ -28,7 +28,7 @@ function CreateOrEditArtwork() {
             navigate('/login');
         }
     };
-    
+
     useEffect(() => {
         checkCookie();
     }, []);
@@ -65,21 +65,22 @@ function CreateOrEditArtwork() {
     };
 
     const [artworkInputs, setArtworkInputs] = useState<Artwork>(emptyArtwork);
+    const [tagsInput, setTagsInput] = useState<string>("");
     
     // map artwork to form
-    
+
     interface ArtworkCreatedResponse {
         message: string;
         created: boolean;
     }
-  
+
     const [validated, setValidated] = useState(false);        // check if form is valid
     const [show, setShow] = useState(false);                  // show alert
     const [ACR, setACR] = useState<ArtworkCreatedResponse>({  // alert message
         message: '',
         created: false
     })
-  
+
     const handleSubmit = (event: any) => {
         try {
             event.preventDefault();
@@ -91,8 +92,9 @@ function CreateOrEditArtwork() {
             } else {
                 if (artworkId) {
                     updateArtwork();
-                } else {
-                    createArtwork();
+                }
+                else {
+                    console.log("Artowork not found");
                 }
             }
             setValidated(true);
@@ -102,22 +104,6 @@ function CreateOrEditArtwork() {
         }
     };
 
-    const createArtwork = async () => {
-        try {
-            const res = await axios.post('http://localhost:5000/artwork/', { artwork: artworkInputs });
-            setACR({ message: res.data.message, created: res.data.created });
-            if (res.data.created) {
-                navigate('/home');
-            }
-        } catch (err: any) {
-            setACR({ message: err.response.data.message, created: err.response.data.created });
-            setShow(true);
-            setTimeout(() => {
-                setShow(false);
-            }, 1200);
-        }
-    }
-    
     const updateArtwork = async () => {
         try {
             const res = await axios.put('http://localhost:5000/artwork/' + artworkId, { artwork: artworkInputs });
@@ -142,6 +128,8 @@ function CreateOrEditArtwork() {
             if (res.data.read) {
                 const aux = res.data.artworkRead[0].artwork;
                 setArtworkInputs(aux);
+
+                setTagsInput(aux.tags.join("; "));
             }
         } catch (err: any) {
             setACR({ message: err.response.data.message, created: err.response.data.created });
@@ -158,9 +146,6 @@ function CreateOrEditArtwork() {
         }
     }, [artworkId]);
 
-    useEffect(() => {
-        console.log("ARTWORK INPUTS:", artworkInputs);
-    }, [artworkInputs]);
 
     const inputChangedHandler = (e: any) => {
         const { id, value } = e.target;
@@ -183,8 +168,10 @@ function CreateOrEditArtwork() {
             };
         } else if (field === 'tags') {
             updatedInputs.tags = Array.from(new Set(value.split(';')
-                .map((tag: string) => tag.trim())
-                .filter((tag: string | any[]) => tag.length > 0)));
+                .map((tag: string) => tag.trim().toUpperCase())
+                .filter((tag: string | any[]) => tag.length > 0)
+            ));
+            setTagsInput(value);
         } else {
             updatedInputs[field as keyof Artwork] = value;
         }
@@ -193,8 +180,8 @@ function CreateOrEditArtwork() {
         console.log(id, value);
     };
 
-    const [counterQuantity, setCounterQuantity] = useState<number>(1);
-    const [infoQuantity, setInfoQuantity] = useState<number>(1);
+    const [counterQuantity, setCounterQuantity] = useState<number>(0);
+    const [infoQuantity, setInfoQuantity] = useState<number>(0);
 
     useEffect(() => {
         setArtworkInputs(prevInputs => ({
@@ -215,7 +202,7 @@ function CreateOrEditArtwork() {
 
     return (
         <>
-            <MenuBar login={login} index={2} />
+            <MenuBar login={login} type={3} message={artworkInputs.title} />
             <Container style={{ height: "100vh", width: "100vw" }}>
                 <Container className='pt-4' style={{ maxWidth: "960px" }}>
                     <Card className='p-4'>
@@ -248,11 +235,11 @@ function CreateOrEditArtwork() {
                                 </Row>
                             ))}
                             <Button style={{ width: "6rem" }} variant='outline-success' onClick={() => setCounterQuantity(counterQuantity + 1)}>Add</Button>
-                            <Button style={{ width: "6rem" }} variant='outline-danger' className='ms-4' onClick={() => setCounterQuantity(counterQuantity > 1 ? counterQuantity - 1 : counterQuantity)}>Remove</Button>
+                            <Button style={{ width: "6rem" }} variant='outline-danger' className='ms-4' onClick={() => setCounterQuantity(counterQuantity > 0 ? counterQuantity - 1 : counterQuantity)}>Remove</Button>
                             <hr />
                             <h4>Tags</h4>
                             <FloatingLabel controlId='tags' label="Tags (example: tag1;tag2;tag3)" className='mb-3'>
-                                <Form.Control disabled={ACR.created} required type='string' placeholder="Tags" value={artworkInputs.tags.join('; ')} onChange={inputChangedHandler} />
+                                <Form.Control disabled={ACR.created} type='string' placeholder="Tags" value={tagsInput} onChange={inputChangedHandler} />
                             </FloatingLabel>
                             <hr />
                             <h4>Informations</h4>
@@ -271,7 +258,7 @@ function CreateOrEditArtwork() {
                                 </Row>
                             ))}
                             <Button style={{ width: "6rem" }} variant='outline-success' onClick={() => setInfoQuantity(infoQuantity + 1)}>Add</Button>
-                            <Button style={{ width: "6rem" }} variant='outline-danger' className='ms-4' onClick={() => setInfoQuantity(infoQuantity > 1 ? infoQuantity - 1 : infoQuantity)}>Remove</Button>
+                            <Button style={{ width: "6rem" }} variant='outline-danger' className='ms-4' onClick={() => setInfoQuantity(infoQuantity > 0 ? infoQuantity - 1 : infoQuantity)}>Remove</Button>
                             <hr />
                             <Button disabled={ACR.created} variant='primary' type='submit'>{artworkId ? 'Update Artwork' : 'Create Artwork'}</Button>
                         </Form>
@@ -282,4 +269,4 @@ function CreateOrEditArtwork() {
     )
 }
 
-export default CreateOrEditArtwork;
+export default updateArtwork;

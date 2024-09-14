@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Form, Card, FloatingLabel, Button, Row, Col } from 'react-bootstrap';
 
-function create() {
+function createArtwork() {
 
     // check if user is logged in
 
@@ -73,7 +73,6 @@ function create() {
     }
   
     const [validated, setValidated] = useState(false);        // check if form is valid
-    const [show, setShow] = useState(false);                  // show alert
     const [ACR, setACR] = useState<ArtworkCreatedResponse>({  // alert message
         message: '',
         created: false
@@ -106,10 +105,6 @@ function create() {
             }
         } catch (err: any) {
             setACR({message:err.response.data.message, created:err.response.data.created})
-            setShow(true);
-            setTimeout(() => {
-                setShow(false);
-            }, 1200);
         }
     }
     
@@ -134,7 +129,7 @@ function create() {
             };
         } else if (field === 'tags') {
             updatedInputs.tags = Array.from(new Set(value.split(';')
-                .map((tag: string) => tag.trim())
+                .map((tag: string) => tag.trim().toUpperCase())
                 .filter((tag: string | any[]) => tag.length > 0)));
         } else {
             updatedInputs[field as keyof Artwork] = value;
@@ -144,8 +139,8 @@ function create() {
         console.log(id, value);
     }
 
-    const [counterQuantity, setCounterQuantity] = useState<number>(1);
-    const [infoQuantity, setInfoQuantity] = useState<number>(1);
+    const [counterQuantity, setCounterQuantity] = useState<number>(0);
+    const [infoQuantity, setInfoQuantity] = useState<number>(0);
 
     useEffect(() => {
         setArtworkInputs(prevInputs => ({
@@ -157,7 +152,7 @@ function create() {
 
     return(
         <>
-        <MenuBar login={login} index={2}/>
+        <MenuBar login={login} type={0}/>
         <Container style={{ height: "100vh", width: "100vw" }}>
             <Container className='pt-4' style={{ maxWidth: "960px" }}>
 
@@ -191,11 +186,11 @@ function create() {
                     </Row>
                   ))}
                   <Button style={{width:"6rem"}} variant='outline-success' onClick={() => setCounterQuantity(counterQuantity + 1)}>Add</Button>
-                  <Button style={{width:"6rem"}} variant='outline-danger' className='ms-4' onClick={() => setCounterQuantity(counterQuantity>1?counterQuantity - 1:counterQuantity)}>Remove</Button>
+                  <Button style={{width:"6rem"}} variant='outline-danger' className='ms-4' onClick={() => setCounterQuantity(counterQuantity>0?counterQuantity - 1:counterQuantity)}>Remove</Button>
                   <hr/>
                   <h4>Tags</h4>
                   <FloatingLabel controlId='tags' label="Tags (example: tag1;tag2;tag3)" className='mb-3'>
-                    <Form.Control disabled={ACR.created} required type='string' placeholder="Tags" onChange={inputChangedHandler}/>
+                    <Form.Control disabled={ACR.created} type='string' placeholder="Tags" onChange={inputChangedHandler}/>
                   </FloatingLabel>
                   <hr/>
                   <h4>Informations</h4>
@@ -214,7 +209,7 @@ function create() {
                     </Row>
                   ))}
                   <Button style={{width:"6rem"}} variant='outline-success' onClick={() => setInfoQuantity(infoQuantity + 1)}>Add</Button>
-                  <Button style={{width:"6rem"}} variant='outline-danger' className='ms-4' onClick={() => setInfoQuantity(infoQuantity>1?infoQuantity - 1:infoQuantity)}>Remove</Button>
+                  <Button style={{width:"6rem"}} variant='outline-danger' className='ms-4' onClick={() => setInfoQuantity(infoQuantity>0?infoQuantity - 1:infoQuantity)}>Remove</Button>
                   <hr/>
                   <Button disabled={ACR.created} variant='primary' type='submit'>Create Artwork</Button>
                 </Form>
@@ -225,4 +220,4 @@ function create() {
         </>
     )
 }
-export default create
+export default createArtwork

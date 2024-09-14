@@ -5,9 +5,11 @@ import { Container, Card, Form, FloatingLabel, Row, Col, Button } from 'react-bo
 import AlertMessage from '../components/alertMessage';
 import MenuBar from '../components/menuBar';
 
-function UpdateUser() {
+function updateUser() {
   const navigate = useNavigate();
   axios.defaults.withCredentials = true;
+  
+  const [login, setLogin] = useState<string>('');
 
   useEffect(() => {
     document.title = 'Register';
@@ -110,6 +112,7 @@ function UpdateUser() {
         user.birthDate = user.birthDate.split('T')[0]; // Format birthDate to YYYY-MM-DD
         setUserId(user._id);
         setFormInputs(user);
+        setLogin(user.login);
       }
     } catch (err: any) {
       setUCR({ message: err.response.data.message, created: err.response.data.read });
@@ -122,7 +125,7 @@ function UpdateUser() {
 
   return (
     <> 
-      <MenuBar index={2} />
+      <MenuBar type={4} login={login} message="your account"/>
       <Container className='pt-4' style={{ maxWidth: "40rem" }}>
         <AlertMessage show={show} variant={UCR.created ? 'success' : 'danger'} title={UCR.created ? 'Success' : 'Error'} message={UCR.message} />
         <Card className='p-4'>
@@ -161,4 +164,4 @@ function UpdateUser() {
   );
 }
 
-export default UpdateUser;
+export default updateUser;

@@ -21,7 +21,7 @@ app.use(express.json());
 
 app.post('/event', async (req:Request, res:Response)=>{
   const event = req.body;
-  console.log(event.type, 'event received by');
+  console.log(event.type, 'event received');
   
   for (let i = 0; i < allowedPorts.length; i++) {
     try {

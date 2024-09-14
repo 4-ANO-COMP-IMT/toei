@@ -76,7 +76,7 @@ export const update_user = async (req: Request, res: Response) => {
         await updateExists( userChanges );
         
         const userUpdated = await userService.updateUser(login, user);
-        if(!userUpdated || userUpdated.modifiedCount === 0){
+        if(!userUpdated || userUpdated.matchedCount === 0){
             return res.status(404).json({ updated:false, message: 'User not found' });
         }
         req.session.login_cookie = user.login;

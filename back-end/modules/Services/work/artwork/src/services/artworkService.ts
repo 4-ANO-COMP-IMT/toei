@@ -2,6 +2,7 @@ import { IArtwork, ArtworksModel } from '../models/artworks';
 import { ISessions, ICookieConfig, SessionsModel } from '../models/sessions';
 import { IUserChanges } from '../models/events';
 import axios from 'axios';
+import { config } from '../config/config';
 
 export const createArtwork =  (login:String, artwork:IArtwork) => {
     const artwork_created = new ArtworksModel({login, artwork});
@@ -25,7 +26,7 @@ export const deleteArtwork =  async (login:String, id:string) => {
 }
 
 export const event = async ( typeMessage: string, payloadMessage: any ) => {
-    axios.post('http://localhost:10000/event', {
+    axios.post(`${config.bridgeUrl}/event`, {
         type: typeMessage,
         payload: payloadMessage
     });

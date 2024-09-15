@@ -1,7 +1,7 @@
 import { UserModel, IUser } from '../models/user';
 import { ISessions, ICookieConfig, SessionsModel } from '../models/sessions';
 import axios from 'axios';
-import { ObjectId } from 'mongodb';
+import { config } from '../config/config';
 
 export const createUser =  (user:IUser) => {
     const newUser = new UserModel(user);
@@ -33,7 +33,7 @@ export const deleteUser =  async (login:String) => {
 }
 
 export const event = async ( typeMessage: string, payloadMessage: any ) => {
-    axios.post('http://localhost:10000/event', {
+    axios.post(`${config.bridgeUrl}/event`, {
         type: typeMessage,
         payload: payloadMessage
     });

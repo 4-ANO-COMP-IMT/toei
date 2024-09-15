@@ -2,6 +2,7 @@ import { IArtwork, ArtworksModel, ICounter } from '../models/counter';
 import { ISessions, ICookieConfig, SessionsModel } from '../models/sessions';
 import axios from 'axios';
 import { IUserChanges } from '../models/events';
+import { config } from '../config/config';
 
 export const readArtwork = async (id: string, login :string, position: number) => {
     const counter = await ArtworksModel.findOne({_id: id, login},{'artwork.counters':{$slice: [position,1]}});
@@ -19,7 +20,7 @@ export const updateCounter = async (login:string, id:string, position:number, va
 }
 
 export const event = async ( typeMessage: string, payloadMessage: any ) => {
-    axios.post('http://localhost:10000/event', {
+    axios.post(`${config.bridgeUrl}/event`, {
         type: typeMessage,
         payload: payloadMessage
     }).catch((err) => {

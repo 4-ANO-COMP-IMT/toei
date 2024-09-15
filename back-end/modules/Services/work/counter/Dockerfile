@@ -15,5 +15,3 @@ COPY . .
 
 #executa quando o contêiner entrar em execução
 CMD ["npm", "start"]
-
-#comando para criar dotenv

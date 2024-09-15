@@ -13,7 +13,6 @@ RUN npm install
 #copia todo o conteúdo .local para a imagem
 COPY . .
 
+EXPOSE 4000
 #executa quando o contêiner entrar em execução
 CMD ["npm", "start"]
-
-#comando para criar dotenv

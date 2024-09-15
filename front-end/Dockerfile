@@ -14,6 +14,6 @@ RUN npm install
 COPY . .
 
 #executa quando o contêiner entrar em execução
-CMD ["npm", "start"]
+CMD ["npm", "run", "dev"]
 
 #comando para criar dotenv

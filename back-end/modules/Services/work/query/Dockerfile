@@ -13,5 +13,15 @@ RUN npm install
 #copia todo o conteúdo .local para a imagem
 COPY . .
 
+#cria variável de ambiente
+ENV BRIDGE_URL=http://bridge-container:10000
+
+EXPOSE 8000
+
 #executa quando o contêiner entrar em execução
 CMD ["npm", "start"]
+
+# docker build -t query-image .
+#optional# docker images
+
+# docker run -p 8000:8000 -d --rm --name query-container --network toei-network query-image

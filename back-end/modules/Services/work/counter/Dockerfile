@@ -13,5 +13,15 @@ RUN npm install
 #copia todo o conteúdo .local para a imagem
 COPY . .
 
+#cria variável de ambiente
+ENV BRIDGE_URL=http://bridge-container:10000
+
+EXPOSE 7000
+
 #executa quando o contêiner entrar em execução
 CMD ["npm", "start"]
+
+# docker build -t counter-image .
+#optional# docker images
+
+# docker run -p 7000:7000 -d --rm --name counter-container --network toei-network counter-image

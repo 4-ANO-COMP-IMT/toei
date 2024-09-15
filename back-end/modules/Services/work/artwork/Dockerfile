@@ -13,5 +13,15 @@ RUN npm install
 #copia todo o conteúdo .local para a imagem
 COPY . .
 
+#cria variável de ambiente
+ENV BRIDGE_URL=http://bridge-container:10000
+
+EXPOSE 5000
+
 #executa quando o contêiner entrar em execução
 CMD ["npm", "start"]
+
+# docker build -t artwork-image .
+#optional# docker images
+
+# docker run -p 5000:5000 -d --rm --name artwork-container --network toei-network artwork-image

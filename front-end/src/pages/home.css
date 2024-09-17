@@ -39,7 +39,8 @@
 }
 .home-tags{
     height: 3rem;
-    overflow:auto;
+    overflow-y: hidden;
+    overflow-x: auto;
 }
 
 .master{

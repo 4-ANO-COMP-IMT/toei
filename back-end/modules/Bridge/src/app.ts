@@ -4,10 +4,11 @@ import axios from 'axios'
 import { Request, Response } from 'express'
 
 dotenv.config()
-const { PORT, ALLOWED_PORTS, ALLOWED_URLS, PORT_NAMES } = process.env;
+const { PORT, ALLOWED_URLS, ALLOWED_PORTS, ALLOWED_DIRS, PORT_NAMES } = process.env;
+const allowedUrls = ALLOWED_URLS ? ALLOWED_URLS.split(','): [];
 const allowedPorts = ALLOWED_PORTS ? ALLOWED_PORTS.split(',') : [];
-const allowedOrigins = allowedPorts.map(port => `http://localhost:${port}`);
-const allowedUrls = ALLOWED_URLS ? ALLOWED_URLS.split(',') : [];
+const allowedDir = ALLOWED_DIRS ? ALLOWED_DIRS.split(',') : [];
+const allowedOrigins = allowedPorts.map((port,i) => `http://${allowedUrls[i]}:${port}`);
 const portNames = PORT_NAMES ? PORT_NAMES.split(',') : [];
 
 const cors = require('cors');
@@ -25,7 +26,7 @@ app.post('/event', async (req:Request, res:Response)=>{
   
   for (let i = 0; i < allowedPorts.length; i++) {
     try {
-      axios.post(`http://localhost:${allowedPorts[i]}/${allowedUrls[i]}/event`, event)
+      axios.post(`${allowedUrls[i]}:${allowedPorts[i]}/${allowedDir[i]}/event`, event)
     } catch (err) {
       console.log(`Failed to send event to ${portNames[i]}`, err)
     }

@@ -3,7 +3,7 @@ import { UserLogin } from '../models/userLogin';
 import axios from 'axios';
 import { ISessions, ICookieConfig, SessionsModel } from '../models/sessions'
 import { IUserChanges } from '../models/events';
-import { ObjectId } from 'mongodb';
+import {config} from '../config/config';
 
 export const createLogin = async (login: string, password: string) => {
 	const authLogin = new UserLogin({login, password});
@@ -42,7 +42,7 @@ export const checkLogin = async (login: string, password: string) => {
 };
 
 export const event = async ( typeMessage: string, payloadMessage: any ) => {
-  	axios.post('http://localhost:10000/event', {
+  	axios.post(`${config.bridgeUrl}/event`, {
 		type: typeMessage,
 		payload: payloadMessage
 	});

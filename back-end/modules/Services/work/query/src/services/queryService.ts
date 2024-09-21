@@ -2,6 +2,7 @@ import { IArtwork, ArtworksModel } from '../models/artworks';
 import { ISessions, ICookieConfig, SessionsModel } from '../models/sessions';
 import axios from 'axios';
 import { IUserChanges } from '../models/events';
+import { config } from '../config/config';
 
 export const readArtworks = async (login:String,title:String,tags:String[],filters:String[],sort:String,order:Boolean) => {
     const filter =
@@ -43,7 +44,7 @@ export const readTags = async (login:String) => {
 }
 
 export const event = async ( typeMessage: string, payloadMessage: any ) => {
-    axios.post('http://localhost:10000/event', {
+    axios.post(`${config.bridgeUrl}/event`, {
         type: typeMessage,
         payload: payloadMessage
     }).catch((err) => {

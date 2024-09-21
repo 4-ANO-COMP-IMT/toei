@@ -13,5 +13,6 @@ export const config ={
         Number(process.env.SESSION_MAX_AGE_H)
       ) * 60
     ) + Number(process.env.SESSION_MAX_AGE_M)
-  ) * 60 * 1000
+  ) * 60 * 1000,
+  bridgeUrl: process.env.BRIDGE_URL
 };

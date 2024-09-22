@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: artwork-service
+spec:
+  # Ip externo, acessível fora do cluster
+  type: NodePort
+  selector:
+    # todo Pod que tiver essa tag
+    # fará parte desse serviço
+    app: artwork
+  ports:
+    - name: artwork
+      protocol: TCP
+      # o nó recebe requisições nessa porta
+      port: 5000
+      # e direciona para essa porta do Pod
+      targetPort: 5000
+      nodePort: 30005

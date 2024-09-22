@@ -14,7 +14,7 @@ RUN npm install
 COPY . .
 
 #cria variável de ambiente
-ENV BRIDGE_URL=http://bridge-container:10000
+ENV BRIDGE_URL=http://bridge-service:10000
 
 EXPOSE 5000
 

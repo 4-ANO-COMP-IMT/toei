@@ -15,8 +15,8 @@ COPY . .
 
 
 #cria variável de ambiente
-ENV ALLOWED_URLS=http://user-container,http://login-container,http://artwork-container,http://query-container,http://counter-container
-#                           user,                   login,                   artwork,                query,                  counter
+ENV ALLOWED_URLS=http://user-clusterip-service,http://login-clusterip-service,http://artwork-clusterip-service,http://query-clusterip-service,http://counter-clusterip-service
+#                             user,                               login,                                artwork,                            query,                                counter
 
 EXPOSE 10000
 

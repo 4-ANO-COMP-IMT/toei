@@ -66,7 +66,7 @@ function Home() {
 
     const checkCookie = async () => {
         try {
-            const res = await axios.get('http://localhost:4000/auth/cookies', { withCredentials: true });
+            const res = await axios.get('http://localhost:30004/auth/cookies', { withCredentials: true });
             if (res.data.valid) {
                 setLogin(res.data.username);
             } else {
@@ -80,7 +80,7 @@ function Home() {
 
     const checkArtworks = async () => {
         try {
-            const res = await axios.post('http://localhost:8000/query/', { formInputs });
+            const res = await axios.post('http://localhost:30008/query/', { formInputs });
             if (res.data.artworks) {
                 setArtworks(res.data.artworks);
                 console.log(artworks);
@@ -92,7 +92,7 @@ function Home() {
 
     const checkTags = async () => {
         try {
-            const res = await axios.get('http://localhost:8000/query/tags', { withCredentials: true });
+            const res = await axios.get('http://localhost:30008/query/tags', { withCredentials: true });
             if (res.data.tags) {
                 if (res.data.tags[0].tags.length > 0) {
                     let aux:string[] = res.data.tags[0].tags;
@@ -116,7 +116,7 @@ function Home() {
             return;
         }
         try {
-            const res = await axios.put('http://localhost:7000/counter/' + id, { position: 0, value: newValue });
+            const res = await axios.put('http://localhost:30007/counter/' + id, { position: 0, value: newValue });
             if (res.data.updated) {
                 let aux = artworks;
                 aux[index].artwork.counter.value = newValue;

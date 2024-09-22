@@ -16,7 +16,7 @@ function createArtwork() {
 
     const checkCookie = async () => {
         try {
-            const res = await axios.get('http://localhost:4000/auth/cookies', { withCredentials: true });
+            const res = await axios.get('http://localhost:30004/auth/cookies', { withCredentials: true });
             if (res.data.valid) {
                 setLogin(res.data.username)
             }else{
@@ -98,7 +98,7 @@ function createArtwork() {
 
     const createArtwork = async () => {
         try {
-            const res = await axios.post('http://localhost:5000/artwork/', {artwork:artworkInputs})
+            const res = await axios.post('http://localhost:30005/artwork/', {artwork:artworkInputs})
             setACR({message:res.data.message, created:res.data.created})
             if (res.data.created) {
                 navigate('/home');

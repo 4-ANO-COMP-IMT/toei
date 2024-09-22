@@ -21,7 +21,7 @@ function updateUser() {
     
   const checkCookie = async () => {
     try {
-        const res = await axios.get('http://localhost:4000/auth/cookies', { withCredentials: true });
+        const res = await axios.get('http://localhost:30004/auth/cookies', { withCredentials: true });
         if (!res.data.valid) {
             navigate('/login');
         }
@@ -86,7 +86,7 @@ function updateUser() {
   const updateUser = async () => {
     try {
       console.log(formInputs);
-      const res = await axios.put('http://localhost:3000/user', formInputs );
+      const res = await axios.put('http://localhost:30003/user', formInputs );
       if(res.data.updated) {
         setUCR({ message: res.data.message, created: res.data.updated });
         setShow(true);
@@ -105,7 +105,7 @@ function updateUser() {
 
   const readUser = async () => {
     try {
-      const res = await axios.get('http://localhost:3000/user', { withCredentials: true });
+      const res = await axios.get('http://localhost:30003/user', { withCredentials: true });
       if (res.data.read) {
         const user = res.data.userRead;
         user.password = ""

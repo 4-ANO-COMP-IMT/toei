@@ -55,7 +55,7 @@ function readArtwork() {
 
     const checkCookie = async () => {
         try {
-            const res = await axios.get('http://localhost:4000/auth/cookies', { withCredentials: true });
+            const res = await axios.get('http://localhost:30004/auth/cookies', { withCredentials: true });
             if (res.data.valid) {
                 setLogin(res.data.username)
             }
@@ -71,7 +71,7 @@ function readArtwork() {
 
     const checkArtwork = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/artwork/' + artworkId);
+            const res = await axios.get('http://localhost:30005/artwork/' + artworkId);
             if (res.data.read) {
                 setArtwork(res.data.artworkRead[0].artwork);
             }
@@ -89,7 +89,7 @@ function readArtwork() {
             const updatedArtwork = { ...artwork };
             updatedArtwork.counters = [...artwork.counters];
             updatedArtwork.counters[index] = { ...artwork.counters[index], value: value };
-            const res = await axios.put('http://localhost:5000/artwork/' + artworkId, { artwork: updatedArtwork });
+            const res = await axios.put('http://localhost:30005/artwork/' + artworkId, { artwork: updatedArtwork });
             if (res.data.updated) {
                 setArtwork(updatedArtwork);
             }

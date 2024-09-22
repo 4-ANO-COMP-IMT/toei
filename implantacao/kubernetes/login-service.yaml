@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: login-service
+spec:
+  # Ip externo, acessível fora do cluster
+  type: NodePort
+  selector:
+    # todo Pod que tiver essa tag
+    # fará parte desse serviço
+    app: login
+  ports:
+    - name: login
+      protocol: TCP
+      # o nó recebe requisições nessa porta
+      port: 4000
+      # e direciona para essa porta do Pod
+      targetPort: 4000
+      nodePort: 30004

@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:frontend/widgets/alertMessage.dart';
 
-const class LoginPage extends StatefulWidget {
+class LoginPage extends StatefulWidget {
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -54,11 +54,11 @@ class _LoginPageState extends State<LoginPage> {
         _show = true;
       });
       if (_logged) {
-        Future.delayed(const Duration(seconds: 1), () {
+        Future.delayed( Duration(seconds: 1), () {
           Navigator.pushReplacementNamed(context, '/home');
         });
       } else {
-        Future.delayed(const Duration(seconds: 1), () {
+        Future.delayed( Duration(seconds: 1), () {
           setState(() {
             _show = false;
           });
@@ -70,7 +70,7 @@ class _LoginPageState extends State<LoginPage> {
         _logged = false;
         _show = true;
       });
-      Future.delayed(const Duration(seconds: 1), () {
+      Future.delayed( Duration(seconds: 1), () {
         setState(() {
           _show = false;
         });
@@ -95,10 +95,10 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Login'),
+        title:  Text('Login'),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding:  EdgeInsets.all(16.0),
         child: Center(
           child: Column(
             children: [
@@ -110,14 +110,14 @@ class _LoginPageState extends State<LoginPage> {
               ),
               Card(
                 child: Padding(
-                  padding: const EdgeInsets.all(16.0),
+                  padding:  EdgeInsets.all(16.0),
                   child: Column(
                     children: [
-                      const Text(
+                       Text(
                         'Log in',
                         style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                       ),
-                      const SizedBox(height: 20),
+                       SizedBox(height: 20),
                       TextField(
                         controller: _loginController,
                         enabled: !_logged,
@@ -128,7 +128,7 @@ class _LoginPageState extends State<LoginPage> {
                               : 'Login is required',
                         ),
                       ),
-                      const SizedBox(height: 20),
+                       SizedBox(height: 20),
                       TextField(
                         controller: _passwordController,
                         enabled: !_logged,
@@ -140,17 +140,17 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         obscureText: true,
                       ),
-                     const SizedBox(height: 20),
+                      SizedBox(height: 20),
                       TextButton(
                         onPressed: () {
                           Navigator.pushNamed(context, '/register');
                         },
-                        child: const Text('Don\'t have an account? Register here'),
+                        child:  Text('Don\'t have an account? Register here'),
                       ),
-                      const SizedBox(height: 20),
+                       SizedBox(height: 20),
                       ElevatedButton(
                         onPressed: _handleSubmit,
-                        child: const Text('Log in'),
+                        child:  Text('Log in'),
                       ),
                     ],
                   ),

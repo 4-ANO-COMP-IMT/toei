@@ -15,6 +15,8 @@ COPY . .
 
 #cria variável de ambiente
 ENV BRIDGE_URL=http://bridge-service:10000
+ENV FLUTTER_URL=http://localhost:30012
+ENV REACT_URL=http://localhost:30011
 
 EXPOSE 5000
 

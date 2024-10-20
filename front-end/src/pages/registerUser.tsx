@@ -66,7 +66,7 @@ interface Information {
 
   const register = async () => {
     try {
-      const res = await axios.post('http://localhost:30003/user', formInputs)
+      const res = await axios.post(`${import.meta.env.VITE_USER_URL}`, formInputs)
       setUCR({message:res.data.message, created:res.data.created})
       setShow(true);
       setTimeout(() => {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:frontend/widgets/alertMessage.dart';
+import 'package:dio/dio.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -23,12 +23,18 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> checkCookie() async {
+    var dio = Dio();
     try {
-      final response = await http.get(
-        Uri.parse('http://localhost:30004/auth/cookies'),
-        headers: {'withCredentials': 'true'},
+      final response = await dio.get(
+        'http://localhost:4000/auth/cookies',
+        options: Options(
+        headers: {
+            'Content-Type': 'application/json',
+          },
+        extra: {'withCredentials': true},
+        ),
       );
-      final data = json.decode(response.body);
+      final data = json.decode(response.toString());
       if (data['valid']) {
         Navigator.pushReplacementNamed(context, '/home');
       }
@@ -38,16 +44,22 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> register() async {
+    var dio = Dio();
     try {
-      final response = await http.post(
-        Uri.parse('http://localhost:30004/auth'),
-        body: json.encode({
+      final response = await dio.post(
+        'http://localhost:4000/auth',
+        data:{
           'login': _loginController.text,
           'password': _passwordController.text,
-        }),
-        headers: {'Content-Type': 'application/json'},
+        },
+        options: Options(
+        headers: {
+            'Content-Type': 'application/json',
+          },
+        extra: {'withCredentials': true},
+        ),
       );
-      final data = json.decode(response.body);
+      final data = json.decode(response.toString());
       setState(() {
         _message = data['message'];
         _logged = data['logged'];

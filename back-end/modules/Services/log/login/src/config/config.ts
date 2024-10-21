@@ -14,5 +14,7 @@ export const config ={
       ) * 60
     ) + Number(process.env.SESSION_MAX_AGE_M)
   ) * 60 * 1000,
-  bridgeUrl: process.env.BRIDGE_URL
+  bridgeUrl: process.env.BRIDGE_URL,
+  reactUrl: process.env.REACT_URL,
+  flutterUrl: process.env.FLUTTER_URL
 };

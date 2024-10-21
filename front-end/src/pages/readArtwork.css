@@ -1,0 +1,21 @@
+
+table {
+	float: right;
+    position: static;
+    max-width: 312px;
+    margin-left: 2rem;
+
+}
+.artwork-tags{
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+.artwork-tags span, .artwork-counters span{
+    display: block;
+}
+.artwork-counters{
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}

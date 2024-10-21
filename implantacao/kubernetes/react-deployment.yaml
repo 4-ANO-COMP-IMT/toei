@@ -1,0 +1,47 @@
+#deployments vem de apps/v1
+apiVersion: apps/v1
+#tipo
+kind: Deployment
+metadata:
+  #nome do deployment
+  name: react-deployment
+spec:
+  #quantas cópias
+  replicas: 1
+  #para especificar o rótulo
+  selector:
+    matchLabels:
+    #rótulo, app não tem nada de especial, pode ser qq coisa
+    #Deployment vai selecionar todo Pod que tiver esse rótulo
+      app: react
+  #modelo que vai ser usado para construção dos Pods
+  template:
+    metadata:
+      labels:
+        #os Pods terão esse rótulo, assim,
+        #serão selecionados por esse deployment
+        app: react
+    spec:
+      containers:
+        - name: react
+          image: react-image
+          imagePullPolicy: Never
+          resources:
+            limits:
+              memory: 256Mi
+              cpu: 1
+---
+apiVersion: v1
+kind: Service
+metadata:
+  #nome diferente do outro de tipo nodePort
+  #que havíamos criado
+  name: react-clusterip-service
+spec:
+  selector:
+    app: react
+  ports:
+    - name: react
+      protocol: TCP
+      port: 5173
+      targetPort: 5173

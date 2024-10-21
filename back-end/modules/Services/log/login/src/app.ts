@@ -8,8 +8,15 @@ import MongoStore from 'connect-mongo';
 const cors = require('cors');
 const app = express();
 
+var whitelist = [config.reactUrl, config.flutterUrl];
 app.use(cors({
-  origin: 'http://localhost:30011',
+  origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
+    if (whitelist.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
   optionsSuccessStatus: 200
 }))

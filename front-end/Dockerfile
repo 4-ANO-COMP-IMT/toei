@@ -13,6 +13,13 @@ RUN npm install
 #copia todo o conteúdo .local para a imagem
 COPY . .
 
+#cria variável de ambiente
+ENV VITE_USER_URL=http://localhost:30003/user
+ENV VITE_LOGIN_URL=http://localhost:30004/auth
+ENV VITE_ARTWORK_URL=http://localhost:30005/artwork
+ENV VITE_COUNTER_URL=http://localhost:30007/counter
+ENV VITE_QUERY_URL=http://localhost:30008/query
+
 EXPOSE 5173
 
 #executa quando o contêiner entrar em execução

@@ -38,7 +38,7 @@ function menuBar({login, type, message }: menuBarProps) {
 
     const disconnect = async () => {
         try {
-            const res = await axios.get('http://localhost:30004/auth/disconnect', { withCredentials: true });
+            const res = await axios.get(`${import.meta.env.VITE_LOGIN_URL}/disconnect`, { withCredentials: true });
             // console.log(res.data);
             if (res.data.disconnected) {
                 navigate('/login');
@@ -52,7 +52,7 @@ function menuBar({login, type, message }: menuBarProps) {
 
     const deleteArtwork = async () => {
         try {
-        const res = await axios.delete('http://localhost:30005/artwork/' + artworkId, { withCredentials: true });
+        const res = await axios.delete(`${import.meta.env.VITE_ARTWORK_URL}/` + artworkId, { withCredentials: true });
         if (res.data.artworkDeleted) { 
             navigate('/home');
         }
@@ -62,7 +62,7 @@ function menuBar({login, type, message }: menuBarProps) {
     }
     const deleteUser = async () => {
         try {
-        const res = await axios.delete('http://localhost:30003/user/');
+        const res = await axios.delete(`${import.meta.env.VITE_USER_URL}`);
         if (res.data.userDeleted) { 
             navigate('/home');
         }

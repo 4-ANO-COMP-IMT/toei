@@ -15,7 +15,7 @@ function Login() {
 
   const checkCookie = async () => {
     try{
-      const res = await axios.get('http://localhost:30004/auth/cookies', {withCredentials: true})
+      const res = await axios.get(`${import.meta.env.VITE_LOGIN_URL}/cookies`, {withCredentials: true})
       if(res.data.valid){
         navigate('/home')
       }
@@ -63,7 +63,7 @@ function Login() {
   
   const register = async () => {
     try {
-      const res = await axios.post('http://localhost:30004/auth', formInputs)
+      const res = await axios.post(`${import.meta.env.VITE_LOGIN_URL}`, formInputs)
       setULR({message:res.data.message, logged:res.data.logged})
       setShow(true);
       setTimeout(() => {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() {
   runApp(MyApp());
@@ -123,6 +124,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  String loginUrl = const String.fromEnvironment('LOGIN_URL', defaultValue: '') != ''
+    ? const String.fromEnvironment('LOGIN_URL')
+    : dotenv.env['LOGIN_URL'] ?? '';
+  String queryUrl = const String.fromEnvironment('QUERY_URL', defaultValue: '') != ''
+    ? const String.fromEnvironment('QUERY_URL')
+    : dotenv.env['QUERY_URL'] ?? '';
   List<String> _tagNames = [];
   List<bool> _tags = [];
   List<bool> _filters = [];
@@ -140,7 +147,7 @@ class _HomePageState extends State<HomePage> {
   // Check cookies for login
   void checkLogin() async {
     try {
-      var response = await DioClient().get('http://localhost:4000/auth/cookies/');
+      var response = await DioClient().get('$loginUrl/cookies/');
       if (response.data['valid'] == false) {
         Navigator.pushReplacementNamed(context, '/login');
       }
@@ -152,7 +159,7 @@ class _HomePageState extends State<HomePage> {
 
   void disconnect() async {
     try {
-      var response = await DioClient().get('http://localhost:4000/auth/disconnect/');
+      var response = await DioClient().get('$loginUrl/disconnect/');
       if (response.data['disconnected'] == true) {
         Navigator.pushReplacementNamed(context, '/login');
       }
@@ -164,7 +171,7 @@ class _HomePageState extends State<HomePage> {
   // Fetch tags from the backend
   void fetchTags() async {
     try {
-      var response = await DioClient().get('http://localhost:8000/query/tags/');
+      var response = await DioClient().get('$queryUrl/tags/');
       if (response.data['read']) {
         setState(() {
           _tagNames = List<String>.from(response.data['tags'][0]['tags']);
@@ -180,7 +187,7 @@ class _HomePageState extends State<HomePage> {
   // Fetch initial artworks
   void fetchArtworks() async {
     try {
-      var response = await DioClient().post('http://localhost:8000/query/', data: {
+      var response = await DioClient().post(queryUrl, data: {
         'formInputs': {
           'title': '',
           'tags': [],
@@ -215,7 +222,7 @@ class _HomePageState extends State<HomePage> {
     }
 
     try {
-      var response = await DioClient().post('http://localhost:8000/query/', data: {
+      var response = await DioClient().post(queryUrl, data: {
         'formInputs': {
           'title': _search,
           'tags': selectedTags,

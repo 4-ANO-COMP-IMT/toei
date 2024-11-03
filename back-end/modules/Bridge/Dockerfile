@@ -8,7 +8,7 @@ WORKDIR /app
 COPY package.json .
 
 #instala as dependências
-RUN npm audit fix
+RUN npm install
 
 #copia todo o conteúdo .local para a imagem
 COPY . .

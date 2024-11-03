@@ -1,0 +1,15 @@
+/* menuBar.css */
+.dropdown-menu-end {
+  right: 0 !important;
+  left: auto !important;
+}
+
+.alert-custom {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 40px); 
+  max-width: 960px;
+  box-sizing: border-box;
+}

@@ -1,51 +1,52 @@
-# Bem-vindo a seu Projeto
+# TOEI
+Repositório para o projeto referente as matérias ECM516 e ECM252, sobre supervisão dos professores [Rodrigo Bossini](https://github.com/professorbossini) e [Antonio Bonato](https://github.com/asbonato).
 
-## Clonando repositório
+# Sumário
 
-Para começar seu projeto, primeiro abra a pasta que deseja utilizar, copie o URL do seu projeto, entre no terminal e digite:
-
-```bash
-git clone https://github.com/4-ANO-COMP-IMT/[$TRABALHO]_[$GRUPO].git
-```
-
-## Iniciando o projeto
-
-Após criar entrar no repostório, crie o arquivo <strong> .gitignore </strong> na pasta raiz do projeto. Adicione as informações baseadas nesse [link](https://github.com/github/gitignore).
-
-## Branches
-Todas as alterações devem ser realizadas em branches criadas pelos alunos e mescladas com a <strong>dev</strong> após a aprovação do grupo.<br>
-Para a entrega final, o professor realizará a review e mesclagem com a <strong>prod</strong>. Esta review conterá comentários sobre o projeto e possíveis melhorias.
-<br>
-<br>
-<strong>ATENÇÃO</strong>:
- - Não faça nenhuma alteração na branch <strong>prod</strong>.
- - Jamais faça push diretamente na <strong>dev</strong> ou <strong>prod</strong>.
- -  Não aceite o pull request de sua branch para a <strong>dev</strong> sem a aprovação do grupo.
-
-## Pull Request
-O pull request deve ser feito da branch do aluno para a <strong>dev</strong>.<br>
+- [Descrição](#Descrição)
+- [Benefícios](#Benefícios)
+- [Funcionalidades](#Funcionalidades)
+- [Autores](#Autores)
 
 
-## Commits 
-Para os commits, siga os <strong>[conventional commits](https://www.conventionalcommits.org/en/v1.0.0/)</strong> para facilitar a leitura do histórico do projeto.
+# Descrição 
 
-Boas práticas:
-- Commits pequenos e frequentes.
-- Mensagens claras e objetivas.
+A aplicação de listagem de obras TOEI visa proporcionar uma experiência personalizada e organizada para os usuários que desejam manter um registro detalhado de suas obras favoritas, sejam elas filmes, séries, livros, jornais, mangás, animes, ou qualquer outro tipo de mídia. O objetivo é oferecer uma plataforma flexível onde os usuários podem criar, gerenciar e visualizar listas de obras de forma intuitiva e prática.
 
-Base:
+# Benefícios
 
+## Organização Pessoal:
 
-```
-<tipo>(<escopo>): <resumo curto>
-  │       │             │
-  │       │             └─⫸ Resumo no presente. Não capitalizado. Sem ponto final no final.
-  │       │
-  │       └─⫸ Escopo do commit: geralmente o nome do módulo afetado
-  │
-  └─⫸ Tipo do commit: build|ci|docs|feat|fix|perf|refactor|test
-```
+Permite ao usuário manter um controle organizado de todas as obras que ele acompanha ou deseja acompanhar, facilitando a gestão do tempo e das prioridades de consumo de conteúdo.
 
-## Conclusão
+## Personalização:
 
-Siga as instruções do professor e boa sorte! 😎
+A liberdade de adicionar informações detalhadas sobre cada obra permite que o usuário personalize suas listas de acordo com suas preferências e necessidades.
+
+## Acessibilidade e Conveniência:
+
+Com uma interface amigável, o usuário pode acessar suas listas de qualquer lugar, proporcionando conveniência e acessibilidade.
+
+# Funcionalidades
+
+## Cadastro e Autenticação de Usuários:
+
+Criação de contas pessoais para que cada usuário possa ter suas listas e preferências armazenadas de forma segura.
+
+## Criação e Gerenciamento de Listas:
+
+Possibilidade de criar múltiplas listas para diferentes tipos de obras (ex.: "Filmes para Assistir", "Livros Favoritos", "Séries em Andamento").
+
+## Adição de Obras:
+
+O usuário pode adicionar títulos manualmente, incluindo informações como nome, imagem, descrição, categoria (filme, série, livro, etc.), status (assistido, não assistido, lendo, etc.), e tags personalizadas.
+
+## Busca e Filtros:
+
+Ferramentas de busca avançada e filtros para facilitar a localização de obras específicas dentro das listas criadas.
+
+# Autores
+
+- [Erick Eiji Nagao 21.00690-3](https://github.com/ErickNagao)
+- [Gabriel Henrique Baca Rado 21.01286-5](https://github.com/Gabriel-HBR)
+- [Ryuske Hideaki Sato 21.00745-4](https://github.com/Dragonrhs)

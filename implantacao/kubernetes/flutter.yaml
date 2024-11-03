@@ -1,0 +1,67 @@
+#deployments vem de apps/v1
+apiVersion: apps/v1
+#tipo
+kind: Deployment
+metadata:
+  #nome do deployment
+  name: flutter-deployment
+spec:
+  #quantas cópias
+  replicas: 1
+  #para especificar o rótulo
+  selector:
+    matchLabels:
+    #rótulo, app não tem nada de especial, pode ser qq coisa
+    #Deployment vai selecionar todo Pod que tiver esse rótulo
+      app: flutter
+  #modelo que vai ser usado para construção dos Pods
+  template:
+    metadata:
+      labels:
+        #os Pods terão esse rótulo, assim,
+        #serão selecionados por esse deployment
+        app: flutter
+    spec:
+      containers:
+        - name: flutter
+          image: flutter-image
+          imagePullPolicy: Never
+          resources:
+            limits:
+              memory: 256Mi
+              cpu: 1
+---
+apiVersion: v1
+kind: Service
+metadata:
+  #nome diferente do outro de tipo nodePort
+  #que havíamos criado
+  name: flutter-clusterip-service
+spec:
+  selector:
+    app: flutter
+  ports:
+    - name: flutter
+      protocol: TCP
+      port: 9001
+      targetPort: 9001
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flutter-service
+spec:
+  # Ip externo, acessível fora do cluster
+  type: NodePort
+  selector:
+    # todo Pod que tiver essa tag
+    # fará parte desse serviço
+    app: flutter
+  ports:
+    - name: flutter
+      protocol: TCP
+      # o nó recebe requisições nessa porta
+      port: 9001
+      # e direciona para essa porta do Pod
+      targetPort: 9001
+      nodePort: 30012

@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bridge-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bridge
+  template:
+    metadata:
+      labels:
+        app: bridge
+    spec:
+      containers:
+        - name: bridge
+          image: bridge-image
+          imagePullPolicy: Never
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bridge-service
+spec:
+  selector:
+    app: bridge
+  # ip interno ao cluster
+  type: ClusterIP
+  ports:
+    - name: bridge
+      protocol: TCP
+      port: 10000
+      targetPort: 10000

@@ -124,12 +124,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  String loginUrl = const String.fromEnvironment('LOGIN_URL', defaultValue: '') != ''
-    ? const String.fromEnvironment('LOGIN_URL')
-    : dotenv.env['LOGIN_URL'] ?? '';
-  String queryUrl = const String.fromEnvironment('QUERY_URL', defaultValue: '') != ''
-    ? const String.fromEnvironment('QUERY_URL')
-    : dotenv.env['QUERY_URL'] ?? '';
+  String loginUrl = dotenv.env['LOGIN_URL'] ?? '';
+  String queryUrl = dotenv.env['QUERY_URL'] ?? '';
   List<String> _tagNames = [];
   List<bool> _tags = [];
   List<bool> _filters = [];

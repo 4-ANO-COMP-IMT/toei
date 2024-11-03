@@ -10,9 +10,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  String loginUrl = const String.fromEnvironment('LOGIN_URL', defaultValue: '') != ''
-    ? const String.fromEnvironment('LOGIN_URL')
-    : dotenv.env['LOGIN_URL'] ?? '';
+  String loginUrl = dotenv.env['LOGIN_URL'] ?? '';
   final TextEditingController _loginController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _validated = false;

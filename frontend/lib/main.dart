@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/screens/login.dart';
 import 'package:frontend/screens/home.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
+Future main() async {
+  await dotenv.load(fileName: "assets/.env");
+  myApp();
+}
+
+void myApp() {
   runApp(MaterialApp(
     title: 'Login',
     theme: ThemeData(

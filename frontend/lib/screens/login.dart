@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:frontend/widgets/alertMessage.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -9,6 +10,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  String loginUrl = dotenv.env['LOGIN_URL'] ?? '';
   final TextEditingController _loginController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _validated = false;
@@ -26,7 +28,7 @@ class _LoginPageState extends State<LoginPage> {
     var dio = Dio();
     try {
       final response = await dio.get(
-        'http://localhost:4000/auth/cookies',
+        '$loginUrl/cookies',
         options: Options(
         headers: {
             'Content-Type': 'application/json',
@@ -47,7 +49,7 @@ class _LoginPageState extends State<LoginPage> {
     var dio = Dio();
     try {
       final response = await dio.post(
-        'http://localhost:4000/auth',
+        loginUrl,
         data:{
           'login': _loginController.text,
           'password': _passwordController.text,

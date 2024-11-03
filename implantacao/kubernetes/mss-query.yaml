@@ -4,7 +4,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   #nome do deployment
-  name: artwork-deployment
+  name: query-deployment
 spec:
   #quantas cópias
   replicas: 1
@@ -13,18 +13,18 @@ spec:
     matchLabels:
     #rótulo, app não tem nada de especial, pode ser qq coisa
     #Deployment vai selecionar todo Pod que tiver esse rótulo
-      app: artwork
+      app: query
   #modelo que vai ser usado para construção dos Pods
   template:
     metadata:
       labels:
         #os Pods terão esse rótulo, assim,
         #serão selecionados por esse deployment
-        app: artwork
+        app: query
     spec:
       containers:
-        - name: artwork
-          image: artwork-image
+        - name: query
+          image: query-image
           imagePullPolicy: Never
           resources:
             limits:
@@ -36,12 +36,32 @@ kind: Service
 metadata:
   #nome diferente do outro de tipo nodePort
   #que havíamos criado
-  name: artwork-clusterip-service
+  name: query-clusterip-service
 spec:
   selector:
-    app: artwork
+    app: query
   ports:
-    - name: artwork
+    - name: query
       protocol: TCP
-      port: 5000
-      targetPort: 5000
+      port: 8000
+      targetPort: 8000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: query-service
+spec:
+  # Ip externo, acessível fora do cluster
+  type: NodePort
+  selector:
+    # todo Pod que tiver essa tag
+    # fará parte desse serviço
+    app: query
+  ports:
+    - name: query
+      protocol: TCP
+      # o nó recebe requisições nessa porta
+      port: 8000
+      # e direciona para essa porta do Pod
+      targetPort: 8000
+      nodePort: 30008

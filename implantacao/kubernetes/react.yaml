@@ -4,7 +4,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   #nome do deployment
-  name: counter-deployment
+  name: react-deployment
 spec:
   #quantas cópias
   replicas: 1
@@ -13,18 +13,18 @@ spec:
     matchLabels:
     #rótulo, app não tem nada de especial, pode ser qq coisa
     #Deployment vai selecionar todo Pod que tiver esse rótulo
-      app: counter
+      app: react
   #modelo que vai ser usado para construção dos Pods
   template:
     metadata:
       labels:
         #os Pods terão esse rótulo, assim,
         #serão selecionados por esse deployment
-        app: counter
+        app: react
     spec:
       containers:
-        - name: counter
-          image: counter-image
+        - name: react
+          image: react-image
           imagePullPolicy: Never
           resources:
             limits:
@@ -36,12 +36,32 @@ kind: Service
 metadata:
   #nome diferente do outro de tipo nodePort
   #que havíamos criado
-  name: counter-clusterip-service
+  name: react-clusterip-service
 spec:
   selector:
-    app: counter
+    app: react
   ports:
-    - name: counter
+    - name: react
       protocol: TCP
-      port: 7000
-      targetPort: 7000
+      port: 5173
+      targetPort: 5173
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: react-service
+spec:
+  # Ip externo, acessível fora do cluster
+  type: NodePort
+  selector:
+    # todo Pod que tiver essa tag
+    # fará parte desse serviço
+    app: react
+  ports:
+    - name: react
+      protocol: TCP
+      # o nó recebe requisições nessa porta
+      port: 5173
+      # e direciona para essa porta do Pod
+      targetPort: 5173
+      nodePort: 30011
